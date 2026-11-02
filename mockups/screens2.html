@@ -1,0 +1,420 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>BattleGrid UI Mockups v2</title>
+<!--
+  Mockup set 2 — art-direction concepts inspired by reference screenshots:
+  title screen, mode hub (diamond tiles), campaign path (polaroids), missions, settings, neon ranks.
+  #title | #hub | #path | #missions | #settings | #ranks  shows one screen alone.
+  Render: node mockups/render.mjs v2
+-->
+<script src="theaters.js"></script>
+<style>
+@font-face { font-family: 'Lilita'; src: url('../assets/fonts/LilitaOne-Regular.ttf'); }
+@font-face { font-family: 'Poppins'; font-weight: 600; src: url('../assets/fonts/Poppins-SemiBold.ttf'); }
+@font-face { font-family: 'Poppins'; font-weight: 700; src: url('../assets/fonts/Poppins-Bold.ttf'); }
+:root {
+  --bg:#070a16; --navy:#121842; --text:#f4f4ff; --dim:#9aa0cc;
+  --card:#c8c9ea; --cardDeep:#a9abd8; --ink:#1d1a4a; --inkSoft:#54538a; --chip:#f1f1ff; --chipEdge:#5b6bd6;
+  --green:#22a522; --greenDeep:#127012; --blue:#2f6bff; --blueDeep:#1236b0; --orange:#ff7a0d; --orangeDeep:#d85a00;
+  --purple:#b81fe6; --purpleDeep:#7d0fa8; --red:#e5262b; --redDeep:#9c1015; --gold:#ffc21a; --goldDeep:#c98a00;
+  --teal:#14b8a6; --tealDeep:#0b7a6e; --pink:#ec4899; --pinkDeep:#a21d62; --outline:#0c1030;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { background: #14172b; }
+body { font-family: 'Poppins', sans-serif; font-weight: 600; }
+.sheet { display: flex; gap: 40px; padding: 40px; width: max-content; }
+.cap { color: #c9cdf5; font: 700 15px 'Poppins'; letter-spacing: 2px; text-align: center; margin-top: 14px; }
+body.solo .sheet { padding: 0; } body.solo .cap, body.solo .item { display: none; } body.solo .item.on { display: block; }
+.phone { position: relative; width: 360px; height: 780px; overflow: hidden; background: var(--bg); }
+body:not(.solo) .phone { border-radius: 36px; box-shadow: 0 0 0 8px #0b0d1c, 0 20px 60px rgba(0,0,0,.5); }
+.status { position: absolute; top: 0; left: 0; right: 0; height: 28px; padding: 6px 18px; display: flex; justify-content: space-between; font: 700 12px 'Poppins'; z-index: 30; color: #fff; }
+.status.dark { color: var(--ink); }
+.d { font-family: 'Lilita', sans-serif; font-weight: 400; }
+.ico { display: inline-block; flex: none; background: currentColor; -webkit-mask: var(--m) center/contain no-repeat; mask: var(--m) center/contain no-repeat; }
+.coin { width: 22px; height: 22px; border-radius: 50%; background: radial-gradient(circle at 35% 30%, #ffe27a, var(--gold) 55%, var(--goldDeep)); border: 2px solid var(--goldDeep); display: inline-block; position: relative; flex: none; }
+.coin::after { content: ''; position: absolute; inset: 3px; border-radius: 50%; border: 1.5px solid rgba(201,138,0,.6); }
+.gridbg { position: absolute; inset: 0; background-image: linear-gradient(rgba(120,130,255,.07) 1px, transparent 1px), linear-gradient(90deg, rgba(120,130,255,.07) 1px, transparent 1px); background-size: 32px 32px; }
+
+/* buttons */
+.btn { position: relative; display: flex; align-items: center; justify-content: center; flex-direction: column; color: #fff; border-radius: 16px; border: 3px solid var(--deep); background: var(--face); box-shadow: 0 6px 0 var(--deep); overflow: hidden; }
+.btn::before { content: ''; position: absolute; left: 0; right: 0; top: 0; height: 50%; background: linear-gradient(rgba(255,255,255,.38), rgba(255,255,255,.08)); }
+.btn .t { position: relative; font-family: 'Lilita'; -webkit-text-stroke: 5px var(--outline); paint-order: stroke fill; letter-spacing: .5px; line-height: 1; }
+.btn .s { position: relative; font: 700 10px 'Poppins'; letter-spacing: 1.2px; margin-top: 3px; text-shadow: 0 1px 0 rgba(0,0,0,.45); }
+.green { --face: var(--green); --deep: var(--greenDeep); } .blue { --face: var(--blue); --deep: var(--blueDeep); } .orange { --face: var(--orange); --deep: var(--orangeDeep); }
+.purple { --face: var(--purple); --deep: var(--purpleDeep); } .gold { --face: var(--gold); --deep: var(--goldDeep); } .red { --face: var(--red); --deep: var(--redDeep); }
+.lg { height: 64px; font-size: 30px; } .md { height: 52px; font-size: 22px; } .sm { height: 40px; font-size: 17px; border-radius: 12px; box-shadow: 0 4px 0 var(--deep); }
+
+/* ═══ TITLE ═══ */
+.title .glowA { position: absolute; left: -60px; top: 120px; width: 320px; height: 320px; border-radius: 50%; background: radial-gradient(circle, rgba(110,100,255,.55), transparent 65%); }
+.title .glowB { position: absolute; right: -80px; top: 60px; width: 280px; height: 280px; border-radius: 50%; background: radial-gradient(circle, rgba(255,60,90,.4), transparent 65%); }
+.orb { position: absolute; border-radius: 50%; }
+.orb.b { left: 52px; top: 160px; width: 122px; height: 122px; background: radial-gradient(circle at 35% 30%, #c3beff, #7a6cff 60%, #5a48f0); border: 7px solid #b9b3ff; box-shadow: 0 0 60px 14px rgba(120,108,255,.6); }
+.orb.r { right: 46px; top: 90px; width: 90px; height: 90px; background: radial-gradient(circle at 35% 30%, #ff8ea0, #ff3c5a 65%); border: 6px solid #ffa0ad; box-shadow: 0 0 50px 12px rgba(255,60,90,.55); }
+.orb.g { right: 110px; top: 262px; width: 46px; height: 46px; background: radial-gradient(circle at 35% 30%, #aaa, #6a6a85); border: 4px solid #9a9ab8; opacity: .9; }
+.orb.n { left: 36px; top: 110px; width: 40px; height: 40px; background: radial-gradient(circle at 35% 30%, #aaa, #6a6a85); border: 4px solid #9a9ab8; opacity: .8; }
+.trail { position: absolute; left: 150px; top: 174px; width: 130px; height: 4px; transform: rotate(-31deg); transform-origin: left center; background: repeating-linear-gradient(90deg, #fff 0 6px, transparent 6px 14px); filter: drop-shadow(0 0 8px #fff); }
+.wm { position: absolute; left: 0; right: 0; top: 290px; text-align: center; line-height: .86; }
+.wm .a { display: block; font: 400 70px 'Lilita'; letter-spacing: 2px; color: #fff; -webkit-text-stroke: 12px #0c1030; paint-order: stroke fill; text-shadow: 0 8px 0 #0c1030; background: none; }
+.wm .b { display: block; font: 400 70px 'Lilita'; letter-spacing: 8px; color: var(--gold); -webkit-text-stroke: 12px #0c1030; paint-order: stroke fill; text-shadow: 0 8px 0 #0c1030; }
+.wm .tag { display: block; margin-top: 18px; font: 700 11px 'Poppins'; letter-spacing: 4px; color: var(--dim); }
+.stack { position: absolute; left: 62px; right: 62px; top: 498px; display: flex; flex-direction: column; gap: 10px; }
+.tbtn { position: relative; height: 46px; display: grid; place-items: center; font: 400 21px 'Lilita'; letter-spacing: 1px; color: var(--text); background: linear-gradient(#232b6b, #141a4a); border: 3px solid #5b6bd6; border-radius: 6px; clip-path: polygon(10px 0, calc(100% - 10px) 0, 100% 10px, 100% calc(100% - 10px), calc(100% - 10px) 100%, 10px 100%, 0 calc(100% - 10px), 0 10px); }
+.tbtn.big { height: 62px; font-size: 34px; background: linear-gradient(#35c335, #1d8d1d); border-color: #0f5d0f; color: #fff; -webkit-text-stroke: 5px #0c1030; paint-order: stroke fill; }
+.tbtn.big::before { content: ''; position: absolute; inset: 0 0 50% 0; background: linear-gradient(rgba(255,255,255,.4), rgba(255,255,255,.05)); }
+.tbtn.big, .tbtn.x { filter: drop-shadow(0 5px 0 #0a3d0a); }
+.tbtn.x { filter: drop-shadow(0 5px 0 #0a0e2c); }
+.sq { position: absolute; bottom: 44px; left: 0; right: 0; display: flex; justify-content: center; gap: 14px; }
+.sq i { width: 48px; height: 48px; border-radius: 14px; display: grid; place-items: center; background: linear-gradient(#2c3678, #171d52); border: 3px solid #5b6bd6; color: #aab4ff; box-shadow: 0 4px 0 #0a0e2c; }
+.sq i .ico { width: 28px; height: 28px; } .sq i.dot { position: relative; } .sq i.dot::after { content: ''; position: absolute; top: -7px; right: -7px; width: 18px; height: 18px; border-radius: 50%; background: var(--red); border: 2px solid #fff; }
+.ver { position: absolute; bottom: 14px; left: 0; right: 0; text-align: center; font: 600 10px 'Poppins'; color: #5f679f; letter-spacing: 1px; }
+.corner { position: absolute; width: 56px; height: 56px; border: 4px solid #5b6bd6; opacity: .8; filter: drop-shadow(0 0 6px rgba(91,107,214,.8)); }
+.corner.tl { left: 12px; top: 34px; border-right: 0; border-bottom: 0; border-top-left-radius: 14px; } .corner.tr { right: 12px; top: 34px; border-left: 0; border-bottom: 0; border-top-right-radius: 14px; }
+.corner.bl { left: 12px; bottom: 12px; border-right: 0; border-top: 0; border-bottom-left-radius: 14px; } .corner.br { right: 12px; bottom: 12px; border-left: 0; border-top: 0; border-bottom-right-radius: 14px; }
+
+/* ═══ HUB ═══ */
+.hub { background: linear-gradient(#0f1546, #070a16 60%); }
+.hub .gridbg { opacity: .8; }
+.prof { position: absolute; top: 34px; left: 14px; right: 14px; height: 62px; border-radius: 14px; background: rgba(18,24,66,.85); border: 2px solid #3a47a8; display: flex; align-items: center; padding: 6px 10px; gap: 10px; z-index: 4; }
+.prof .av { width: 46px; height: 46px; border-radius: 12px; background: var(--blue); border: 3px solid #fff; display: grid; place-items: center; font: 400 24px 'Lilita'; color: #fff; }
+.prof .nm { color: #fff; font: 700 15px 'Poppins'; } .prof .xp { margin-top: 5px; width: 160px; height: 10px; border-radius: 5px; background: #0a0e2c; border: 1.5px solid #3a47a8; overflow: hidden; } .prof .xp b { display: block; width: 62%; height: 100%; background: linear-gradient(var(--gold), var(--orange)); }
+.prof .lv { margin-left: auto; font: 400 34px 'Lilita'; color: #fff; } .prof .lv small { font-size: 13px; color: var(--dim); margin-right: 3px; }
+.hubhd { position: absolute; top: 112px; left: 18px; font: 400 30px/1 'Lilita'; color: #fff; letter-spacing: 1px; } .hubhd small { display: block; font: 600 12px 'Poppins'; color: var(--dim); letter-spacing: 1px; margin-top: 4px; }
+.tiles { position: absolute; top: 176px; left: 8px; right: 8px; display: grid; grid-template-columns: repeat(3, 1fr); row-gap: 8px; }
+.tile { position: relative; height: 172px; }
+.tile .base { position: absolute; left: 8px; right: 8px; bottom: 6px; height: 84px; border-radius: 10px; background: var(--face); border-bottom: 5px solid var(--deep); display: flex; align-items: flex-end; justify-content: center; padding-bottom: 9px; text-align: center; font: 400 14px/1.05 'Lilita'; color: #fff; letter-spacing: .5px; text-shadow: 0 2px 0 rgba(0,0,0,.35); }
+.tile .dia { position: absolute; top: 24px; left: 50%; margin-left: -37px; width: 74px; height: 74px; transform: rotate(45deg); border-radius: 16px; border: 4px solid #fff; overflow: hidden; box-shadow: 0 5px 0 rgba(0,0,0,.25); background: var(--face); }
+.tile .dia svg { position: absolute; left: -14px; top: -14px; width: 94px; height: 94px; transform: rotate(-45deg); }
+.tile .flag { position: absolute; top: 10px; right: 6px; width: 34px; height: 44px; background: var(--flag); clip-path: polygon(0 0, 100% 0, 100% 78%, 50% 100%, 0 78%); display: grid; place-items: start center; padding-top: 7px; color: #fff; z-index: 3; filter: drop-shadow(0 2px 0 rgba(0,0,0,.3)); }
+.tile .flag .ico { width: 20px; height: 20px; }
+.tile .dotb { position: absolute; top: 6px; right: 2px; width: 16px; height: 16px; border-radius: 50%; background: var(--red); border: 2px solid #fff; z-index: 4; }
+.tile .timer { position: absolute; top: 0; left: 0; right: 0; text-align: center; font: 400 12px 'Lilita'; color: #fff; letter-spacing: 1px; }
+.tile.locked { --face: #6b6aa8 !important; --deep: #4f4e8a !important; --flag: #3d3f8a !important; }
+.tile.locked .dia { filter: saturate(.3) brightness(.7); border-color: #b3b2e0; background: #7c7bb8; }
+.tile.locked .base { color: #a7a6d6; text-shadow: none; opacity: .85; }
+.tile .lock { position: absolute; top: 40px; left: 50%; margin-left: -17px; width: 34px; height: 34px; color: #e9e9ff; z-index: 3; filter: drop-shadow(0 2px 0 rgba(0,0,0,.4)); }
+.nav { position: absolute; left: 0; right: 0; bottom: 0; height: 72px; background: linear-gradient(#171e55, #0d1236); border-top: 3px solid #3a47a8; display: flex; align-items: center; justify-content: space-around; padding: 0 6px; }
+.nav .n { width: 56px; height: 62px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px; color: #8d97e8; font: 400 11px 'Lilita'; border-radius: 14px; position: relative; }
+.nav .n .ico { width: 28px; height: 28px; } .nav .n.on { color: #fff; background: linear-gradient(#3548c8, #23329a); border: 2px solid #6f80ff; box-shadow: 0 0 18px rgba(80,100,255,.6); }
+.nav .n .badge { position: absolute; top: 2px; right: 4px; width: 18px; height: 18px; border-radius: 50%; background: var(--red); border: 2px solid #fff; font: 400 11px/14px 'Lilita'; color: #fff; text-align: center; }
+.nav .mid { width: 74px; height: 74px; margin-top: -26px; border-radius: 50%; background: radial-gradient(circle at 35% 30%, #5cd65c, var(--green) 60%); border: 5px solid #fff; box-shadow: 0 0 0 4px var(--greenDeep), 0 0 24px rgba(60,220,60,.5); display: grid; place-items: center; color: #fff; }
+.nav .mid .ico { width: 38px; height: 38px; filter: drop-shadow(0 2px 0 rgba(0,0,0,.35)); }
+
+/* ═══ PATH ═══ */
+.path { background: #efcf9b; }
+.path::before { content: ''; position: absolute; inset: 0; background:
+  radial-gradient(ellipse 90px 60px at 20% 18%, #e5b878, transparent 70%), radial-gradient(ellipse 130px 80px at 85% 40%, #e5b878, transparent 70%),
+  radial-gradient(ellipse 110px 70px at 15% 68%, #e5b878, transparent 70%), radial-gradient(ellipse 120px 70px at 80% 90%, #e5b878, transparent 70%),
+  linear-gradient(rgba(150,100,40,.12) 1px, transparent 1px), linear-gradient(90deg, rgba(150,100,40,.12) 1px, transparent 1px); background-size: auto, auto, auto, auto, 40px 40px, 40px 40px; }
+.polaroid { position: absolute; width: 206px; background: #fffdf8; padding: 7px 7px 0; border-radius: 3px; box-shadow: 0 8px 18px rgba(90,50,10,.35), 0 1px 0 #fff inset; }
+.polaroid .pic { position: relative; height: 112px; overflow: hidden; background: linear-gradient(#bfe0ff, #e8f3ff); }
+.polaroid .pic svg { position: absolute; inset: 0; width: 100%; height: 100%; }
+.polaroid .cap2 { height: 40px; display: flex; align-items: center; justify-content: center; gap: 6px; font: 400 18px 'Lilita'; color: #8a3a22; letter-spacing: .3px; }
+.polaroid .cap2 small { font: 700 10px 'Poppins'; color: #a06a50; letter-spacing: 1px; }
+.polaroid .tape { position: absolute; top: -9px; width: 56px; height: 20px; background: rgba(255,255,255,.55); border: 1px solid rgba(255,255,255,.7); transform: rotate(-36deg); }
+.polaroid.lockedp .pic { filter: grayscale(1) brightness(.85); } .polaroid.lockedp .cap2 { color: #8c8c9a; }
+.polaroid .padl { position: absolute; left: 50%; top: 50px; margin-left: -22px; width: 44px; height: 44px; color: #fff; filter: drop-shadow(0 3px 0 rgba(0,0,0,.4)); z-index: 3; }
+.polaroid.cur { box-shadow: 0 0 0 5px var(--gold), 0 0 30px 6px rgba(255,194,26,.7), 0 8px 18px rgba(90,50,10,.35); }
+.pbadge { position: absolute; top: -14px; right: -12px; z-index: 5; padding: 2px 12px; border-radius: 8px; background: var(--red); border: 2px solid #fff; font: 400 14px/20px 'Lilita'; color: #fff; letter-spacing: 1px; transform: rotate(6deg); }
+.stars3 { display: flex; gap: 1px; } .stars3 .ico { width: 14px; height: 14px; color: var(--gold); filter: drop-shadow(0 1px 0 var(--goldDeep)); }
+.pback { position: absolute; left: 14px; bottom: 16px; width: 52px; height: 52px; border-radius: 50%; background: radial-gradient(circle at 35% 30%, #5cc8f0, #1e88c8); border: 4px solid #fff; box-shadow: 0 4px 0 #14608f; display: grid; place-items: center; z-index: 8; }
+.pback i { width: 18px; height: 18px; border-left: 6px solid #fff; border-bottom: 6px solid #fff; transform: rotate(45deg); margin-left: 6px; border-radius: 2px; }
+.pdash { position: absolute; inset: 0; z-index: 1; }
+.phd { position: absolute; top: 34px; left: 0; right: 0; text-align: center; z-index: 9; }
+.phd b { display: inline-block; padding: 4px 24px; border-radius: 10px; background: #8a3a22; border: 3px solid #fff4d9; font: 400 20px 'Lilita'; color: #fff4d9; letter-spacing: 2px; box-shadow: 0 4px 0 #5e2412; }
+
+/* ═══ MISSIONS ═══ */
+.missions { background: linear-gradient(#2a3fb8 0, #121842 330px); }
+.topbar { position: absolute; top: 32px; left: 10px; right: 10px; height: 44px; border-radius: 12px; background: rgba(8,10,32,.78); border: 2px solid #3a47a8; display: flex; align-items: center; gap: 8px; padding: 0 8px 0 50px; z-index: 6; color: #fff; font: 400 15px 'Lilita'; }
+.topbar .av { position: absolute; left: -2px; top: -6px; width: 52px; height: 52px; border-radius: 50%; background: var(--blue); border: 4px solid #fff; box-shadow: 0 0 0 3px #7b4be0; display: grid; place-items: center; font: 400 24px 'Lilita'; }
+.topbar .av i { position: absolute; bottom: -8px; right: -4px; font-style: normal; background: #7b4be0; border: 2px solid #fff; border-radius: 8px; font-size: 12px; padding: 0 5px; }
+.topbar .rs { display: flex; align-items: center; gap: 5px; margin-left: 6px; }
+.topbar .plus { width: 18px; height: 18px; border-radius: 5px; background: var(--green); display: grid; place-items: center; font-size: 14px; line-height: 1; }
+.hero { position: absolute; top: 80px; left: 0; right: 0; height: 250px; overflow: hidden; }
+.hero svg { position: absolute; inset: 0; width: 100%; height: 100%; }
+.plate { position: absolute; top: 96px; left: 28px; right: 28px; z-index: 3; text-align: center; padding: 6px 0 8px; border-radius: 14px; background: linear-gradient(#232b6b, #0f1446); border: 3px solid #fff; box-shadow: 0 6px 0 #070a24, 0 0 30px rgba(90,110,255,.5); transform: skewX(-6deg); }
+.plate b { display: block; font: 400 34px/1 'Lilita'; letter-spacing: 1px; color: #fff; -webkit-text-stroke: 6px #0c1030; paint-order: stroke fill; }
+.plate span { font: 700 11px 'Poppins'; letter-spacing: 1.5px; color: var(--dim); } .plate span em { font: 400 20px 'Lilita'; font-style: normal; color: var(--gold); letter-spacing: .5px; margin-left: 6px; }
+.tabs { position: absolute; top: 322px; left: 8px; right: 8px; display: flex; gap: 4px; z-index: 4; }
+.tabs div { flex: 1; height: 34px; display: grid; place-items: center; border-radius: 10px 10px 0 0; background: #1a2260; color: #8d97e8; font: 400 12px 'Lilita'; letter-spacing: .5px; } .tabs .on { background: linear-gradient(#7b4be0, #5a30c0); color: #fff; }
+.list { position: absolute; top: 356px; left: 0; right: 0; bottom: 0; background: #0d1236; border-top: 3px solid #3a47a8; padding: 10px 8px 0; display: flex; flex-direction: column; gap: 8px; overflow: hidden; }
+.row { position: relative; height: 82px; border-radius: 14px; background: var(--card); border: 3px solid #fff; border-bottom: 6px solid var(--cardDeep); display: flex; align-items: center; padding: 6px 8px; gap: 8px; }
+.row.hot { background: linear-gradient(#ffe48a, #ffc74a); border-bottom-color: var(--goldDeep); }
+.row .ic { width: 54px; height: 54px; border-radius: 12px; background: var(--face); border: 3px solid var(--deep); display: grid; place-items: center; color: #fff; flex: none; }
+.row .ic .ico { width: 32px; height: 32px; filter: drop-shadow(0 2px 0 rgba(0,0,0,.3)); }
+.row .mid2 { flex: 1; min-width: 0; } .row h4 { font: 400 15px/1 'Lilita'; color: var(--ink); letter-spacing: .3px; white-space: nowrap; } .row p { font: 600 10px 'Poppins'; color: var(--inkSoft); margin: 3px 0 5px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.bar { position: relative; height: 15px; border-radius: 8px; background: #1b1f45; overflow: hidden; border: 1.5px solid #1b1f45; } .bar b { display: block; height: 100%; background: var(--face2); } .bar span { position: absolute; right: 6px; top: -1px; font: 400 11px/15px 'Lilita'; color: #fff; }
+.rw { width: 46px; height: 56px; border-radius: 10px; background: rgba(255,255,255,.55); border: 2px solid rgba(255,255,255,.8); display: flex; flex-direction: column; align-items: center; justify-content: center; font: 400 11px 'Lilita'; color: var(--ink); gap: 1px; flex: none; }
+.rw .coin { width: 24px; height: 24px; } .rw .ico { width: 24px; height: 24px; color: var(--gold); filter: drop-shadow(0 1px 0 var(--goldDeep)); }
+.act { width: 66px; height: 34px; border-radius: 9px; display: grid; place-items: center; font: 400 14px 'Lilita'; flex: none; }
+.act.go { background: var(--gold); border: 2px solid var(--goldDeep); border-bottom-width: 4px; color: #fff; -webkit-text-stroke: 3px #0c1030; paint-order: stroke fill; }
+.act.claim { background: var(--green); border: 2px solid var(--greenDeep); border-bottom-width: 4px; color: #fff; -webkit-text-stroke: 3px #0c1030; paint-order: stroke fill; }
+.act.ip { background: #aeb0d0; border: 2px solid #8486b4; border-bottom-width: 4px; color: #5a5c8e; font-size: 9px; letter-spacing: 0; text-align: center; line-height: 1; }
+
+/* ═══ SETTINGS ═══ */
+.settings { background: radial-gradient(ellipse 80% 50% at 50% 100%, rgba(255,138,28,.25), transparent 70%), #090c20; }
+.dim { position: absolute; inset: 0; background: rgba(4,6,14,.55); }
+.sp { position: absolute; left: 22px; right: 22px; top: 130px; border-radius: 22px; padding: 56px 18px 20px; background: linear-gradient(#1a2166, #0e1344); border: 4px solid #4a5cd8; box-shadow: 0 0 0 3px #0a0e2c, 0 0 50px rgba(80,100,255,.55), inset 0 0 40px rgba(60,80,230,.35); }
+.sp::before, .sp::after { content: ''; position: absolute; top: 14px; width: 14px; height: 14px; border-radius: 50%; background: #8d97ff; box-shadow: 0 0 10px #8d97ff; } .sp::before { left: 14px; } .sp::after { right: 14px; }
+.sp .ttl { position: absolute; top: -30px; left: 50%; transform: translateX(-50%); padding: 8px 34px; border-radius: 14px; background: linear-gradient(var(--gold), var(--orange)); border: 4px solid #fff4c9; box-shadow: 0 5px 0 var(--orangeDeep); font: 400 30px/1 'Lilita'; color: #fff; -webkit-text-stroke: 6px #5a2a00; paint-order: stroke fill; letter-spacing: 1px; }
+.sp .x { position: absolute; top: -12px; right: -12px; width: 36px; height: 36px; border-radius: 50%; background: radial-gradient(circle at 35% 30%, #ff6a6e, var(--red)); border: 3px solid #fff; display: grid; place-items: center; color: #fff; font: 400 20px 'Lilita'; box-shadow: 0 3px 0 var(--redDeep); }
+.set { display: flex; align-items: center; gap: 12px; margin-bottom: 16px; }
+.hex { width: 50px; height: 56px; flex: none; clip-path: polygon(50% 0, 100% 25%, 100% 75%, 50% 100%, 0 75%, 0 25%); background: linear-gradient(#5d70ff, #2a38b8); display: grid; place-items: center; color: #fff; position: relative; }
+.hex svg { width: 26px; height: 26px; }
+.sl { flex: 1; } .sl .lab { font: 700 11px 'Poppins'; letter-spacing: 1.5px; color: #b8c0ff; text-transform: uppercase; margin-bottom: 5px; display: flex; justify-content: space-between; } .sl .lab b { color: #fff; }
+.track2 { position: relative; height: 18px; border-radius: 9px; background: #080b26; border: 2px solid #3a47a8; } .track2 i { position: absolute; left: 0; top: 0; bottom: 0; border-radius: 9px; background: linear-gradient(90deg, #2bd9e8, #5d70ff); box-shadow: 0 0 12px rgba(80,200,255,.7); } .track2 u { position: absolute; top: -6px; width: 26px; height: 26px; margin-left: -13px; border-radius: 50%; background: radial-gradient(circle at 35% 30%, #fff, #c9d0ff); border: 3px solid #5d70ff; box-shadow: 0 2px 0 #1a2260; }
+.tog { display: flex; align-items: center; justify-content: space-between; height: 48px; padding: 0 12px; border-radius: 12px; background: rgba(8,11,38,.7); border: 2px solid #2d3a95; margin-bottom: 8px; font: 700 13px 'Poppins'; color: #e2e6ff; }
+.sw { width: 52px; height: 28px; border-radius: 14px; background: var(--green); border: 2px solid var(--greenDeep); position: relative; } .sw::after { content: ''; position: absolute; right: 2px; top: 2px; width: 20px; height: 20px; border-radius: 50%; background: #fff; box-shadow: 0 2px 0 rgba(0,0,0,.25); }
+.sw.off { background: #3a3f78; border-color: #2a2e60; } .sw.off::after { right: auto; left: 2px; }
+.acct { display: flex; align-items: center; gap: 10px; padding: 10px; border-radius: 12px; background: rgba(8,11,38,.7); border: 2px solid #2d3a95; margin: 14px 0 10px; }
+.acct .av { width: 40px; height: 40px; border-radius: 10px; background: var(--blue); color: #fff; display: grid; place-items: center; font: 400 20px 'Lilita'; border: 2px solid #fff; } .acct b { display: block; color: #fff; font: 700 13px 'Poppins'; } .acct small { color: var(--dim); font: 600 10px 'Poppins'; }
+.lang { white-space: nowrap; margin-left: auto; padding: 6px 12px; border-radius: 10px; background: #080b26; border: 2px solid #5d70ff; color: #fff; font: 400 14px 'Lilita'; }
+
+/* ═══ RANKS (neon) ═══ */
+.ranks { background: linear-gradient(#2a0a5e 0, #130630 40%, #0a0420 100%); }
+.ranks::before { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse 70% 30% at 50% 22%, rgba(214,60,255,.45), transparent 70%), radial-gradient(ellipse 60% 25% at 50% 100%, rgba(0,220,255,.25), transparent 70%); }
+.ranks .gridbg { background-image: linear-gradient(rgba(214,100,255,.12) 1px, transparent 1px), linear-gradient(90deg, rgba(214,100,255,.12) 1px, transparent 1px); mask: linear-gradient(transparent, #000 40%); -webkit-mask: linear-gradient(transparent, #000 40%); }
+.neon { color: #ff7cf0; text-shadow: 0 0 10px #ff2fe0, 0 0 24px #b81fe6; }
+.rtitle { position: absolute; top: 44px; left: 0; right: 0; text-align: center; font: 400 34px/1 'Lilita'; letter-spacing: 3px; color: #fff; text-shadow: 0 0 8px #ff2fe0, 0 0 22px #ff2fe0, 0 0 40px #8a1fe0; }
+.rtitle small { display: block; font: 700 11px 'Poppins'; letter-spacing: 5px; color: #7ff3ff; text-shadow: 0 0 10px #00d8ff; margin-top: 6px; }
+.banner { position: absolute; top: 112px; left: 14px; right: 14px; height: 148px; clip-path: polygon(0 0, calc(100% - 22px) 0, 100% 22px, 100% 100%, 22px 100%, 0 calc(100% - 22px)); background: linear-gradient(120deg, #3a0f8e, #7a1fd0 60%, #b81fe6); padding: 3px; filter: drop-shadow(0 0 14px rgba(214,60,255,.8)); }
+.banner > div { position: absolute; inset: 3px; clip-path: inherit; background: linear-gradient(120deg, #1b0b52, #3a1480 70%, #5a1fa8); padding: 18px 16px; }
+.banner h3 { font: 400 34px/.95 'Lilita'; color: #fff; letter-spacing: 1px; } .banner h3 b { color: #ff5cf0; font-weight: 400; text-shadow: 0 0 12px #ff2fe0; }
+.banner p { font: 700 12px 'Poppins'; color: #d8c4ff; margin-top: 6px; } .banner .btn { position: absolute; left: 16px; bottom: 14px; width: 150px; height: 36px; border-radius: 8px; font-size: 15px; box-shadow: 0 3px 0 var(--deep); }
+.banner .orbs { position: absolute; right: 4px; top: 10px; width: 130px; height: 112px; }
+.cards { position: absolute; top: 280px; left: 10px; right: 10px; display: flex; gap: 6px; }
+.rc { flex: 1; height: 108px; clip-path: polygon(10px 0, 100% 0, calc(100% - 10px) 100%, 0 100%); background: var(--rg); padding: 2px; position: relative; }
+.rc > div { position: absolute; inset: 2px; clip-path: inherit; background: linear-gradient(#2a1470, #150a40); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; }
+.rc .medal { width: 40px; height: 40px; border-radius: 12px; transform: rotate(45deg); background: var(--rg); display: grid; place-items: center; box-shadow: 0 0 14px var(--rgl); } .rc .medal .ico { width: 22px; height: 22px; color: #fff; transform: rotate(-45deg); }
+.rc b { font: 400 10.5px 'Lilita'; color: #fff; letter-spacing: .5px; } .rc small { white-space: nowrap; font: 700 7.5px 'Poppins'; color: #c8b6ff; letter-spacing: .6px; }
+.rc.cur { filter: drop-shadow(0 0 10px var(--rgl)); } .rc.lk { opacity: .55; } .rc.lk .medal { background: #4a3a8a; box-shadow: none; }
+.lb { position: absolute; top: 404px; left: 10px; right: 10px; bottom: 82px; display: flex; flex-direction: column; gap: 7px; }
+.lb h5 { font: 400 15px 'Lilita'; letter-spacing: 2px; color: #7ff3ff; text-shadow: 0 0 8px #00d8ff; display: flex; justify-content: space-between; margin-bottom: 1px; } .lb h5 span { color: #c8b6ff; font: 700 10px 'Poppins'; text-shadow: none; letter-spacing: 1px; align-self: center; }
+.lr { height: 46px; display: flex; align-items: center; gap: 10px; padding: 0 12px; border-radius: 10px; background: rgba(32,14,86,.85); border: 1.5px solid #6a2fd0; color: #fff; font: 700 13px 'Poppins'; }
+.lr .pos { font: 400 20px 'Lilita'; width: 26px; text-align: center; color: #c8b6ff; } .lr .pos.g { color: var(--gold); text-shadow: 0 0 10px var(--gold); }
+.lr .av { width: 30px; height: 30px; border-radius: 8px; background: var(--c); display: grid; place-items: center; font: 400 15px 'Lilita'; border: 2px solid rgba(255,255,255,.8); } .lr em { margin-left: auto; font: 400 16px 'Lilita'; font-style: normal; color: #ff7cf0; display: flex; align-items: center; gap: 5px; text-shadow: 0 0 8px #ff2fe0; }
+.lr.me { background: linear-gradient(90deg, #5a1fa8, #8a2fe8); border-color: #ff5cf0; box-shadow: 0 0 16px rgba(255,60,240,.6); }
+.rnav { position: absolute; left: 0; right: 0; bottom: 0; height: 70px; background: linear-gradient(#1b0b52, #0a0420); border-top: 2px solid #b81fe6; box-shadow: 0 -4px 24px rgba(184,31,230,.5); display: flex; justify-content: space-around; align-items: center; }
+.rnav .n { width: 58px; text-align: center; color: #8e7cc8; font: 400 10px 'Lilita'; display: flex; flex-direction: column; align-items: center; gap: 3px; } .rnav .n .ico { width: 26px; height: 26px; } .rnav .on { color: #7ff3ff; text-shadow: 0 0 8px #00d8ff; } .rnav .on .ico { filter: drop-shadow(0 0 6px #00d8ff); }
+</style>
+</head>
+<body>
+<div class="sheet">
+
+<!-- ═════ TITLE ═════ -->
+<div class="item" data-id="title"><div class="phone title">
+  <div class="status"><span>9:41</span><span>●●● ▮</span></div>
+  <div class="gridbg"></div><div class="glowA"></div><div class="glowB"></div>
+  <i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
+  <i class="orb n"></i><i class="orb g"></i><i class="trail"></i><i class="orb b"></i><i class="orb r"></i>
+  <div class="wm"><span class="a">BATTLE</span><span class="b">GRID</span><span class="tag">CAPTURE · SPREAD · CONQUER</span></div>
+  <div class="stack">
+    <div class="tbtn big">PLAY</div>
+    <div class="tbtn x">CONTINUE · LV 5</div>
+    <div class="tbtn x">DAILY BONUS</div>
+  </div>
+  <div class="sq">
+    <i><span class="ico" style="--m:url(../assets/ui/leaderboardsComplex.png)"></span></i>
+    <i class="dot"><span class="ico" style="--m:url(../assets/ui/medal1.png)"></span></i>
+    <i><span class="ico" style="--m:url(../assets/ui/trophy.png)"></span></i>
+    <i><span class="ico" style="--m:url(../assets/ui/gear.png)"></span></i>
+  </div>
+  <div class="ver">v1.0 · SIGNED IN AS GUEST</div>
+</div><div class="cap">TITLE · MAIN MENU</div></div>
+
+<!-- ═════ HUB ═════ -->
+<div class="item" data-id="hub"><div class="phone hub">
+  <div class="status"><span>9:41</span><span>●●● ▮</span></div>
+  <div class="gridbg"></div>
+  <div class="prof"><div class="av">A</div><div><div class="nm">Alex</div><div class="xp"><b></b></div></div><div class="lv d"><small>Lv</small>5</div></div>
+  <div class="hubhd">GAME MODES<small>Pick your battlefield</small></div>
+  <div class="tiles" id="tiles"></div>
+  <div class="nav">
+    <div class="n"><span class="ico" style="--m:url(../assets/ui/leaderboardsComplex.png)"></span>LEVELS</div>
+    <div class="n"><span class="ico" style="--m:url(../assets/ui/medal1.png)"></span>DAILY<i class="badge">!</i></div>
+    <div class="mid"><span class="ico" style="--m:url(../assets/ui/home.png)"></span></div>
+    <div class="n"><span class="ico" style="--m:url(../assets/ui/multiplayer.png)"></span>PROFILE</div>
+    <div class="n"><span class="ico" style="--m:url(../assets/ui/gear.png)"></span>SETTINGS</div>
+  </div>
+</div><div class="cap">HUB · MODE TILES (concept)</div></div>
+
+<!-- ═════ PATH ═════ -->
+<div class="item" data-id="path"><div class="phone path" id="pathscreen">
+  <div class="status dark"><span>9:41</span><span>●●● ▮</span></div>
+  <div class="phd"><b>WORLD TOUR</b></div>
+  <svg class="pdash" viewBox="0 0 360 780" fill="none" stroke="#9a5a3a" stroke-width="7" stroke-dasharray="14 12" stroke-linecap="butt">
+    <path d="M250 175 C320 215 330 255 260 285"/><path d="M110 395 C40 425 35 470 110 500" stroke-dasharray="14 12"/><path d="M250 625 C320 640 330 670 270 700"/><path d="M110 330 C70 350 70 380 110 400" opacity="0"/>
+  </svg>
+  <div id="polaroids"></div>
+  <div class="pback"><i></i></div>
+</div><div class="cap">CAMPAIGN PATH · THEATERS</div></div>
+
+<!-- ═════ MISSIONS ═════ -->
+<div class="item" data-id="missions"><div class="phone missions">
+  <div class="status"><span>9:41</span><span>●●● ▮</span></div>
+  <div class="topbar"><div class="av">A<i>5</i></div><span>ALEX</span><div class="rs" style="margin-left:auto"><span class="coin"></span>1,240<i class="plus">+</i></div><div class="rs"><span class="ico" style="--m:url(../assets/ui/star.png);width:20px;height:20px;color:var(--gold)"></span>48<i class="plus">+</i></div></div>
+  <div class="hero"><svg viewBox="0 0 360 250" preserveAspectRatio="xMidYMid slice">
+    <defs><radialGradient id="hg" cx="50%" cy="65%" r="55%"><stop offset="0" stop-color="#6c7bff" stop-opacity=".7"/><stop offset="1" stop-color="#6c7bff" stop-opacity="0"/></radialGradient></defs>
+    <rect width="360" height="250" fill="url(#hg)"/>
+    <g stroke="#8fa0ff" stroke-opacity=".25"><path d="M0 200H360M0 160H360M0 120H360M60 100V250M120 100V250M180 100V250M240 100V250M300 100V250"/></g>
+    <ellipse cx="180" cy="228" rx="150" ry="22" fill="#0a0e2c" opacity=".45"/>
+    <g stroke="#fff" stroke-dasharray="1 8" stroke-width="3" stroke-linecap="round"><path d="M72 190L142 175"/><path d="M218 172L292 188"/></g>
+    <circle cx="62" cy="192" r="26" fill="#2c6a99" stroke="#fff" stroke-width="3.5"/><circle cx="300" cy="190" r="22" fill="#8b160d" stroke="#fff" stroke-width="3.5"/>
+    <circle cx="86" cy="130" r="14" fill="#7a7a7a" stroke="#fff" stroke-width="3"/><circle cx="290" cy="128" r="16" fill="#147a22" stroke="#fff" stroke-width="3"/>
+    <!-- chest -->
+    <g transform="translate(180 168)"><rect x="-44" y="-32" width="88" height="62" rx="10" fill="#b81fe6" stroke="#7d0fa8" stroke-width="4"/><rect x="-44" y="-32" width="88" height="24" rx="10" fill="#d24cff" stroke="#7d0fa8" stroke-width="4"/><rect x="-8" y="-18" width="16" height="26" rx="4" fill="#ffc21a" stroke="#c98a00" stroke-width="3"/><rect x="-44" y="-4" width="88" height="6" fill="#ffc21a" opacity=".85"/></g>
+    <path d="M180 82l9 20 22 3-16 15 4 22-19-11-19 11 4-22-16-15 22-3z" fill="#ffc21a" stroke="#c98a00" stroke-width="3" stroke-linejoin="round"/>
+    <g fill="#fff" opacity=".8"><circle cx="120" cy="110" r="2"/><circle cx="250" cy="100" r="2.5"/><circle cx="150" cy="70" r="1.8"/><circle cx="220" cy="64" r="2"/></g>
+  </svg></div>
+  <div class="plate"><b>MISSIONS</b><span>TOTAL STARS<em>48 / 180</em></span></div>
+  <div class="tabs"><div class="on">ALL</div><div>BATTLE</div><div>CAMPAIGN</div><div>DAILY</div></div>
+  <div class="list" id="mlist"></div>
+</div><div class="cap">MISSIONS · ACHIEVEMENTS (concept)</div></div>
+
+<!-- ═════ SETTINGS ═════ -->
+<div class="item" data-id="settings"><div class="phone settings">
+  <div class="status"><span>9:41</span><span>●●● ▮</span></div>
+  <div class="gridbg"></div><div class="dim"></div>
+  <div class="sp">
+    <div class="ttl">SETTINGS</div><div class="x">✕</div>
+    <div class="set"><div class="hex"><svg viewBox="0 0 24 24" fill="#fff"><path d="M3 9v6h4l5 4V5L7 9zM15.5 8.5a5 5 0 0 1 0 7M18 5.5a9 9 0 0 1 0 13" stroke="#fff" stroke-width="2" fill-rule="evenodd" stroke-linecap="round"/></svg></div>
+      <div class="sl"><div class="lab">Sound effects<b>80%</b></div><div class="track2"><i style="width:80%"></i><u style="left:80%"></u></div></div></div>
+    <div class="set"><div class="hex"><svg viewBox="0 0 24 24" fill="#fff"><path d="M9 18V6l10-2v12" stroke="#fff" stroke-width="2.2" fill="none" stroke-linejoin="round"/><circle cx="7" cy="18" r="3"/><circle cx="17" cy="16" r="3"/></svg></div>
+      <div class="sl"><div class="lab">Music<b>55%</b></div><div class="track2"><i style="width:55%"></i><u style="left:55%"></u></div></div></div>
+    <div class="tog">Haptics (vibration)<div class="sw"></div></div>
+    <div class="tog">Battle hints<div class="sw"></div></div>
+    <div class="tog">Reduce motion<div class="sw off"></div></div>
+    <div class="acct"><div class="av">A</div><div><b>Alex</b><small>Play Games</small></div><div class="lang">ENGLISH ▾</div></div>
+    <div class="btn md blue"><span class="t">SYNC PROGRESS</span></div>
+    <div style="height:14px"></div>
+    <div class="btn sm red"><span class="t">SIGN OUT</span></div>
+  </div>
+</div><div class="cap">SETTINGS · MODAL PANEL</div></div>
+
+<!-- ═════ RANKS ═════ -->
+<div class="item" data-id="ranks"><div class="phone ranks">
+  <div class="status"><span>9:41</span><span>●●● ▮</span></div>
+  <div class="gridbg"></div>
+  <div class="rtitle">COMMANDER RANKS<small>SEASON 1 · ENDS IN 12 DAYS</small></div>
+  <div class="banner"><div>
+    <h3>CLIMB<br>THE <b>LADDER</b></h3>
+    <div class="btn purple"><span class="t" style="-webkit-text-stroke:4px #0c1030">VIEW REWARDS</span></div>
+    <svg class="orbs" viewBox="0 0 150 130"><g stroke="#fff" stroke-dasharray="1 7" stroke-width="3" stroke-linecap="round"><path d="M44 92L100 44"/></g><circle cx="40" cy="92" r="28" fill="#7a6cff" stroke="#c3beff" stroke-width="5"/><circle cx="108" cy="40" r="22" fill="#ff3c5a" stroke="#ffa0ad" stroke-width="4"/><circle cx="128" cy="100" r="12" fill="#6a6a85" stroke="#9a9ab8" stroke-width="3"/></svg>
+  </div></div>
+  <div class="cards" id="rcards"></div>
+  <div class="lb"><h5>TOP COMMANDERS<span>THIS SEASON</span></h5><div id="lrows" style="display:flex;flex-direction:column;gap:7px"></div></div>
+  <div class="rnav">
+    <div class="n"><span class="ico" style="--m:url(../assets/ui/home.png)"></span>BATTLE</div>
+    <div class="n"><span class="ico" style="--m:url(../assets/ui/leaderboardsComplex.png)"></span>LEVELS</div>
+    <div class="n on"><span class="ico" style="--m:url(../assets/ui/trophy.png)"></span>RANKS</div>
+    <div class="n"><span class="ico" style="--m:url(../assets/ui/multiplayer.png)"></span>PROFILE</div>
+    <div class="n"><span class="ico" style="--m:url(../assets/ui/gear.png)"></span>SETTINGS</div>
+  </div>
+</div><div class="cap">RANKS · NEON THEME (concept)</div></div>
+
+</div>
+<script>
+const M = (n) => `style="--m:url(../assets/ui/${n}.png)"`;
+const ico = (n) => `<span class="ico" ${M(n)}></span>`;
+const T = window.THEATERS || [];
+
+/* theater outline svg, optionally tinting the first `done` countries blue */
+function theaterInner(t, done, cur) {
+  if (!t) return '';
+  const paths = t.paths.map((d, i) => `<path d="${d}" fill="${i < done ? '#7cc8ff' : '#b9b9b9'}" stroke="#fff" stroke-width=".6" stroke-linejoin="round"/>`).join('');
+  const dots = t.markers.map((m, i) => `<circle cx="${m.x}" cy="${m.y}" r="2.1" fill="${i < done ? '#2f6bff' : i === cur ? '#ffc21a' : '#f1f1ff'}" stroke="${i < done ? '#1236b0' : i === cur ? '#c98a00' : '#5b6bd6'}" stroke-width=".7"/>`).join('');
+  return paths + dots;
+}
+function theaterSvg(t, done, cur) {
+  return t ? `<svg viewBox="0 0 ${t.width} ${t.height}" preserveAspectRatio="xMidYMid meet">${theaterInner(t, done, cur)}</svg>` : '';
+}
+
+/* HUB tiles */
+const tiles = [
+  ['CAMPAIGN', 'var(--green)', 'var(--greenDeep)', '#16a34a', 'flag_triangle', 'map', 0, 0],
+  ['DAILY BONUS', 'var(--orange)', 'var(--orangeDeep)', '#ea580c', 'medal1', 'sun', 0, 1],
+  ['SKIRMISH', 'var(--blue)', 'var(--blueDeep)', '#1d4ed8', 'multiplayer', 'orbs', 0, 0],
+  ['MISSIONS', '#e0a800', '#a37800', '#d97706', 'star', 'stars', 0, 1],
+  ['RANKS', 'var(--teal)', 'var(--tealDeep)', '#0d9488', 'trophy', 'orbs2', 0, 0],
+  ['ENDLESS', 'var(--purple)', 'var(--purpleDeep)', '#7e22ce', 'crown_a', 'orbs3', 0, 1],
+  ['REPLAYS', 'var(--pink)', 'var(--pinkDeep)', '#be185d', 'movie', 'orbs4', 0, 0],
+  ['VERSUS ARENA', '', '', '', 'multiplayer', 'orbs', 1, 0],
+  ['CO-OP WAR', '', '', '', 'flag_triangle', 'orbs2', 1, 0],
+];
+const art = (kind) => {
+  const orb = (x, y, r, c, e) => `<circle cx="${x}" cy="${y}" r="${r}" fill="${c}" stroke="${e}" stroke-width="3"/>`;
+  const grid = '<g stroke="#fff" stroke-opacity=".18"><path d="M0 40H118M0 80H118M40 0V118M80 0V118"/></g>';
+  const link = (a, b) => `<path d="M${a}L${b}" stroke="#fff" stroke-width="3" stroke-dasharray="1 7" stroke-linecap="round" fill="none"/>`;
+  switch (kind) {
+    case 'map': {
+      const t = T[0];
+      return `<rect width="118" height="118" fill="#dde6f1"/><g transform="translate(22 10) scale(0.78)">${theaterInner(t, 3, 3)}</g>`;
+    }
+    case 'sun': return `<rect width="118" height="118" fill="#ffb347"/><g stroke="#fff" stroke-opacity=".35" stroke-width="6">${[...Array(10)].map((_, i) => `<path d="M59 59L${59 + 90 * Math.cos(i * 0.628)} ${59 + 90 * Math.sin(i * 0.628)}"/>`).join('')}</g><circle cx="59" cy="59" r="26" fill="#ffd95a" stroke="#fff" stroke-width="4"/><circle cx="59" cy="59" r="16" fill="none" stroke="#c98a00" stroke-width="3" opacity=".5"/>`;
+    case 'stars': return `<rect width="118" height="118" fill="#2a2f8a"/>${grid}<g fill="#ffc21a" stroke="#c98a00" stroke-width="3" stroke-linejoin="round"><path d="M59 24l10 22 24 3-18 16 5 24-21-12-21 12 5-24-18-16 24-3z"/></g>`;
+    case 'orbs': return `<rect width="118" height="118" fill="#e8e8e8"/>${grid.replace(/#fff/g, '#999')}${link('34,78 84,40')}${orb(34, 78, 22, '#2c6a99', '#fff')}${orb(86, 38, 17, '#8b160d', '#fff')}${orb(88, 92, 11, '#7a7a7a', '#fff')}`;
+    case 'orbs2': return `<rect width="118" height="118" fill="#2f2f4a"/>${grid}${link('30,40 84,84')}${orb(30, 40, 19, '#147a22', '#fff')}${orb(86, 84, 21, '#2c6a99', '#fff')}${orb(88, 34, 10, '#7a7a7a', '#fff')}`;
+    case 'orbs3': return `<rect width="118" height="118" fill="#3a1060"/>${grid}${link('59,60 24,30')}${link('59,60 96,34')}${link('59,60 90,92')}${orb(59, 60, 22, '#7a6cff', '#fff')}${orb(24, 30, 10, '#ff3c5a', '#fff')}${orb(96, 34, 11, '#ff3c5a', '#fff')}${orb(90, 92, 12, '#ff3c5a', '#fff')}`;
+    default: return `<rect width="118" height="118" fill="#4a1038"/>${grid}${link('30,80 86,36')}${orb(30, 80, 20, '#2c6a99', '#fff')}${orb(88, 36, 18, '#147a22', '#fff')}`;
+  }
+};
+document.getElementById('tiles').innerHTML = tiles.map(([n, face, deep, flag, ic, a, lock, dot], i) => `
+  <div class="tile ${lock ? 'locked' : ''}" style="--face:${face};--deep:${deep};--flag:${flag}">
+    ${i === 1 ? '<div class="timer">READY</div>' : ''}
+    <div class="base">${n.replace(' ', '<br>')}</div>
+    <div class="dia"><svg viewBox="0 0 118 118">${art(a)}</svg></div>
+    <div class="flag">${ico(ic)}</div>
+    ${dot ? '<i class="dotb"></i>' : ''}
+    ${lock ? ico('locked').replace('class="ico"', 'class="ico lock"') : ''}
+  </div>`).join('');
+
+/* PATH polaroids */
+const cards = [
+  { i: 0, n: '1. The Americas', sub: '10/10 · ★ 27', x: 22, y: 78, r: -3, tape: 'left', done: 10 },
+  { i: 1, n: '2. Europe', sub: 'LEVEL 5 · 4/10', x: 130, y: 280, r: 2.5, cur: true, done: 4 },
+  { i: 2, n: '3. Asia', sub: 'LOCKED', x: 22, y: 490, r: -2, lock: true, done: 0 },
+  { i: 3, n: '4. Africa', sub: 'LOCKED', x: 130, y: 690, r: 3, lock: true, done: 0, short: true },
+];
+document.getElementById('polaroids').innerHTML = cards.map((c) => `
+  <div class="polaroid ${c.lock ? 'lockedp' : ''} ${c.cur ? 'cur' : ''}" style="left:${c.x}px;top:${c.y}px;transform:rotate(${c.r}deg);z-index:3">
+    <i class="tape" style="left:-18px"></i>
+    ${c.cur ? '<div class="pbadge">YOU ARE HERE</div>' : ''}
+    <div class="pic" style="${c.i === 2 ? 'background:linear-gradient(#ffd0b8,#ffeede)' : c.i === 3 ? 'background:linear-gradient(#ffe9a8,#fff5d6)' : c.i === 1 ? 'background:linear-gradient(#c8d6ff,#eef1ff)' : ''}">${theaterSvg(T[c.i], c.done, c.done)}${c.lock ? ico('locked').replace('class="ico"', 'class="ico padl"') : ''}</div>
+    <div class="cap2">${c.n}</div>
+    <div style="text-align:center;margin:-8px 0 8px;display:flex;justify-content:center;gap:8px;align-items:center"><small style="font:700 10px Poppins;color:#a06a50;letter-spacing:1px">${c.sub}</small>${c.done === 10 ? '<span class="stars3">' + ico('star').repeat(3) + '</span>' : ''}</div>
+  </div>`).join('');
+
+/* MISSIONS */
+const ms = [
+  { t: 'First Blood', d: 'Win your first battle', p: 1, n: 1, c: 'var(--green)', cd: 'var(--greenDeep)', ic: 'trophy', rw: 'coin:100', a: 'claim', hot: 1, bar: '#3fd03f' },
+  { t: 'Land Grab', d: 'Capture 100 territories', p: 72, n: 100, c: 'var(--blue)', cd: 'var(--blueDeep)', ic: 'flag_triangle', rw: 'coin:250', a: 'go', bar: '#4d86ff' },
+  { t: 'Perfectionist', d: 'Earn 3 stars on 10 levels', p: 4, n: 10, c: 'var(--gold)', cd: 'var(--goldDeep)', ic: 'star', rw: 'coin:400', a: 'ip', bar: '#ffc21a' },
+  { t: 'Streak Keeper', d: 'Claim the daily bonus 7 days running', p: 4, n: 7, c: 'var(--orange)', cd: 'var(--orangeDeep)', ic: 'medal1', rw: 'coin:300', a: 'ip', bar: '#ff9a3d' },
+  { t: 'World Tour', d: 'Clear every level in Europe', p: 4, n: 10, c: 'var(--purple)', cd: 'var(--purpleDeep)', ic: 'crown_a', rw: 'star:1', a: 'ip', bar: '#d24cff' },
+];
+document.getElementById('mlist').innerHTML = ms.map((m) => `
+  <div class="row ${m.hot ? 'hot' : ''}" style="--face:${m.c};--deep:${m.cd};--face2:${m.bar}">
+    <div class="ic">${ico(m.ic)}</div>
+    <div class="mid2"><h4>${m.t.toUpperCase()}</h4><p>${m.d}</p><div class="bar"><b style="width:${(m.p / m.n) * 100}%"></b><span>${m.p}/${m.n}</span></div></div>
+    <div class="rw">${m.rw.startsWith('coin') ? '<span class="coin"></span>' : ico('star')}×${m.rw.split(':')[1]}</div>
+    <div class="act ${m.a}">${m.a === 'go' ? 'GO' : m.a === 'claim' ? 'CLAIM' : 'IN<br>PROGRESS'}</div>
+  </div>`).join('');
+
+/* RANKS */
+const ranks = [
+  ['RECRUIT', '#2fd0ff', '#00c8ff', 'star', '', 'cur-no'], ['CAPTAIN', '#ff4fd8', '#ff2fe0', 'flag_triangle', 'YOU', 'cur'],
+  ['MAJOR', '#ffc21a', '#ffb000', 'medal1', '120★', 'lk'], ['GENERAL', '#b87cff', '#a04cff', 'crown_a', '240★', 'lk'], ['LEGEND', '#ff6a3d', '#ff4a1a', 'trophy', '400★', 'lk'],
+];
+document.getElementById('rcards').innerHTML = ranks.map(([n, g, gl, ic, sm, st]) => `
+  <div class="rc ${st === 'cur' ? 'cur' : ''} ${st === 'lk' ? 'lk' : ''}" style="--rg:linear-gradient(${g},${gl});--rgl:${gl}"><div>
+    <span class="medal">${ico(ic)}</span><b>${n}</b><small>${st === 'lk' ? '🔒 ' + sm : st === 'cur' ? '▲ ' + sm + ' · 86★' : '✓ DONE'}</small></div></div>`).join('');
+const lr = [['1', 'V', 'Viktor', '#e5262b', '3,420', 1], ['2', 'M', 'MinJi', '#14b8a6', '3,105'], ['3', 'S', 'Sofia', '#b81fe6', '2,980'], ['14', 'A', 'Alex (You)', '#2f6bff', '86', 0, 1]];
+document.getElementById('lrows').innerHTML = lr.map(([p, i, n, c, s, g, me]) => `<div class="lr ${me ? 'me' : ''}"><span class="pos ${g || p === '2' || p === '3' ? 'g' : ''}">${p}</span><span class="av" style="--c:${c}">${i}</span>${n}<em>${s} ${ico('star').replace('class="ico"', 'class="ico" style="width:16px;height:16px;color:var(--gold);--m:url(../assets/ui/star.png)"')}</em></div>`).join('');
+
+const id = location.hash.slice(1);
+if (id) { document.body.classList.add('solo'); document.querySelector(`.item[data-id="${id}"]`)?.classList.add('on'); }
+</script>
+</body>
+</html>

@@ -1,0 +1,66 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>splash match</title>
+<style>
+@font-face { font-family: 'Lilita'; src: url('../../assets/fonts/LilitaOne-Regular.ttf'); }
+@font-face { font-family: 'Poppins'; font-weight: 700; src: url('../../assets/fonts/Poppins-Bold.ttf'); }
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { background: #2b1d14; font-family: 'Poppins', sans-serif; }
+#sheet { display: flex; gap: 28px; padding: 40px; width: max-content; }
+figure { margin: 0; }
+figcaption { height: 44px; line-height: 44px; text-align: center; color: #f3e2bf; font-weight: 700; letter-spacing: 2px; font-size: 16px; }
+.screen { position: relative; width: 360px; height: 800px; overflow: hidden; border-radius: 18px; box-shadow: 0 6px 18px #0009; }
+.screen img.full { width: 360px; height: 800px; display: block; }
+.abs { position: absolute; }
+.status { position: absolute; top: 0; left: 0; right: 0; padding: 6px 14px; display: flex; justify-content: space-between; font-size: 12px; font-weight: 700; color: #3a2a6a; z-index: 3; }
+/* the app's Stage: peach sky, soft olive hills, pale sun glow */
+.sky { position: absolute; inset: 0; background: linear-gradient(#9fcdf0, #f7dcc4); }
+.hill { position: absolute; border-radius: 50%; }
+.sun { position: absolute; border-radius: 50%; background: rgba(255, 244, 204, .35); }
+.state { position: absolute; background: rgba(255, 255, 255, .55); }
+.bar-track { height: 22px; border-radius: 11px; border: 3px solid #8a5a2b; background: #6e3d1c; overflow: hidden; }
+.bar-fill { height: 100%; border-radius: 8px; background: #9ab53e; }
+.label { font-family: 'Lilita'; font-size: 16px; letter-spacing: .5px; color: #fff; text-shadow: 0 2px 3px rgba(40, 20, 5, .7); }
+</style>
+</head>
+<body>
+<div id="sheet">
+  <figure>
+    <div class="screen" id="old"><img class="full" src="../png_new/splash.png"></div>
+    <figcaption>TODAY'S SPLASH</figcaption>
+  </figure>
+  <figure>
+    <div class="screen" id="new">
+      <div class="sky"></div>
+      
+      <div class="hill" style="bottom:-198px;left:-108px;width:396px;height:396px;background:rgba(154,181,62,.28)"></div>
+      <div class="hill" style="bottom:-252px;right:-144px;width:432px;height:432px;background:rgba(122,154,50,.3)"></div>
+      <!-- faint territories, as on Home -->
+      <svg class="abs" style="left:0;top:0" width="360" height="800" viewBox="0 0 360 800" fill="rgba(255,255,255,.55)">
+        <path d="M200 320 L252 296 L276 330 L246 372 L206 360Z"/>
+        <path d="M-6 470 L34 452 L52 500 L18 530 L-6 520Z"/>
+        <path d="M318 520 L366 508 L372 566 L330 590 L310 556Z"/>
+        <path d="M150 640 L204 624 L226 668 L190 704 L148 690Z"/>
+      </svg>
+      <div class="status"><span>9:41</span><span>▲ ▮▮▮ ▮</span></div>
+      <img class="abs" src="../../assets/ui/logo.png" style="left:30px;top:150px;width:300px;filter:drop-shadow(0 8px 10px rgba(59,31,13,.28))">
+      <div class="abs" style="left:0;right:0;top:376px;text-align:center;font-weight:700;font-size:12px;letter-spacing:3px;color:#fff;text-shadow:0 1px 3px rgba(40,20,5,.55)">CAPTURE · SPREAD · CONQUER</div>
+      <div class="abs" style="left:0;right:0;bottom:46px;display:flex;flex-direction:column;align-items:center;gap:10px">
+        <div class="bar-track" style="width:216px"><div class="bar-fill" style="width:62%"></div></div>
+        <div class="label">Loading levels…</div>
+      </div>
+    </div>
+    <figcaption>NEW SPLASH · MATCHES TODAY'S UI</figcaption>
+  </figure>
+  <figure>
+    <div class="screen" id="home"><img class="full" src="../png_new/home.png"></div>
+    <figcaption>HOME (FOR COMPARISON)</figcaption>
+  </figure>
+</div>
+<script>
+Promise.all([...document.images].map((i) => (i.complete ? 1 : new Promise((r) => { i.onload = i.onerror = r; })))).then(() => document.fonts.ready).then(() => { document.title = 'ready'; });
+</script>
+</body>
+</html>

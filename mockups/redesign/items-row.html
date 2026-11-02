@@ -1,0 +1,86 @@
+<!doctype html>
+<meta charset="utf-8">
+<title>Battle screen: item row</title>
+<style>
+@font-face { font-family: Lilita; src: url("../../assets/fonts/LilitaOne-Regular.ttf"); }
+@font-face { font-family: Poppins; font-weight: 700; src: url("../../assets/fonts/Poppins-Bold.ttf"); }
+* { box-sizing: border-box; }
+body { margin: 0; width: 1120px; background: #cfd9e8; font-family: Poppins, sans-serif; color: #2b2118; }
+.sheet { display: flex; gap: 28px; padding: 28px; align-items: flex-start; }
+.col { width: 360px; }
+.cap { font: 400 22px Lilita; margin: 0 0 10px 4px; }
+.phone { position: relative; width: 360px; height: 800px; border-radius: 30px; overflow: hidden; box-shadow: 0 0 0 8px #2b2118, 0 18px 40px rgba(0,0,0,.35); background: #dfe6ee; }
+.phone > img.shot { position: absolute; inset: 0; width: 360px; height: 800px; }
+/* hides the old bomb button; everything above it is the real, unchanged screen */
+.cover { position: absolute; left: 0; right: 0; top: 684px; height: 98px; background: #dfe6ee; }
+
+.row { position: absolute; left: 0; right: 0; top: 712px; display: flex; justify-content: center; gap: 9px; }
+.tile { position: relative; width: 56px; height: 56px; border-radius: 15px; border: 3px solid #2b2118;
+  background: var(--c); display: flex; align-items: center; justify-content: center; font-size: 28px;
+  box-shadow: inset 0 3px 0 rgba(255,255,255,.4), inset 0 -5px 0 rgba(0,0,0,.22), 0 5px 0 #2b2118; }
+.tile span { filter: drop-shadow(0 2px 0 rgba(0,0,0,.35)); }
+.tile em { position: absolute; top: -9px; right: -8px; min-width: 22px; height: 22px; padding: 0 5px; border-radius: 11px; background: #d41f1f;
+  border: 2.5px solid #fff; color: #fff; font: 400 13px/17px Lilita; text-align: center; font-style: normal; }
+.tile.sel { transform: translateY(-9px); border-color: #fff; box-shadow: 0 0 0 3px #2b2118, 0 0 18px 5px rgba(255,138,28,.85), 0 5px 0 3px #2b2118; }
+.tile.dim { opacity: .5; }
+.pips { position: absolute; left: 0; right: 0; top: 690px; text-align: center; font: 400 12px Lilita; letter-spacing: 1px; color: #5a4636; }
+.pips i { display: inline-block; width: 9px; height: 9px; margin-left: 4px; border-radius: 50%; background: #ff8a1c; border: 2px solid #2b2118; vertical-align: -1px; }
+.pips i.off { background: #cfc3b3; }
+.prompt { position: absolute; top: 51px; left: 50%; transform: translateX(-50%); padding: 0 20px; height: 38px; border-radius: 19px; background: #ff8a1c; border: 3px solid #fff; color: #fff; font: 400 18px/32px Lilita; white-space: nowrap; }
+.ring { position: absolute; left: 213px; top: 308px; width: 54px; height: 54px; border-radius: 50%; border: 4px dashed #ff8a1c; box-shadow: 0 0 0 4px rgba(255,255,255,.9); }
+.note { position: absolute; width: 22px; height: 22px; border-radius: 50%; background: #e8262f; color: #fff; font: 400 14px/22px Lilita; text-align: center; border: 2px solid #fff; z-index: 5; }
+.inspo { width: 236px; border-radius: 14px; box-shadow: 0 6px 18px rgba(0,0,0,.3); display: block; }
+.notes { width: 360px; padding-top: 6px; font-size: 13px; line-height: 1.5; }
+.notes h2 { font: 400 26px Lilita; margin: 0 0 10px; }
+.notes ul { padding: 0; margin: 0 0 14px; }
+.notes li { list-style: none; margin: 0 0 9px; display: flex; gap: 8px; }
+.notes li b { flex: none; width: 20px; height: 20px; border-radius: 50%; background: #e8262f; color: #fff; font: 400 13px/20px Lilita; text-align: center; margin-top: 1px; }
+.notes p { font-size: 12px; color: #5a4636; margin: 10px 0 0; }
+</style>
+
+<div class="sheet">
+  <div class="col"><p class="cap">A · Battle</p>
+    <div class="phone">
+      <img class="shot" src="play.png">
+      <div class="cover"></div>
+      <div class="pips">ITEMS LEFT<i></i><i></i><i></i></div>
+      <div class="row">
+        <div class="tile" style="--c:#4a5d82"><span>💣</span><em>2</em></div>
+        <div class="tile" style="--c:#3f9d8f"><span>❄️</span><em>1</em></div>
+        <div class="tile" style="--c:#9ab53e"><span>🛡️</span><em>1</em></div>
+        <div class="tile" style="--c:#e2a321"><span>⚡</span><em>1</em></div>
+        <div class="tile" style="--c:#a6642a"><span>📦</span><em>2</em></div>
+      </div>
+      <div class="note" style="left:16px;top:686px">1</div>
+      <div class="note" style="left:322px;top:686px">2</div>
+    </div>
+  </div>
+  <div class="col"><p class="cap">B · Freeze picked</p>
+    <div class="phone">
+      <img class="shot" src="play.png">
+      <div class="cover"></div>
+      <div class="ring"></div>
+      <div class="prompt">TAP AN ENEMY TOWER</div>
+      <div class="pips">ITEMS LEFT<i></i><i></i><i></i></div>
+      <div class="row">
+        <div class="tile dim" style="--c:#4a5d82"><span>💣</span><em>2</em></div>
+        <div class="tile sel" style="--c:#3f9d8f"><span>❄️</span><em>1</em></div>
+        <div class="tile dim" style="--c:#9ab53e"><span>🛡️</span><em>1</em></div>
+        <div class="tile dim" style="--c:#e2a321"><span>⚡</span><em>1</em></div>
+        <div class="tile dim" style="--c:#a6642a"><span>📦</span><em>2</em></div>
+      </div>
+      <div class="note" style="left:322px;top:686px">3</div>
+    </div>
+  </div>
+  <div class="notes">
+    <p class="cap">Inspo</p>
+    <img class="inspo" src="file:///C:/Users/hp/AppData/Local/Temp/claude/d--BattleGrid/05d6f774-3b58-4ff0-9e3a-1a794bd28285/images/3.jpg">
+    <h2 style="margin-top:18px">What changes</h2>
+    <ul>
+      <li><b>1</b><span>A row of square item tiles along the bottom, like the inspo's icon row: rounded, flat colours, a chunky dark edge. Only the items you hold show up, each with its count.</span></li>
+      <li><b>2</b><span>The round bomb button and the pop-up tray are gone; the row replaces them. Nothing else on the battle screen changes.</span></li>
+      <li><b>3</b><span>Tap a tile to pick the item. It lifts and glows, the others dim, and the same orange prompt as today appears at the top. Tap it again to put it away.</span></li>
+    </ul>
+    <p>Everything above the row is the real screen, captured from the app. The dots show how many item uses are left in this battle, which the old bomb button showed as a number.</p>
+  </div>
+</div>

@@ -1,0 +1,100 @@
+rules_version = '2';
+
+// BattleGrid cloud save: one document per player at players/{uid}, readable and
+// writable only by that player (anonymous guests included — every player is
+// signed in). Deploy with: firebase deploy --only firestore:rules
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function isOwner(uid) {
+      return request.auth != null && request.auth.uid == uid;
+    }
+
+    // Numbers that only ever grow and can never be negative or absurd.
+    function validProgress(p) {
+      return p is map
+        && p.coins is number && p.coins >= 0 && p.coins < 1000000000
+        && p.unlocked is number && p.unlocked >= 1 && p.unlocked < 100000
+        && p.wins is number && p.wins >= 0
+        && p.losses is number && p.losses >= 0
+        && p.streak is number && p.streak >= 0
+        && p.bestStreak is number && p.bestStreak >= 0
+        && (p.lastClaimDay == null || p.lastClaimDay is string)
+        && (!('stars' in p) || p.stars is map)
+        && (!('spent' in p) || (p.spent is number && p.spent >= 0 && p.spent < 1000000000))
+        && (!('skins' in p) || (p.skins is list && p.skins.size() <= 64))
+        && (!('skin' in p) || p.skin is string)
+        && (!('shapes' in p) || (p.shapes is list && p.shapes.size() <= 64))
+        && (!('shape' in p) || p.shape is string)
+        && (!('boards' in p) || (p.boards is list && p.boards.size() <= 64))
+        && (!('board' in p) || p.board is string)
+        && (!('titles' in p) || (p.titles is list && p.titles.size() <= 64))
+        && (!('title' in p) || p.title is string)
+        && (!('items' in p) || (p.items is map && p.items.size() <= 64))
+        && (!('itemsUsed' in p) || (p.itemsUsed is map && p.itemsUsed.size() <= 64))
+        && (!('upgrades' in p) || (p.upgrades is map && p.upgrades.size() <= 64));
+    }
+
+    function validSettings(s) {
+      return s is map
+        && s.sound is bool
+        && s.music is bool
+        && s.vibration is bool;
+    }
+
+    match /players/{uid} {
+      allow read: if isOwner(uid);
+
+      allow create, update: if isOwner(uid)
+        && request.resource.data.playerId == uid
+        && (!('progress' in request.resource.data) || validProgress(request.resource.data.progress))
+        && (!('settings' in request.resource.data) || validSettings(request.resource.data.settings));
+
+      allow delete: if false;
+    }
+
+    // Global leaderboard: one document per player per UTC day (src/leaderboard.ts), world-readable
+    // so any signed-in device can render the board, but a player can only ever write their own
+    // doc — with a score that never decreases and a day key the client cannot fake, since it is
+    // re-derived here from server time rather than trusted from the write.
+    match /leaderboard/{entryId} {
+      function serverDayKey() {
+        return string(request.time.year()) + '-'
+          + (request.time.month() < 10 ? '0' : '') + string(request.time.month()) + '-'
+          + (request.time.day()   < 10 ? '0' : '') + string(request.time.day());
+      }
+
+      function incoming() {
+        return request.resource.data;
+      }
+
+      function isWellFormed() {
+        return incoming().keys().hasOnly(['uid', 'name', 'score', 'dayKey', 'createdAt', 'photoURL', 'country', 'city', 'countryCode', 'title'])
+          && incoming().keys().hasAll(['uid', 'name', 'score', 'dayKey', 'createdAt'])
+          && incoming().name is string && incoming().name.size() >= 1 && incoming().name.size() <= 40
+          && incoming().score is int && incoming().score > 0 && incoming().score < 1000000000
+          && incoming().dayKey == serverDayKey()
+          && incoming().createdAt == request.time
+          && (!('photoURL' in incoming()) || incoming().photoURL is string)
+          && (!('country' in incoming()) || (incoming().country is string && incoming().country.size() <= 80))
+          && (!('city' in incoming()) || (incoming().city is string && incoming().city.size() <= 80))
+          && (!('countryCode' in incoming()) || incoming().countryCode == null || incoming().countryCode is string)
+          // The title id (e.g. "champion"): a free-text field here, since the catalogue that gives it meaning
+          // (name, icon, price) lives client-side in src/shop.ts, not in the rules.
+          && (!('title' in incoming()) || (incoming().title is string && incoming().title.size() <= 32));
+      }
+
+      function ownsEntry() {
+        return request.auth != null
+          && incoming().uid == request.auth.uid
+          && entryId == request.auth.uid + '_' + incoming().dayKey;
+      }
+
+      allow read: if true;
+      allow create: if ownsEntry() && isWellFormed();
+      // Never decreases: a resubmitted identity (name/photo/geo) is fine even on a day the score does not improve.
+      allow update: if ownsEntry() && isWellFormed() && incoming().score >= resource.data.score;
+      allow delete: if false;
+    }
+  }
+}

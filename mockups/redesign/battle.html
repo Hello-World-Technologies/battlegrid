@@ -1,0 +1,205 @@
+<!doctype html>
+<meta charset="utf-8">
+<title>BattleGrid battle screen redesign</title>
+<style>
+@font-face { font-family: Lilita; src: url("../../assets/fonts/LilitaOne-Regular.ttf"); }
+@font-face { font-family: Poppins; font-weight: 700; src: url("../../assets/fonts/Poppins-Bold.ttf"); }
+:root {
+  --ink: #0d1b4a; --navy: #14296b; --blue1: #66b9ff; --blue2: #2c78f2; --blue3: #1c4fd2;
+  --gold1: #ffe14d; --gold2: #ffa31c; --gold3: #f2560e; --cream: #fff4cf; --sand: #efe0bd; --water: #f1e3c4;
+}
+* { box-sizing: border-box; }
+body { margin: 0; width: 1240px; background: #cfd9e8; font-family: Poppins, sans-serif; color: var(--ink); }
+.sheet { display: flex; gap: 28px; padding: 28px; align-items: flex-start; }
+.col { width: 360px; }
+.cap { font: 400 22px Lilita; margin: 0 0 10px 4px; letter-spacing: .5px; }
+.phone { position: relative; width: 360px; height: 780px; border-radius: 34px; overflow: hidden; background: var(--water); box-shadow: 0 0 0 8px #0d1b4a, 0 18px 40px rgba(0,0,0,.35); }
+.status { position: absolute; top: 0; left: 0; right: 0; height: 26px; display: flex; justify-content: space-between; padding: 6px 18px 0; font-size: 12px; color: var(--ink); z-index: 20; }
+svg.board { position: absolute; left: 32px; top: 196px; transform: scale(.9); transform-origin: 0 0; }
+
+/* chunky logo-style buttons and pills */
+.chunk { border: 3px solid #fff; box-shadow: 0 0 0 3px var(--ink), 0 5px 0 3px var(--ink); }
+.hud { position: absolute; z-index: 10; }
+.pause { left: 16px; top: 40px; width: 46px; height: 46px; border-radius: 15px; background: linear-gradient(var(--blue1), var(--blue2) 55%, var(--blue3)); display: flex; align-items: center; justify-content: center; gap: 6px; }
+.pause i { width: 7px; height: 20px; border-radius: 3px; background: #fff; box-shadow: 0 2px 0 rgba(0,0,0,.25); }
+.level { left: 50%; transform: translateX(-50%); top: 36px; min-width: 112px; padding: 5px 12px 7px; border-radius: 18px; text-align: center; background: linear-gradient(var(--navy), #0d1b4a); }
+.level b { display: block; font: 400 17px/1 Lilita; color: #fff; letter-spacing: .5px; }
+.level small { display: flex; align-items: center; justify-content: center; gap: 6px; font: 400 15px/1.15 Lilita; color: var(--gold1); }
+.level .st { color: var(--gold1); font-size: 13px; letter-spacing: 1px; }
+.level .st .off { color: #5d6aa0; }
+.coins { right: 12px; top: 40px; height: 40px; padding: 0 10px 0 6px; border-radius: 20px; background: linear-gradient(#fff6d6, #ffe09a); display: flex; align-items: center; gap: 6px; font: 400 18px Lilita; }
+.coins i { width: 24px; height: 24px; border-radius: 50%; background: radial-gradient(circle at 35% 30%, #fff3a6, #ffb81c 60%, #e0820c); border: 2px solid var(--ink); }
+
+.power { left: 16px; right: 16px; top: 100px; height: 52px; display: flex; align-items: center; gap: 8px; }
+.avatar { width: 50px; height: 50px; border-radius: 50%; overflow: hidden; background: radial-gradient(#e8f6ff, #8fd0ff); flex: none; position: relative; }
+.avatar img { position: absolute; width: 112px; left: -31px; top: -30px; }
+.bar { flex: 1; height: 26px; border-radius: 13px; background: #5b6584; display: flex; overflow: hidden; border: 3px solid #fff; box-shadow: 0 0 0 3px var(--ink), 0 4px 0 3px var(--ink); }
+.bar span { display: block; height: 100%; border-right: 3px solid #fff; }
+.bar span:last-child { border: 0; }
+.rivals { display: flex; gap: 4px; flex-direction: column; }
+.rv { display: flex; align-items: center; gap: 4px; font: 400 12px Lilita; color: var(--ink); }
+.rv i { width: 14px; height: 14px; border-radius: 50%; border: 2px solid #fff; box-shadow: 0 0 0 2px var(--ink); }
+
+.chips { left: 0; right: 0; top: 158px; display: flex; justify-content: center; gap: 8px; }
+.chip { height: 26px; padding: 0 12px; border-radius: 13px; font: 400 14px/20px Lilita; color: #fff; border: 3px solid #fff; box-shadow: 0 0 0 2px var(--ink); }
+.prompt { left: 50%; transform: translateX(-50%); top: 158px; padding: 6px 20px 8px; border-radius: 20px; font: 400 18px Lilita; color: #fff; background: linear-gradient(var(--gold1) -30%, var(--gold2) 40%, var(--gold3)); text-shadow: 0 2px 0 rgba(120,40,0,.55); white-space: nowrap; }
+
+/* bottom dock */
+.dock { left: 12px; right: 12px; bottom: 14px; height: 128px; border-radius: 28px; background: linear-gradient(#1e3a8f, #0f2160); padding: 28px 14px 0; display: flex; align-items: flex-start; gap: 10px; }
+.dock .title { position: absolute; top: -13px; left: 50%; transform: translateX(-50%); padding: 3px 14px 5px; border-radius: 14px; font: 400 15px/1 Lilita; color: #fff; background: linear-gradient(var(--blue1), var(--blue2) 55%, var(--blue3)); white-space: nowrap; border: 3px solid #fff; box-shadow: 0 0 0 2px var(--ink); }
+.dock .title i { display: inline-block; width: 9px; height: 9px; border-radius: 50%; margin-left: 4px; background: var(--gold1); border: 1.5px solid var(--ink); vertical-align: 1px; }
+.dock .title i.off { background: #5d6aa0; }
+.slot { position: relative; flex: 1; height: 66px; border-radius: 20px; background: linear-gradient(#fff, #dfe9ff); border: 3px solid #fff; box-shadow: 0 0 0 3px var(--ink), 0 5px 0 3px var(--ink); display: flex; align-items: center; justify-content: center; font-size: 32px; }
+.slot em { position: absolute; top: -9px; right: -7px; min-width: 24px; height: 24px; padding: 0 5px; border-radius: 12px; background: #e8262f; color: #fff; font: 400 14px/20px Lilita; text-align: center; border: 2px solid #fff; box-shadow: 0 0 0 2px var(--ink); }
+.slot.sel { background: linear-gradient(var(--gold1), var(--gold2)); transform: translateY(-14px); box-shadow: 0 0 0 3px var(--ink), 0 5px 0 3px var(--ink), 0 0 22px 6px rgba(255,200,40,.75); }
+.slot.dim { opacity: .45; }
+.slot small { position: absolute; bottom: -22px; left: 0; right: 0; text-align: center; font: 400 12px Lilita; color: #bcd2ff; }
+.slot.sel small { color: var(--gold1); }
+
+.mascot { left: 4px; bottom: 124px; width: 96px; z-index: 12; filter: drop-shadow(0 4px 0 rgba(13,27,74,.25)); }
+.bubble { left: 92px; bottom: 156px; width: 218px; padding: 9px 12px 10px; border-radius: 18px; background: #fff; font: 700 12px/1.3 Poppins; color: var(--ink); z-index: 12; border: 3px solid var(--ink); }
+.bubble:after { content: ""; position: absolute; left: -11px; bottom: 16px; border: 7px solid transparent; border-right-color: var(--ink); border-left: 0; }
+.bubble b { color: #1c4fd2; }
+
+.note { position: absolute; z-index: 30; width: 22px; height: 22px; border-radius: 50%; background: #e8262f; color: #fff; font: 400 14px/22px Lilita; text-align: center; border: 2px solid #fff; box-shadow: 0 2px 4px rgba(0,0,0,.35); }
+.notes { width: 360px; padding-top: 38px; }
+.notes h2 { font: 400 28px Lilita; margin: 0 0 12px; }
+.notes li { margin: 0 0 12px; list-style: none; font-size: 13px; line-height: 1.45; display: flex; gap: 10px; }
+.notes li > b { flex: none; width: 22px; height: 22px; border-radius: 50%; background: #e8262f; color: #fff; font: 400 14px/22px Lilita; text-align: center; margin-top: 1px; }
+.notes ul { padding: 0; margin: 0; }
+.notes p { font-size: 12px; color: #4a587c; line-height: 1.5; }
+</style>
+
+<div class="sheet">
+  <div class="col"><p class="cap">A · Battle</p><div class="phone" id="A"></div></div>
+  <div class="col"><p class="cap">B · Item armed</p><div class="phone" id="B"></div></div>
+  <div class="notes">
+    <h2>Battle screen redesign</h2>
+    <ul>
+      <li><b>1</b><span><strong>Top bar.</strong> Chunky pause button, level name and a timer with the three star goals. The stars go dark as the 3-star and 2-star times pass, so speed is visible while you play.</span></li>
+      <li><b>2</b><span><strong>Power bar with your face.</strong> The mascot marks your share and a legend names each rival colour with its percentage. Today the bar is unlabelled.</span></li>
+      <li><b>3</b><span><strong>3D troops.</strong> The equipped troop skin (here the Warplane) flies on a disc in the owner colour, so you can tell whose squad it is.</span></li>
+      <li><b>4</b><span><strong>"Takes it" feedback.</strong> While dragging, a floating chip shows how many troops you are sending and the target ring turns green when you can win.</span></li>
+      <li><b>5</b><span><strong>Item dock.</strong> Replaces the single bomb button: your held items in one row, with counts and the "uses left" pips. Picking one raises it and shows a gold prompt on top.</span></li>
+      <li><b>6</b><span><strong>Mascot tips.</strong> The tips the game already generates (factory, fortress, storm, outnumbered) are spoken by the water sprite instead of being unseen.</span></li>
+    </ul>
+    <p>Style: the logo's blue and gold, thick navy outlines with a white rim, Lilita One. This is a design proposal; the battlefield itself is still drawn by Skia.</p>
+  </div>
+</div>
+
+<script>
+const OWN = {
+  me:     { fill: '#70bceb', deep: '#2c6a99' },
+  red:    { fill: '#ff6b57', deep: '#9d1f12' },
+  green:  { fill: '#86d88f', deep: '#1c7a2c' },
+  purple: { fill: '#b886ec', deep: '#5d2a91' },
+  none:   { fill: '#c9b48a', deep: '#fff' },
+};
+// seed, owner, troops, kind
+const SEEDS = [
+  [52, 56, 'none', 27], [150, 44, 'green', 40], [268, 66, 'red', 40],
+  [92, 150, 'none', 76], [205, 138, 'none', 24], [292, 176, 'none', 16],
+  [42, 238, 'me', 22], [150, 238, 'none', 51, 'factory'], [240, 250, 'none', 83],
+  [76, 336, 'me', 64], [160, 352, 'none', 100, 'fortress'], [258, 362, 'purple', 40],
+  [300, 296, 'none', 30], [40, 410, 'none', 96], [212, 420, 'none', 18],
+];
+const BW = 328, BH = 440;
+
+function clip(poly, a, b, c) { // keep a*x + b*y <= c
+  const out = [];
+  for (let i = 0; i < poly.length; i++) {
+    const p = poly[i], q = poly[(i + 1) % poly.length];
+    const fp = a * p[0] + b * p[1] - c, fq = a * q[0] + b * q[1] - c;
+    if (fp <= 0) out.push(p);
+    if ((fp < 0 && fq > 0) || (fp > 0 && fq < 0)) {
+      const t = fp / (fp - fq);
+      out.push([p[0] + (q[0] - p[0]) * t, p[1] + (q[1] - p[1]) * t]);
+    }
+  }
+  return out;
+}
+function cells() {
+  return SEEDS.map((s, i) => {
+    let poly = [[0, 0], [BW, 0], [BW, BH], [0, BH]];
+    SEEDS.forEach((o, j) => {
+      if (i === j) return;
+      const mx = (s[0] + o[0]) / 2, my = (s[1] + o[1]) / 2;
+      const a = o[0] - s[0], b = o[1] - s[1];
+      poly = clip(poly, a, b, a * mx + b * my);
+    });
+    return poly;
+  });
+}
+const CELLS = cells();
+
+function plane(x, y, ang) {
+  return `<g transform="translate(${x} ${y})"><circle r="11" fill="${OWN.me.fill}" stroke="#fff" stroke-width="2.5"/>
+  <image href="../../assets/ui/troop_plane.png" x="-15" y="-15" width="30" height="30" transform="rotate(${ang})"/></g>`;
+}
+function board(opts) {
+  let svg = `<svg class="board" width="${BW}" height="${BH}" viewBox="0 0 ${BW} ${BH}"><defs><clipPath id="r${opts.id}"><rect width="${BW}" height="${BH}" rx="26"/></clipPath>
+  <filter id="s"><feDropShadow dx="0" dy="3" stdDeviation="2" flood-color="#000" flood-opacity=".35"/></filter></defs>
+  <rect width="${BW}" height="${BH}" rx="26" fill="#e6d4a8"/><g clip-path="url(#r${opts.id})">`;
+  CELLS.forEach((poly, i) => {
+    const [x, y, o, n, kind] = SEEDS[i];
+    const d = poly.map((p, k) => (k ? 'L' : 'M') + p[0].toFixed(1) + ' ' + p[1].toFixed(1)).join('') + 'Z';
+    const dim = opts.dim && o !== 'red' ? 0.88 : 1;
+    svg += `<path d="${d}" fill="${OWN[o].fill}" stroke="#fffaf0" stroke-width="3.5" stroke-linejoin="round" opacity="${dim}"/>`;
+  });
+  svg += `</g>`;
+  // towers
+  SEEDS.forEach(([x, y, o, n, kind], i) => {
+    const own = o !== 'none';
+    const r = own ? 17 : 15;
+    const ring = opts.targets && o === 'red' ? `<circle cx="${x}" cy="${y}" r="${r + 10}" fill="none" stroke="#fff" stroke-width="5"/><circle cx="${x}" cy="${y}" r="${r + 10}" fill="none" stroke="#ffa31c" stroke-width="3" stroke-dasharray="7 5"/>` : '';
+    const take = opts.take === i ? `<circle cx="${x}" cy="${y}" r="${r + 10}" fill="none" stroke="#3dff9a" stroke-width="4" stroke-dasharray="6 5"/>` : '';
+    const fort = kind === 'fortress' ? `<circle cx="${x}" cy="${y}" r="${r + 6}" fill="none" stroke="#fff" stroke-width="3" stroke-dasharray="5 4"/>` : '';
+    svg += `${ring}${take}${fort}<circle cx="${x}" cy="${y}" r="${r}" fill="${own ? OWN[o].deep : '#fff'}" stroke="#fff" stroke-width="3" filter="url(#s)"/>`;
+    svg += `<text x="${x}" y="${y + 6}" text-anchor="middle" font-family="Lilita" font-size="${own ? 17 : 15}" fill="${own ? '#fff' : '#0d1b4a'}" stroke="${own ? '#0d1b4a' : 'none'}" stroke-width="3" paint-order="stroke">${n}</text>`;
+    if (kind === 'factory') svg += `<g transform="translate(${x + 13} ${y - 15})"><circle r="8" fill="#ffd23f" stroke="#0d1b4a" stroke-width="2"/><path d="M1 -5 L-3 1 H0 L-1 5 L3 -1 H0Z" fill="#0d1b4a"/></g>`;
+    if (opts.frozen === i) svg += `<circle cx="${x}" cy="${y}" r="${r + 7}" fill="rgba(160,225,255,.45)" stroke="#bdeaff" stroke-width="3"/><text x="${x + 18}" y="${y - 14}" font-size="16">❄️</text>`;
+  });
+  svg += opts.extra || '';
+  return svg + '</svg>';
+}
+
+function statusBar() { return '<div class="status"><span>9:41</span><span>▲ ▮▮▮▮</span></div>'; }
+function topBar() {
+  return `${statusBar()}
+  <div class="hud pause chunk"><i></i><i></i></div>
+  <div class="hud level chunk"><b>LEVEL 24</b><small><span>1:12</span><span class="st">★★<span class="off">★</span></span></small></div>
+  <div class="hud coins chunk"><i></i>2,840</div>
+  <div class="hud power">
+    <div class="avatar chunk"><img src="../../assets/ui/shape_sprite.png"></div>
+    <div class="bar"><span style="width:26%;background:#3a9cf0"></span><span style="width:20%;background:#ff4a38"></span><span style="width:12%;background:#2ec04a"></span><span style="width:10%;background:#9a52e0"></span><span style="flex:1;background:#6b7494"></span></div>
+    <div class="rivals"><div class="rv"><i style="background:#ff4a38"></i>20%</div><div class="rv"><i style="background:#2ec04a"></i>12%</div></div>
+  </div>`;
+}
+function dock(sel) {
+  const items = [['💣', 2, 'Bomb'], ['❄️', 1, 'Freeze'], ['🛡️', 1, 'Shield'], ['⚡', 1, 'Surge'], ['📦', 2, 'Airdrop']];
+  return `<div class="hud dock chunk"><div class="title">ITEMS · 3 USES<i></i><i></i><i></i></div>
+  ${items.map(([e, n, name], i) => `<div class="slot ${sel === i ? 'sel' : sel !== null ? 'dim' : ''}">${e}<em>${n}</em><small>${name}</small></div>`).join('')}</div>`;
+}
+
+// ── Frame A ─────────────────────────────────────────────────────────────
+// The drag in progress: from my tower on the left to the factory, with a "+32" chip and a green ring on the target.
+const dragPath = `<path d="M64 238 Q96 224 124 238" fill="none" stroke="#fff" stroke-width="9" stroke-linecap="round" opacity=".9"/><path d="M64 238 Q96 224 124 238" fill="none" stroke="#2c78f2" stroke-width="5" stroke-linecap="round" stroke-dasharray="1 11"/>
+<g transform="translate(92 206)"><rect x="-28" y="-14" width="56" height="26" rx="13" fill="#1d7a3a" stroke="#fff" stroke-width="3"/><text y="5" text-anchor="middle" font-family="Lilita" font-size="16" fill="#fff">+32</text></g>`;
+// A squad already in the air, from my big tower to the 83, each plane turned along the curve.
+const P0 = [76, 336], C = [175, 340], P2 = [240, 250];
+const planes = [0.14, 0.26, 0.38, 0.5, 0.62, 0.74, 0.86].map((t) => {
+  const x = (1 - t) * (1 - t) * P0[0] + 2 * (1 - t) * t * C[0] + t * t * P2[0];
+  const y = (1 - t) * (1 - t) * P0[1] + 2 * (1 - t) * t * C[1] + t * t * P2[1];
+  const dx = 2 * (1 - t) * (C[0] - P0[0]) + 2 * t * (P2[0] - C[0]);
+  const dy = 2 * (1 - t) * (C[1] - P0[1]) + 2 * t * (P2[1] - C[1]);
+  return plane(x.toFixed(1), y.toFixed(1), (Math.atan2(dy, dx) * 180 / Math.PI).toFixed(1));
+}).join('');
+document.getElementById('A').innerHTML = topBar() + board({ id: 'A', take: 7, extra: dragPath + planes }) +
+  `<div class="hud chips"><div class="chip" style="background:#ffb400">⚡ SURGE 8s</div></div>` +
+  `<img class="hud mascot" src="../../assets/ui/shape_sprite.png"><div class="hud bubble"><b>Factory ahead!</b> It makes double troops. Take it early.</div>` + dock(null) +
+  `<div class="note" style="left:56px;top:34px">1</div><div class="note" style="left:20px;top:98px">2</div><div class="note" style="left:222px;top:420px">3</div><div class="note" style="left:128px;top:366px">4</div><div class="note" style="left:330px;top:622px">5</div><div class="note" style="left:296px;top:574px">6</div>`;
+
+// ── Frame B ─────────────────────────────────────────────────────────────
+document.getElementById('B').innerHTML = topBar() + board({ id: 'B', dim: true, targets: true, frozen: 2 }) +
+  `<div class="hud prompt chunk">TAP AN ENEMY TOWER</div>` + dock(1);
+</script>

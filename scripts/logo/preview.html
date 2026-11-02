@@ -1,0 +1,180 @@
+<!doctype html><meta charset="utf-8"><style>body{margin:0;display:flex}div{width:600px;height:465px;display:flex;align-items:center;justify-content:center}svg{width:580px;height:auto}</style>
+<div style="background:#eaf3ff"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 850" width="1200" height="850">
+<defs>
+  <style>@font-face{font-family:LilitaOne;src:url("file:///D:/BattleGrid/assets/fonts/LilitaOne-Regular.ttf")}</style>
+  <linearGradient id="gBattle" gradientUnits="userSpaceOnUse" x1="0" y1="90" x2="0" y2="350"><stop offset="0" stop-color="#fffbc4"/><stop offset="0.28" stop-color="#ffe14d"/><stop offset="0.62" stop-color="#ffa31c"/><stop offset="1" stop-color="#f2560e"/></linearGradient>
+  <linearGradient id="gGrid" gradientUnits="userSpaceOnUse" x1="0" y1="430" x2="0" y2="710"><stop offset="0" stop-color="#e3fdff"/><stop offset="0.3" stop-color="#74e3ff"/><stop offset="0.65" stop-color="#2f8fff"/><stop offset="1" stop-color="#1b46dc"/></linearGradient>
+  <linearGradient id="gFlag" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ff7b8a"/><stop offset="1" stop-color="#e01f43"/></linearGradient>
+  <text id="tBattle" x="600" y="318" dy="30 -24 -20 -2 20 26" rotate="-9 -5 -1 2 5 9" font-family="LilitaOne" letter-spacing="4" text-anchor="middle"><tspan font-size="292">B</tspan><tspan font-size="256">A</tspan><tspan font-size="268">T</tspan><tspan font-size="258">T</tspan><tspan font-size="264">L</tspan><tspan font-size="284">E</tspan></text>
+  <text id="tGrid" x="600" y="690" dy="8 -12 -10 22" rotate="-5 2 0 5" font-family="LilitaOne" letter-spacing="8" text-anchor="middle"><tspan font-size="336">G</tspan><tspan font-size="322">R</tspan><tspan font-size="372">I</tspan><tspan font-size="330">D</tspan></text>
+  <clipPath id="clipGrid"><use href="#tGrid"/></clipPath>
+  <pattern id="gridPat" width="48" height="48" patternUnits="userSpaceOnUse" x="10" y="14">
+    <path d="M48 0H0V48" fill="none" stroke="#fff" stroke-opacity="0.38" stroke-width="3"/>
+  </pattern>
+  <!-- lit bevel: soft specular rim from the upper left, a shaded underside -->
+  <filter id="bevel" filterUnits="userSpaceOnUse" x="0" y="0" width="1200" height="850" color-interpolation-filters="sRGB">
+    <feGaussianBlur in="SourceAlpha" stdDeviation="6" result="blur"/>
+    <feSpecularLighting in="blur" surfaceScale="10" specularConstant="1.25" specularExponent="26" lighting-color="#ffffff" result="spec">
+      <feDistantLight azimuth="235" elevation="48"/>
+    </feSpecularLighting>
+    <feComposite in="spec" in2="SourceAlpha" operator="in" result="specIn"/>
+    <feDiffuseLighting in="blur" surfaceScale="10" diffuseConstant="1.18" lighting-color="#ffffff" result="diff">
+      <feDistantLight azimuth="235" elevation="62"/>
+    </feDiffuseLighting>
+    <feComposite in="SourceGraphic" in2="diff" operator="arithmetic" k1="1" k2="0" k3="0" k4="0" result="shaded"/>
+    <feComposite in="shaded" in2="specIn" operator="arithmetic" k1="0" k2="1" k3="0.8" k4="0" result="lit"/>
+    <feComposite in="lit" in2="SourceAlpha" operator="in"/>
+  </filter>
+  <filter id="drop" x="-10%" y="-10%" width="120%" height="130%"><feDropShadow dx="0" dy="14" stdDeviation="9" flood-color="#000" flood-opacity="0.32"/></filter>
+</defs>
+
+<g filter="url(#drop)">
+
+  <g>
+    <use href="#tBattle" transform="translate(0 0)" fill="#26103f" stroke="#26103f" stroke-width="50" stroke-linejoin="round"/><use href="#tBattle" transform="translate(0 2)" fill="#26103f" stroke="#26103f" stroke-width="50" stroke-linejoin="round"/><use href="#tBattle" transform="translate(0 4)" fill="#26103f" stroke="#26103f" stroke-width="50" stroke-linejoin="round"/><use href="#tBattle" transform="translate(0 6)" fill="#26103f" stroke="#26103f" stroke-width="50" stroke-linejoin="round"/><use href="#tBattle" transform="translate(0 8)" fill="#26103f" stroke="#26103f" stroke-width="50" stroke-linejoin="round"/><use href="#tBattle" transform="translate(0 10)" fill="#26103f" stroke="#26103f" stroke-width="50" stroke-linejoin="round"/><use href="#tBattle" transform="translate(0 12)" fill="#26103f" stroke="#26103f" stroke-width="50" stroke-linejoin="round"/><use href="#tBattle" transform="translate(0 14)" fill="#26103f" stroke="#26103f" stroke-width="50" stroke-linejoin="round"/><use href="#tBattle" transform="translate(0 16)" fill="#26103f" stroke="#26103f" stroke-width="50" stroke-linejoin="round"/><use href="#tBattle" transform="translate(0 18)" fill="#26103f" stroke="#26103f" stroke-width="50" stroke-linejoin="round"/><use href="#tBattle" transform="translate(0 20)" fill="#26103f" stroke="#26103f" stroke-width="50" stroke-linejoin="round"/><use href="#tBattle" transform="translate(0 22)" fill="#26103f" stroke="#26103f" stroke-width="50" stroke-linejoin="round"/><use href="#tBattle" transform="translate(0 24)" fill="#26103f" stroke="#26103f" stroke-width="50" stroke-linejoin="round"/>
+    <use href="#tBattle" transform="translate(0 2)" fill="#d4480c" stroke="#d4480c" stroke-width="22" stroke-linejoin="round"/><use href="#tBattle" transform="translate(0 4)" fill="#d4480c" stroke="#d4480c" stroke-width="22" stroke-linejoin="round"/><use href="#tBattle" transform="translate(0 6)" fill="#d4480c" stroke="#d4480c" stroke-width="22" stroke-linejoin="round"/><use href="#tBattle" transform="translate(0 8)" fill="#d4480c" stroke="#d4480c" stroke-width="22" stroke-linejoin="round"/><use href="#tBattle" transform="translate(0 10)" fill="#d4480c" stroke="#d4480c" stroke-width="22" stroke-linejoin="round"/><use href="#tBattle" transform="translate(0 12)" fill="#d4480c" stroke="#d4480c" stroke-width="22" stroke-linejoin="round"/><use href="#tBattle" transform="translate(0 14)" fill="#9e2c08" stroke="#9e2c08" stroke-width="22" stroke-linejoin="round"/><use href="#tBattle" transform="translate(0 16)" fill="#9e2c08" stroke="#9e2c08" stroke-width="22" stroke-linejoin="round"/><use href="#tBattle" transform="translate(0 18)" fill="#9e2c08" stroke="#9e2c08" stroke-width="22" stroke-linejoin="round"/><use href="#tBattle" transform="translate(0 20)" fill="#9e2c08" stroke="#9e2c08" stroke-width="22" stroke-linejoin="round"/><use href="#tBattle" transform="translate(0 22)" fill="#9e2c08" stroke="#9e2c08" stroke-width="22" stroke-linejoin="round"/><use href="#tBattle" transform="translate(0 24)" fill="#9e2c08" stroke="#9e2c08" stroke-width="22" stroke-linejoin="round"/>
+    <use href="#tBattle" fill="#fff3c4" stroke="#fff3c4" stroke-width="20" stroke-linejoin="round"/>
+    <use href="#tBattle" fill="#c2410c" stroke="#c2410c" stroke-width="6" stroke-linejoin="round"/>
+    <g filter="url(#bevel)"><use href="#tBattle" fill="url(#gBattle)"/></g>
+    
+  </g>
+
+
+  <g>
+    <use href="#tGrid" transform="translate(0 0)" fill="#26103f" stroke="#26103f" stroke-width="50" stroke-linejoin="round"/><use href="#tGrid" transform="translate(0 2)" fill="#26103f" stroke="#26103f" stroke-width="50" stroke-linejoin="round"/><use href="#tGrid" transform="translate(0 4)" fill="#26103f" stroke="#26103f" stroke-width="50" stroke-linejoin="round"/><use href="#tGrid" transform="translate(0 6)" fill="#26103f" stroke="#26103f" stroke-width="50" stroke-linejoin="round"/><use href="#tGrid" transform="translate(0 8)" fill="#26103f" stroke="#26103f" stroke-width="50" stroke-linejoin="round"/><use href="#tGrid" transform="translate(0 10)" fill="#26103f" stroke="#26103f" stroke-width="50" stroke-linejoin="round"/><use href="#tGrid" transform="translate(0 12)" fill="#26103f" stroke="#26103f" stroke-width="50" stroke-linejoin="round"/><use href="#tGrid" transform="translate(0 14)" fill="#26103f" stroke="#26103f" stroke-width="50" stroke-linejoin="round"/><use href="#tGrid" transform="translate(0 16)" fill="#26103f" stroke="#26103f" stroke-width="50" stroke-linejoin="round"/><use href="#tGrid" transform="translate(0 18)" fill="#26103f" stroke="#26103f" stroke-width="50" stroke-linejoin="round"/><use href="#tGrid" transform="translate(0 20)" fill="#26103f" stroke="#26103f" stroke-width="50" stroke-linejoin="round"/><use href="#tGrid" transform="translate(0 22)" fill="#26103f" stroke="#26103f" stroke-width="50" stroke-linejoin="round"/><use href="#tGrid" transform="translate(0 24)" fill="#26103f" stroke="#26103f" stroke-width="50" stroke-linejoin="round"/>
+    <use href="#tGrid" transform="translate(0 2)" fill="#1546c4" stroke="#1546c4" stroke-width="22" stroke-linejoin="round"/><use href="#tGrid" transform="translate(0 4)" fill="#1546c4" stroke="#1546c4" stroke-width="22" stroke-linejoin="round"/><use href="#tGrid" transform="translate(0 6)" fill="#1546c4" stroke="#1546c4" stroke-width="22" stroke-linejoin="round"/><use href="#tGrid" transform="translate(0 8)" fill="#1546c4" stroke="#1546c4" stroke-width="22" stroke-linejoin="round"/><use href="#tGrid" transform="translate(0 10)" fill="#1546c4" stroke="#1546c4" stroke-width="22" stroke-linejoin="round"/><use href="#tGrid" transform="translate(0 12)" fill="#1546c4" stroke="#1546c4" stroke-width="22" stroke-linejoin="round"/><use href="#tGrid" transform="translate(0 14)" fill="#0b2a8c" stroke="#0b2a8c" stroke-width="22" stroke-linejoin="round"/><use href="#tGrid" transform="translate(0 16)" fill="#0b2a8c" stroke="#0b2a8c" stroke-width="22" stroke-linejoin="round"/><use href="#tGrid" transform="translate(0 18)" fill="#0b2a8c" stroke="#0b2a8c" stroke-width="22" stroke-linejoin="round"/><use href="#tGrid" transform="translate(0 20)" fill="#0b2a8c" stroke="#0b2a8c" stroke-width="22" stroke-linejoin="round"/><use href="#tGrid" transform="translate(0 22)" fill="#0b2a8c" stroke="#0b2a8c" stroke-width="22" stroke-linejoin="round"/><use href="#tGrid" transform="translate(0 24)" fill="#0b2a8c" stroke="#0b2a8c" stroke-width="22" stroke-linejoin="round"/>
+    <use href="#tGrid" fill="#e6fbff" stroke="#e6fbff" stroke-width="20" stroke-linejoin="round"/>
+    <use href="#tGrid" fill="#1a47c9" stroke="#1a47c9" stroke-width="6" stroke-linejoin="round"/>
+    <g filter="url(#bevel)"><use href="#tGrid" fill="url(#gGrid)"/></g>
+    <rect x="0" y="430" width="1200" height="300" fill="url(#gridPat)" clip-path="url(#clipGrid)"/>
+  </g>
+
+
+  <g transform="translate(686 482) scale(0.72)">
+    <path d="M0 20 V-150" stroke="#26103f" stroke-width="32" stroke-linecap="round"/>
+    <path d="M4 -128 C60 -154 96 -98 170 -128 L150 -72 L176 -24 C100 6 64 -50 4 -20Z" fill="#26103f" stroke="#26103f" stroke-width="30" stroke-linejoin="round"/>
+    <path d="M0 20 V-150" stroke="#ffd25a" stroke-width="15" stroke-linecap="round"/>
+    <path d="M4 -128 C60 -154 96 -98 170 -128 L150 -72 L176 -24 C100 6 64 -50 4 -20Z" fill="url(#gFlag)" stroke="#fff" stroke-width="7" stroke-linejoin="round"/>
+    <path d="M14 -116 C62 -136 96 -88 150 -112" fill="none" stroke="#fff" stroke-opacity="0.55" stroke-width="8" stroke-linecap="round"/>
+    <circle cx="0" cy="-156" r="16" fill="#ffd25a" stroke="#26103f" stroke-width="8"/>
+    <path transform="translate(86 -66) scale(26)" fill="#fff" d="M0 -1 L0.30 -0.34 L0.95 -0.31 L0.44 0.14 L0.59 0.81 L0 0.45 L-0.59 0.81 L-0.44 0.14 L-0.95 -0.31 L-0.30 -0.34Z"/>
+  </g>
+
+
+  <radialGradient id="o168" cx="0.35" cy="0.3" r="0.8">
+    <stop offset="0" stop-color="#d7d4ff"/><stop offset="0.55" stop-color="#7b6dff"/><stop offset="1" stop-color="#4128d8"/>
+  </radialGradient>
+  <circle cx="168" cy="699" r="86" fill="#26103f"/>
+  <circle cx="168" cy="690" r="86" fill="#26103f"/>
+  <circle cx="168" cy="690" r="78" fill="#fff"/>
+  <circle cx="168" cy="690" r="71" fill="url(#o168)"/>
+  <ellipse cx="145.8" cy="658.92" rx="31.08" ry="16.28" transform="rotate(-28 145.8 658.92)" fill="#fff" opacity="0.7"/>
+  <text x="168" y="713.68" text-anchor="middle" font-family="LilitaOne" font-size="72.52" fill="#fff" stroke="#26103f" stroke-width="8" paint-order="stroke" stroke-linejoin="round">42</text>
+
+  <radialGradient id="o1040" cx="0.35" cy="0.3" r="0.8">
+    <stop offset="0" stop-color="#ffc4cc"/><stop offset="0.55" stop-color="#ff4a63"/><stop offset="1" stop-color="#c4102f"/>
+  </radialGradient>
+  <circle cx="1040" cy="695" r="76" fill="#26103f"/>
+  <circle cx="1040" cy="686" r="76" fill="#26103f"/>
+  <circle cx="1040" cy="686" r="68" fill="#fff"/>
+  <circle cx="1040" cy="686" r="61" fill="url(#o1040)"/>
+  <ellipse cx="1020.8" cy="659.12" rx="26.88" ry="14.08" transform="rotate(-28 1020.8 659.12)" fill="#fff" opacity="0.7"/>
+  <text x="1040" y="706.48" text-anchor="middle" font-family="LilitaOne" font-size="62.72" fill="#fff" stroke="#26103f" stroke-width="8" paint-order="stroke" stroke-linejoin="round">27</text>
+</g>
+
+<path transform="translate(92 190) scale(36)" fill="#fff3a6" stroke="#26103f" stroke-width="0.09722222222222222" stroke-linejoin="round" d="M0 -1 Q0.12 -0.12 1 0 Q0.12 0.12 0 1 Q-0.12 0.12 -1 0 Q-0.12 -0.12 0 -1Z"/>
+<path transform="translate(1112 168) scale(28)" fill="#fff" stroke="#26103f" stroke-width="0.125" stroke-linejoin="round" d="M0 -1 Q0.12 -0.12 1 0 Q0.12 0.12 0 1 Q-0.12 0.12 -1 0 Q-0.12 -0.12 0 -1Z"/>
+<path transform="translate(1000 70) scale(18)" fill="#fff3a6" stroke="#26103f" stroke-width="0.19444444444444445" stroke-linejoin="round" d="M0 -1 Q0.12 -0.12 1 0 Q0.12 0.12 0 1 Q-0.12 0.12 -1 0 Q-0.12 -0.12 0 -1Z"/>
+<path transform="translate(236 74) scale(17)" fill="#fff" stroke="#26103f" stroke-width="0.20588235294117646" stroke-linejoin="round" d="M0 -1 Q0.12 -0.12 1 0 Q0.12 0.12 0 1 Q-0.12 0.12 -1 0 Q-0.12 -0.12 0 -1Z"/>
+<path transform="translate(1128 800) scale(20)" fill="#fff3a6" stroke="#26103f" stroke-width="0.175" stroke-linejoin="round" d="M0 -1 Q0.12 -0.12 1 0 Q0.12 0.12 0 1 Q-0.12 0.12 -1 0 Q-0.12 -0.12 0 -1Z"/>
+<path transform="translate(60 804) scale(15)" fill="#fff" stroke="#26103f" stroke-width="0.23333333333333334" stroke-linejoin="round" d="M0 -1 Q0.12 -0.12 1 0 Q0.12 0.12 0 1 Q-0.12 0.12 -1 0 Q-0.12 -0.12 0 -1Z"/>
+</svg></div><div style="background:linear-gradient(#1b1450,#0b0828)"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 850" width="1200" height="850">
+<defs>
+  <style>@font-face{font-family:LilitaOne;src:url("file:///D:/BattleGrid/assets/fonts/LilitaOne-Regular.ttf")}</style>
+  <linearGradient id="gBattle" gradientUnits="userSpaceOnUse" x1="0" y1="90" x2="0" y2="350"><stop offset="0" stop-color="#fffbc4"/><stop offset="0.28" stop-color="#ffe14d"/><stop offset="0.62" stop-color="#ffa31c"/><stop offset="1" stop-color="#f2560e"/></linearGradient>
+  <linearGradient id="gGrid" gradientUnits="userSpaceOnUse" x1="0" y1="430" x2="0" y2="710"><stop offset="0" stop-color="#e3fdff"/><stop offset="0.3" stop-color="#74e3ff"/><stop offset="0.65" stop-color="#2f8fff"/><stop offset="1" stop-color="#1b46dc"/></linearGradient>
+  <linearGradient id="gFlag" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ff7b8a"/><stop offset="1" stop-color="#e01f43"/></linearGradient>
+  <text id="tBattle" x="600" y="318" dy="30 -24 -20 -2 20 26" rotate="-9 -5 -1 2 5 9" font-family="LilitaOne" letter-spacing="4" text-anchor="middle"><tspan font-size="292">B</tspan><tspan font-size="256">A</tspan><tspan font-size="268">T</tspan><tspan font-size="258">T</tspan><tspan font-size="264">L</tspan><tspan font-size="284">E</tspan></text>
+  <text id="tGrid" x="600" y="690" dy="8 -12 -10 22" rotate="-5 2 0 5" font-family="LilitaOne" letter-spacing="8" text-anchor="middle"><tspan font-size="336">G</tspan><tspan font-size="322">R</tspan><tspan font-size="372">I</tspan><tspan font-size="330">D</tspan></text>
+  <clipPath id="clipGrid"><use href="#tGrid"/></clipPath>
+  <pattern id="gridPat" width="48" height="48" patternUnits="userSpaceOnUse" x="10" y="14">
+    <path d="M48 0H0V48" fill="none" stroke="#fff" stroke-opacity="0.38" stroke-width="3"/>
+  </pattern>
+  <!-- lit bevel: soft specular rim from the upper left, a shaded underside -->
+  <filter id="bevel" filterUnits="userSpaceOnUse" x="0" y="0" width="1200" height="850" color-interpolation-filters="sRGB">
+    <feGaussianBlur in="SourceAlpha" stdDeviation="6" result="blur"/>
+    <feSpecularLighting in="blur" surfaceScale="10" specularConstant="1.25" specularExponent="26" lighting-color="#ffffff" result="spec">
+      <feDistantLight azimuth="235" elevation="48"/>
+    </feSpecularLighting>
+    <feComposite in="spec" in2="SourceAlpha" operator="in" result="specIn"/>
+    <feDiffuseLighting in="blur" surfaceScale="10" diffuseConstant="1.18" lighting-color="#ffffff" result="diff">
+      <feDistantLight azimuth="235" elevation="62"/>
+    </feDiffuseLighting>
+    <feComposite in="SourceGraphic" in2="diff" operator="arithmetic" k1="1" k2="0" k3="0" k4="0" result="shaded"/>
+    <feComposite in="shaded" in2="specIn" operator="arithmetic" k1="0" k2="1" k3="0.8" k4="0" result="lit"/>
+    <feComposite in="lit" in2="SourceAlpha" operator="in"/>
+  </filter>
+  <filter id="drop" x="-10%" y="-10%" width="120%" height="130%"><feDropShadow dx="0" dy="14" stdDeviation="9" flood-color="#000" flood-opacity="0.32"/></filter>
+</defs>
+
+<g filter="url(#drop)">
+
+  <g>
+    <use href="#tBattle" transform="translate(0 0)" fill="#26103f" stroke="#26103f" stroke-width="50" stroke-linejoin="round"/><use href="#tBattle" transform="translate(0 2)" fill="#26103f" stroke="#26103f" stroke-width="50" stroke-linejoin="round"/><use href="#tBattle" transform="translate(0 4)" fill="#26103f" stroke="#26103f" stroke-width="50" stroke-linejoin="round"/><use href="#tBattle" transform="translate(0 6)" fill="#26103f" stroke="#26103f" stroke-width="50" stroke-linejoin="round"/><use href="#tBattle" transform="translate(0 8)" fill="#26103f" stroke="#26103f" stroke-width="50" stroke-linejoin="round"/><use href="#tBattle" transform="translate(0 10)" fill="#26103f" stroke="#26103f" stroke-width="50" stroke-linejoin="round"/><use href="#tBattle" transform="translate(0 12)" fill="#26103f" stroke="#26103f" stroke-width="50" stroke-linejoin="round"/><use href="#tBattle" transform="translate(0 14)" fill="#26103f" stroke="#26103f" stroke-width="50" stroke-linejoin="round"/><use href="#tBattle" transform="translate(0 16)" fill="#26103f" stroke="#26103f" stroke-width="50" stroke-linejoin="round"/><use href="#tBattle" transform="translate(0 18)" fill="#26103f" stroke="#26103f" stroke-width="50" stroke-linejoin="round"/><use href="#tBattle" transform="translate(0 20)" fill="#26103f" stroke="#26103f" stroke-width="50" stroke-linejoin="round"/><use href="#tBattle" transform="translate(0 22)" fill="#26103f" stroke="#26103f" stroke-width="50" stroke-linejoin="round"/><use href="#tBattle" transform="translate(0 24)" fill="#26103f" stroke="#26103f" stroke-width="50" stroke-linejoin="round"/>
+    <use href="#tBattle" transform="translate(0 2)" fill="#d4480c" stroke="#d4480c" stroke-width="22" stroke-linejoin="round"/><use href="#tBattle" transform="translate(0 4)" fill="#d4480c" stroke="#d4480c" stroke-width="22" stroke-linejoin="round"/><use href="#tBattle" transform="translate(0 6)" fill="#d4480c" stroke="#d4480c" stroke-width="22" stroke-linejoin="round"/><use href="#tBattle" transform="translate(0 8)" fill="#d4480c" stroke="#d4480c" stroke-width="22" stroke-linejoin="round"/><use href="#tBattle" transform="translate(0 10)" fill="#d4480c" stroke="#d4480c" stroke-width="22" stroke-linejoin="round"/><use href="#tBattle" transform="translate(0 12)" fill="#d4480c" stroke="#d4480c" stroke-width="22" stroke-linejoin="round"/><use href="#tBattle" transform="translate(0 14)" fill="#9e2c08" stroke="#9e2c08" stroke-width="22" stroke-linejoin="round"/><use href="#tBattle" transform="translate(0 16)" fill="#9e2c08" stroke="#9e2c08" stroke-width="22" stroke-linejoin="round"/><use href="#tBattle" transform="translate(0 18)" fill="#9e2c08" stroke="#9e2c08" stroke-width="22" stroke-linejoin="round"/><use href="#tBattle" transform="translate(0 20)" fill="#9e2c08" stroke="#9e2c08" stroke-width="22" stroke-linejoin="round"/><use href="#tBattle" transform="translate(0 22)" fill="#9e2c08" stroke="#9e2c08" stroke-width="22" stroke-linejoin="round"/><use href="#tBattle" transform="translate(0 24)" fill="#9e2c08" stroke="#9e2c08" stroke-width="22" stroke-linejoin="round"/>
+    <use href="#tBattle" fill="#fff3c4" stroke="#fff3c4" stroke-width="20" stroke-linejoin="round"/>
+    <use href="#tBattle" fill="#c2410c" stroke="#c2410c" stroke-width="6" stroke-linejoin="round"/>
+    <g filter="url(#bevel)"><use href="#tBattle" fill="url(#gBattle)"/></g>
+    
+  </g>
+
+
+  <g>
+    <use href="#tGrid" transform="translate(0 0)" fill="#26103f" stroke="#26103f" stroke-width="50" stroke-linejoin="round"/><use href="#tGrid" transform="translate(0 2)" fill="#26103f" stroke="#26103f" stroke-width="50" stroke-linejoin="round"/><use href="#tGrid" transform="translate(0 4)" fill="#26103f" stroke="#26103f" stroke-width="50" stroke-linejoin="round"/><use href="#tGrid" transform="translate(0 6)" fill="#26103f" stroke="#26103f" stroke-width="50" stroke-linejoin="round"/><use href="#tGrid" transform="translate(0 8)" fill="#26103f" stroke="#26103f" stroke-width="50" stroke-linejoin="round"/><use href="#tGrid" transform="translate(0 10)" fill="#26103f" stroke="#26103f" stroke-width="50" stroke-linejoin="round"/><use href="#tGrid" transform="translate(0 12)" fill="#26103f" stroke="#26103f" stroke-width="50" stroke-linejoin="round"/><use href="#tGrid" transform="translate(0 14)" fill="#26103f" stroke="#26103f" stroke-width="50" stroke-linejoin="round"/><use href="#tGrid" transform="translate(0 16)" fill="#26103f" stroke="#26103f" stroke-width="50" stroke-linejoin="round"/><use href="#tGrid" transform="translate(0 18)" fill="#26103f" stroke="#26103f" stroke-width="50" stroke-linejoin="round"/><use href="#tGrid" transform="translate(0 20)" fill="#26103f" stroke="#26103f" stroke-width="50" stroke-linejoin="round"/><use href="#tGrid" transform="translate(0 22)" fill="#26103f" stroke="#26103f" stroke-width="50" stroke-linejoin="round"/><use href="#tGrid" transform="translate(0 24)" fill="#26103f" stroke="#26103f" stroke-width="50" stroke-linejoin="round"/>
+    <use href="#tGrid" transform="translate(0 2)" fill="#1546c4" stroke="#1546c4" stroke-width="22" stroke-linejoin="round"/><use href="#tGrid" transform="translate(0 4)" fill="#1546c4" stroke="#1546c4" stroke-width="22" stroke-linejoin="round"/><use href="#tGrid" transform="translate(0 6)" fill="#1546c4" stroke="#1546c4" stroke-width="22" stroke-linejoin="round"/><use href="#tGrid" transform="translate(0 8)" fill="#1546c4" stroke="#1546c4" stroke-width="22" stroke-linejoin="round"/><use href="#tGrid" transform="translate(0 10)" fill="#1546c4" stroke="#1546c4" stroke-width="22" stroke-linejoin="round"/><use href="#tGrid" transform="translate(0 12)" fill="#1546c4" stroke="#1546c4" stroke-width="22" stroke-linejoin="round"/><use href="#tGrid" transform="translate(0 14)" fill="#0b2a8c" stroke="#0b2a8c" stroke-width="22" stroke-linejoin="round"/><use href="#tGrid" transform="translate(0 16)" fill="#0b2a8c" stroke="#0b2a8c" stroke-width="22" stroke-linejoin="round"/><use href="#tGrid" transform="translate(0 18)" fill="#0b2a8c" stroke="#0b2a8c" stroke-width="22" stroke-linejoin="round"/><use href="#tGrid" transform="translate(0 20)" fill="#0b2a8c" stroke="#0b2a8c" stroke-width="22" stroke-linejoin="round"/><use href="#tGrid" transform="translate(0 22)" fill="#0b2a8c" stroke="#0b2a8c" stroke-width="22" stroke-linejoin="round"/><use href="#tGrid" transform="translate(0 24)" fill="#0b2a8c" stroke="#0b2a8c" stroke-width="22" stroke-linejoin="round"/>
+    <use href="#tGrid" fill="#e6fbff" stroke="#e6fbff" stroke-width="20" stroke-linejoin="round"/>
+    <use href="#tGrid" fill="#1a47c9" stroke="#1a47c9" stroke-width="6" stroke-linejoin="round"/>
+    <g filter="url(#bevel)"><use href="#tGrid" fill="url(#gGrid)"/></g>
+    <rect x="0" y="430" width="1200" height="300" fill="url(#gridPat)" clip-path="url(#clipGrid)"/>
+  </g>
+
+
+  <g transform="translate(686 482) scale(0.72)">
+    <path d="M0 20 V-150" stroke="#26103f" stroke-width="32" stroke-linecap="round"/>
+    <path d="M4 -128 C60 -154 96 -98 170 -128 L150 -72 L176 -24 C100 6 64 -50 4 -20Z" fill="#26103f" stroke="#26103f" stroke-width="30" stroke-linejoin="round"/>
+    <path d="M0 20 V-150" stroke="#ffd25a" stroke-width="15" stroke-linecap="round"/>
+    <path d="M4 -128 C60 -154 96 -98 170 -128 L150 -72 L176 -24 C100 6 64 -50 4 -20Z" fill="url(#gFlag)" stroke="#fff" stroke-width="7" stroke-linejoin="round"/>
+    <path d="M14 -116 C62 -136 96 -88 150 -112" fill="none" stroke="#fff" stroke-opacity="0.55" stroke-width="8" stroke-linecap="round"/>
+    <circle cx="0" cy="-156" r="16" fill="#ffd25a" stroke="#26103f" stroke-width="8"/>
+    <path transform="translate(86 -66) scale(26)" fill="#fff" d="M0 -1 L0.30 -0.34 L0.95 -0.31 L0.44 0.14 L0.59 0.81 L0 0.45 L-0.59 0.81 L-0.44 0.14 L-0.95 -0.31 L-0.30 -0.34Z"/>
+  </g>
+
+
+  <radialGradient id="o168" cx="0.35" cy="0.3" r="0.8">
+    <stop offset="0" stop-color="#d7d4ff"/><stop offset="0.55" stop-color="#7b6dff"/><stop offset="1" stop-color="#4128d8"/>
+  </radialGradient>
+  <circle cx="168" cy="699" r="86" fill="#26103f"/>
+  <circle cx="168" cy="690" r="86" fill="#26103f"/>
+  <circle cx="168" cy="690" r="78" fill="#fff"/>
+  <circle cx="168" cy="690" r="71" fill="url(#o168)"/>
+  <ellipse cx="145.8" cy="658.92" rx="31.08" ry="16.28" transform="rotate(-28 145.8 658.92)" fill="#fff" opacity="0.7"/>
+  <text x="168" y="713.68" text-anchor="middle" font-family="LilitaOne" font-size="72.52" fill="#fff" stroke="#26103f" stroke-width="8" paint-order="stroke" stroke-linejoin="round">42</text>
+
+  <radialGradient id="o1040" cx="0.35" cy="0.3" r="0.8">
+    <stop offset="0" stop-color="#ffc4cc"/><stop offset="0.55" stop-color="#ff4a63"/><stop offset="1" stop-color="#c4102f"/>
+  </radialGradient>
+  <circle cx="1040" cy="695" r="76" fill="#26103f"/>
+  <circle cx="1040" cy="686" r="76" fill="#26103f"/>
+  <circle cx="1040" cy="686" r="68" fill="#fff"/>
+  <circle cx="1040" cy="686" r="61" fill="url(#o1040)"/>
+  <ellipse cx="1020.8" cy="659.12" rx="26.88" ry="14.08" transform="rotate(-28 1020.8 659.12)" fill="#fff" opacity="0.7"/>
+  <text x="1040" y="706.48" text-anchor="middle" font-family="LilitaOne" font-size="62.72" fill="#fff" stroke="#26103f" stroke-width="8" paint-order="stroke" stroke-linejoin="round">27</text>
+</g>
+
+<path transform="translate(92 190) scale(36)" fill="#fff3a6" stroke="#26103f" stroke-width="0.09722222222222222" stroke-linejoin="round" d="M0 -1 Q0.12 -0.12 1 0 Q0.12 0.12 0 1 Q-0.12 0.12 -1 0 Q-0.12 -0.12 0 -1Z"/>
+<path transform="translate(1112 168) scale(28)" fill="#fff" stroke="#26103f" stroke-width="0.125" stroke-linejoin="round" d="M0 -1 Q0.12 -0.12 1 0 Q0.12 0.12 0 1 Q-0.12 0.12 -1 0 Q-0.12 -0.12 0 -1Z"/>
+<path transform="translate(1000 70) scale(18)" fill="#fff3a6" stroke="#26103f" stroke-width="0.19444444444444445" stroke-linejoin="round" d="M0 -1 Q0.12 -0.12 1 0 Q0.12 0.12 0 1 Q-0.12 0.12 -1 0 Q-0.12 -0.12 0 -1Z"/>
+<path transform="translate(236 74) scale(17)" fill="#fff" stroke="#26103f" stroke-width="0.20588235294117646" stroke-linejoin="round" d="M0 -1 Q0.12 -0.12 1 0 Q0.12 0.12 0 1 Q-0.12 0.12 -1 0 Q-0.12 -0.12 0 -1Z"/>
+<path transform="translate(1128 800) scale(20)" fill="#fff3a6" stroke="#26103f" stroke-width="0.175" stroke-linejoin="round" d="M0 -1 Q0.12 -0.12 1 0 Q0.12 0.12 0 1 Q-0.12 0.12 -1 0 Q-0.12 -0.12 0 -1Z"/>
+<path transform="translate(60 804) scale(15)" fill="#fff" stroke="#26103f" stroke-width="0.23333333333333334" stroke-linejoin="round" d="M0 -1 Q0.12 -0.12 1 0 Q0.12 0.12 0 1 Q-0.12 0.12 -1 0 Q-0.12 -0.12 0 -1Z"/>
+</svg></div>

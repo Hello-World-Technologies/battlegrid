@@ -1,0 +1,424 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>BattleGrid Modern UI</title>
+<!--
+  Modern, gamified-but-subtle UI for BattleGrid. GENERATED from template.html by build-screens.mjs (map placeholders -> inline SVG of
+  the real levels). Open with #splash | #onboarding | #home | #tour | #levels | #daily | #profile | #settings | #pause | #victory | #defeat.
+-->
+<style>
+@font-face { font-family: 'Lilita'; src: url('../../assets/fonts/LilitaOne-Regular.ttf'); }
+@font-face { font-family: 'Poppins'; font-weight: 600; src: url('../../assets/fonts/Poppins-SemiBold.ttf'); }
+@font-face { font-family: 'Poppins'; font-weight: 700; src: url('../../assets/fonts/Poppins-Bold.ttf'); }
+:root {
+  --bg:#f3f5fb; --card:#fff; --ink:#141a3a; --ink2:#5d6590; --ink3:#98a0c4; --line:#e5e8f4;
+  --blue:#2f6bff; --blue2:#5b8cff; --blueSoft:#e9f0ff; --gold:#f2a900; --goldSoft:#fff4d6; --green:#16a36a; --greenSoft:#e2f7ec;
+  --red:#e5484d; --redSoft:#ffe9ea; --orange:#ff8a1c; --navy:#070a16; --navy2:#10163a; --violet:#7b5cff;
+  --sh: 0 1px 2px rgba(20,26,58,.06), 0 8px 24px rgba(20,26,58,.08); --shS: 0 1px 2px rgba(20,26,58,.08), 0 3px 10px rgba(20,26,58,.07);
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { background: #0f1226; }
+body { font-family: 'Poppins', sans-serif; font-weight: 600; color: var(--ink); }
+.sheet { display: flex; gap: 40px; padding: 40px; width: max-content; }
+.cap { color: #b9bfe6; font: 700 14px 'Poppins'; letter-spacing: 2px; text-align: center; margin-top: 14px; }
+body.solo .sheet { padding: 0; } body.solo .cap, body.solo .item { display: none; } body.solo .item.on { display: block; }
+.phone { position: relative; width: 360px; height: 780px; overflow: hidden; background: var(--bg); }
+body:not(.solo) .phone { border-radius: 36px; box-shadow: 0 0 0 8px #070914, 0 20px 60px rgba(0,0,0,.55); }
+.status { position: absolute; top: 0; left: 0; right: 0; height: 28px; padding: 7px 20px; display: flex; justify-content: space-between; font: 700 12px 'Poppins'; z-index: 50; color: var(--ink); }
+.status.l { color: #fff; }
+.d { font-family: 'Lilita'; font-weight: 400; }
+.ico { display: inline-block; flex: none; background: currentColor; -webkit-mask: var(--m) center/contain no-repeat; mask: var(--m) center/contain no-repeat; }
+.map svg { width: 100%; height: 100%; display: block; }
+.coin { width: 18px; height: 18px; border-radius: 50%; background: radial-gradient(circle at 35% 30%, #ffe27a, #f5b301 60%, #c98a00); display: inline-block; position: relative; flex: none; box-shadow: inset 0 0 0 1.5px rgba(150,95,0,.45); }
+.coin::after { content: ''; position: absolute; inset: 4.5px; border-radius: 50%; border: 1.3px solid rgba(150,95,0,.45); }
+.flame { width: 14px; height: 18px; background: linear-gradient(#ffc83d, #ff7a1a); clip-path: path('M7 0C8 4.500 13 7 13 12.500a6 6 0 0 1-12 0c0-2.500 1.500-4.500 2.500-6 1 1.500 1 2.500 2 2.500 0-3.500 1-6 1.500-9z'); }
+
+/* ── kit ── */
+.card { background: var(--card); border-radius: 20px; box-shadow: var(--sh); }
+.chip { display: inline-flex; align-items: center; gap: 6px; height: 34px; padding: 0 12px; border-radius: 17px; background: #fff; box-shadow: var(--shS); font: 700 13px 'Poppins'; color: var(--ink); white-space: nowrap; }
+.chip b { font: 400 16px 'Lilita'; letter-spacing: .3px; }
+.btn { position: relative; display: flex; align-items: center; justify-content: center; height: 54px; border-radius: 18px; font: 400 21px 'Lilita'; letter-spacing: .6px; color: #fff; overflow: hidden; }
+.btn::after { content: ''; position: absolute; left: 0; right: 0; top: 0; height: 50%; background: linear-gradient(rgba(255,255,255,.22), rgba(255,255,255,0)); }
+.btn.green { background: linear-gradient(#27bf7e, #14956a); box-shadow: 0 8px 18px rgba(22,163,106,.32), inset 0 -2px 0 rgba(0,0,0,.12); }
+.btn.blue { background: linear-gradient(#4d83ff, #2a5fe6); box-shadow: 0 8px 18px rgba(47,107,255,.3), inset 0 -2px 0 rgba(0,0,0,.12); }
+.btn.gold { background: linear-gradient(#ffc933, #f2a000); box-shadow: 0 8px 18px rgba(242,169,0,.35), inset 0 -2px 0 rgba(0,0,0,.1); color: #3d2a00; }
+.btn.light { background: #fff; color: var(--ink); box-shadow: var(--shS), inset 0 0 0 1.5px var(--line); } .btn.light::after { display: none; }
+.btn.ghost { background: transparent; color: var(--ink2); box-shadow: none; font: 700 14px 'Poppins'; height: 40px; } .btn.ghost::after { display: none; }
+.btn small { display: block; font: 600 10.5px 'Poppins'; letter-spacing: .8px; opacity: .9; margin-top: 1px; }
+.btn.stack { flex-direction: column; line-height: 1; }
+.pill { display: inline-flex; align-items: center; gap: 4px; height: 22px; padding: 0 9px; border-radius: 11px; font: 700 10.5px 'Poppins'; letter-spacing: .4px; }
+.pill.blue { background: var(--blueSoft); color: var(--blue); } .pill.gold { background: var(--goldSoft); color: #a56f00; } .pill.green { background: var(--greenSoft); color: var(--green); } .pill.red { background: var(--redSoft); color: var(--red); } .pill.grey { background: #eceef7; color: var(--ink3); }
+.bar { height: 8px; border-radius: 4px; background: #e8ebf6; overflow: hidden; } .bar b { display: block; height: 100%; border-radius: 4px; background: linear-gradient(90deg, var(--blue), var(--blue2)); }
+.bar.gold b { background: linear-gradient(90deg, #f2a900, #ffd25a); } .bar.green b { background: linear-gradient(90deg, #14956a, #3ccf92); }
+.stars { display: inline-flex; gap: 2px; } .stars .ico { width: 15px; height: 15px; color: var(--gold); } .stars .off { color: #d9dcec; }
+.avatar { width: 40px; height: 40px; border-radius: 14px; background: linear-gradient(145deg, #4d83ff, #2a5fe6); color: #fff; display: grid; place-items: center; font: 400 20px 'Lilita'; }
+.ring { position: relative; width: 52px; height: 52px; border-radius: 50%; background: conic-gradient(var(--blue) var(--p, 60%), #dfe4f5 0); display: grid; place-items: center; }
+.ring::before { content: ''; position: absolute; inset: 4px; border-radius: 50%; background: #fff; } .ring > * { position: relative; }
+.nav { position: absolute; left: 14px; right: 14px; bottom: 14px; height: 64px; border-radius: 22px; background: rgba(255,255,255,.96); box-shadow: 0 10px 30px rgba(20,26,58,.16), 0 1px 2px rgba(20,26,58,.08); display: flex; padding: 7px; gap: 4px; z-index: 40; }
+.nav i { flex: 1; border-radius: 16px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; color: var(--ink3); font: 700 9.5px 'Poppins'; font-style: normal; letter-spacing: .3px; position: relative; }
+.nav i .ico { width: 22px; height: 22px; } .nav i.on { background: var(--blueSoft); color: var(--blue); }
+.nav i .dot { position: absolute; top: 5px; right: 20%; width: 9px; height: 9px; border-radius: 50%; background: var(--red); border: 2px solid #fff; }
+.back { width: 38px; height: 38px; border-radius: 13px; background: #fff; box-shadow: var(--shS); display: grid; place-items: center; }
+.back i { width: 10px; height: 10px; border-left: 2.5px solid var(--ink); border-bottom: 2.5px solid var(--ink); transform: rotate(45deg); margin-left: 4px; }
+.h1 { font: 400 28px/1 'Lilita'; letter-spacing: .4px; } .sub { font: 600 12px 'Poppins'; color: var(--ink2); }
+.sec { font: 700 11px 'Poppins'; color: var(--ink3); letter-spacing: 1.4px; text-transform: uppercase; }
+.row { display: flex; align-items: center; gap: 12px; }
+
+/* ── splash ── */
+.splash { background: radial-gradient(ellipse 80% 50% at 50% 38%, #1b2370, transparent 70%), var(--navy); }
+.splash .grid { position: absolute; inset: 0; background-image: linear-gradient(rgba(120,130,255,.08) 1px, transparent 1px), linear-gradient(90deg, rgba(120,130,255,.08) 1px, transparent 1px); background-size: 32px 32px; mask: radial-gradient(ellipse 70% 55% at 50% 42%, #000, transparent); -webkit-mask: radial-gradient(ellipse 70% 55% at 50% 42%, #000, transparent); }
+.orb { position: absolute; border-radius: 50%; }
+.orb.b { left: 70px; top: 250px; width: 110px; height: 110px; background: radial-gradient(circle at 35% 30%, #c3beff, #7a6cff 60%, #5a48f0); border: 6px solid #b9b3ff; box-shadow: 0 0 60px 12px rgba(120,108,255,.55); }
+.orb.r { right: 62px; top: 190px; width: 78px; height: 78px; background: radial-gradient(circle at 35% 30%, #ff8ea0, #ff3c5a 65%); border: 5px solid #ffa0ad; box-shadow: 0 0 50px 10px rgba(255,60,90,.5); }
+.orb.g { right: 96px; top: 330px; width: 34px; height: 34px; background: radial-gradient(circle at 35% 30%, #aaa, #6a6a85); border: 3px solid #9a9ab8; opacity: .85; }
+.trail { position: absolute; left: 170px; top: 276px; width: 120px; height: 4px; transform: rotate(-27deg); transform-origin: left center; background: repeating-linear-gradient(90deg, #fff 0 6px, transparent 6px 14px); filter: drop-shadow(0 0 8px #fff); }
+.wm { position: absolute; left: 0; right: 0; top: 408px; text-align: center; color: #fff; }
+.wm h1 { font: 400 54px/1 'Lilita'; letter-spacing: 1.5px; text-shadow: 0 4px 24px rgba(91,140,255,.5); } .wm h1 b { font-weight: 400; background: linear-gradient(#8fb0ff, #5b8cff); -webkit-background-clip: text; background-clip: text; color: transparent; }
+.wm p { margin-top: 10px; font: 600 12px 'Poppins'; letter-spacing: 4px; color: #8e97d8; }
+.load { position: absolute; left: 90px; right: 90px; bottom: 82px; text-align: center; font: 600 11px 'Poppins'; color: #7f88cc; letter-spacing: .5px; } .load .bar { background: rgba(255,255,255,.1); margin-bottom: 10px; height: 5px; } .load .bar b { width: 68%; }
+.ver { position: absolute; bottom: 30px; left: 0; right: 0; text-align: center; font: 600 10px 'Poppins'; color: #4f578f; letter-spacing: 1.5px; }
+
+/* ── onboarding ── */
+.skip { position: absolute; right: 20px; top: 40px; font: 700 13px 'Poppins'; color: var(--ink2); }
+.ob-map { position: absolute; left: 20px; right: 20px; top: 88px; height: 360px; border-radius: 26px; overflow: hidden; box-shadow: var(--sh); background: #dfe6ee; }
+.ob-hand { position: absolute; width: 50px; filter: drop-shadow(0 5px 6px rgba(0,0,0,.3)); z-index: 3; }
+.ob-line { position: absolute; inset: 0; z-index: 2; }
+.ob h2 { position: absolute; left: 28px; right: 28px; top: 472px; font: 400 30px/1.05 'Lilita'; letter-spacing: .3px; } .ob p { position: absolute; left: 28px; right: 28px; top: 518px; font: 600 14px/1.5 'Poppins'; color: var(--ink2); }
+.dots { position: absolute; left: 0; right: 0; top: 618px; display: flex; justify-content: center; gap: 6px; } .dots i { width: 7px; height: 7px; border-radius: 4px; background: #d6dbee; } .dots i.on { width: 22px; background: var(--blue); }
+.ob .btn { position: absolute; left: 24px; right: 24px; bottom: 40px; }
+
+/* ── home ── */
+.home-top { position: absolute; top: 38px; left: 18px; right: 18px; display: flex; align-items: center; gap: 8px; z-index: 5; }
+.home-top .who { display: flex; align-items: center; gap: 10px; flex: 1; } .home-top .who b { display: block; font: 700 14px 'Poppins'; } .home-top .who span { font: 600 11px 'Poppins'; color: var(--ink2); }
+.hero { position: absolute; left: 18px; right: 18px; top: 100px; height: 316px; border-radius: 28px; overflow: hidden; box-shadow: 0 14px 34px rgba(20,26,58,.18); background: #dfe6ee; }
+.hero { background: #fff; } .hero .map { position: absolute; left: 0; right: 0; top: 0; height: 236px; }
+.hero .tl { position: absolute; left: 14px; top: 14px; z-index: 3; display: flex; gap: 6px; }
+.hero .meta { position: absolute; left: 0; right: 0; bottom: 0; height: 80px; padding: 0 18px; z-index: 3; background: #fff; display: flex; align-items: center; }
+.hero .meta > .row { width: 100%; }
+.hero .meta h3 { font: 400 24px/1 'Lilita'; letter-spacing: .4px; color: var(--ink); } .hero .meta p { font: 600 12px 'Poppins'; color: var(--ink2); margin-top: 5px; }
+.hero .meta .stars .ico { width: 22px; height: 22px; }
+.goal { position: absolute; left: 18px; right: 18px; top: 634px; height: 58px; padding: 0 14px; display: flex; align-items: center; gap: 12px; }
+.goal .ic { width: 34px; height: 34px; border-radius: 12px; background: var(--greenSoft); color: var(--green); display: grid; place-items: center; } .goal .ic .ico { width: 18px; height: 18px; }
+.goal b { font: 700 13px 'Poppins'; display: block; } .goal .bar { margin-top: 5px; height: 6px; } .goal .tx { flex: 1; } .goal em { font: 700 12px 'Poppins'; font-style: normal; color: var(--ink2); }
+.home-play { position: absolute; left: 18px; right: 18px; top: 430px; }
+.tiles { position: absolute; left: 18px; right: 18px; top: 504px; display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.tile { height: 116px; padding: 12px; position: relative; overflow: hidden; }
+.tile .t { font: 700 13px 'Poppins'; } .tile .s { font: 600 11px 'Poppins'; color: var(--ink2); margin-top: 2px; }
+.tile .ic { width: 38px; height: 38px; border-radius: 13px; display: grid; place-items: center; margin-bottom: 8px; } .tile .ic .ico { width: 22px; height: 22px; }
+.tile .photo { position: absolute; right: 0; top: 0; width: 56%; height: 100%; background-size: cover; background-position: center; mask: linear-gradient(90deg, transparent, #000 60%); -webkit-mask: linear-gradient(90deg, transparent, #000 60%); }
+.tile .dotr { position: absolute; top: 12px; right: 12px; width: 10px; height: 10px; border-radius: 50%; background: var(--red); box-shadow: 0 0 0 3px #fff; }
+
+/* ── tour (path) ── */
+.tour { background: #efcf9b; }
+.tour::before { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse 90px 60px at 20% 18%, #e5b878, transparent 70%), radial-gradient(ellipse 130px 80px at 85% 40%, #e5b878, transparent 70%), radial-gradient(ellipse 110px 70px at 15% 68%, #e5b878, transparent 70%), radial-gradient(ellipse 120px 70px at 80% 92%, #e5b878, transparent 70%), linear-gradient(rgba(150,100,40,.12) 1px, transparent 1px), linear-gradient(90deg, rgba(150,100,40,.12) 1px, transparent 1px); background-size: auto, auto, auto, auto, 40px 40px, 40px 40px; }
+.tour .dash { position: absolute; inset: 0; z-index: 1; }
+.tour-hd { position: absolute; top: 34px; left: 16px; right: 16px; z-index: 9; display: flex; align-items: center; gap: 10px; }
+.tour-hd .h1 { color: #6b2c16; flex: 1; text-shadow: 0 2px 0 #fff4d9; }
+.polaroid { position: absolute; width: 206px; background: #fffdf8; padding: 7px 7px 0; border-radius: 3px; box-shadow: 0 8px 18px rgba(90,50,10,.38); z-index: 3; }
+.polaroid .pic { position: relative; height: 134px; overflow: hidden; background: #ddd; }
+.polaroid .pic img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; display: block; }
+.polaroid .place { position: absolute; left: 0; right: 0; bottom: 0; z-index: 3; padding: 14px 8px 5px; text-align: center; font: 700 10px 'Poppins'; letter-spacing: 1.2px; text-transform: uppercase; color: #fff; text-shadow: 0 1px 3px rgba(0,0,0,.7); background: linear-gradient(transparent, rgba(40,20,10,.62)); }
+.polaroid .cap2 { height: 34px; display: flex; align-items: center; justify-content: center; font: 400 17px 'Lilita'; color: #8a3a22; }
+.polaroid .subl { text-align: center; margin: -8px 0 7px; font: 700 10px 'Poppins'; color: #a06a50; letter-spacing: 1px; display: flex; justify-content: center; gap: 8px; align-items: center; }
+.polaroid .tape { position: absolute; top: -9px; left: -16px; width: 54px; height: 19px; background: rgba(255,255,255,.55); border: 1px solid rgba(255,255,255,.7); transform: rotate(-36deg); z-index: 4; }
+.polaroid.locked .pic img { filter: grayscale(1) brightness(.85) blur(1.5px); } .polaroid.locked .cap2 { color: #8c8c9a; }
+.polaroid.cur { box-shadow: 0 0 0 5px #ffc21a, 0 0 30px 6px rgba(255,194,26,.7), 0 8px 18px rgba(90,50,10,.38); }
+.polaroid .lock { position: absolute; left: 50%; top: 50%; width: 40px; height: 40px; margin: -20px 0 0 -20px; color: #fff; filter: drop-shadow(0 3px 0 rgba(0,0,0,.45)); z-index: 5; }
+.here { position: absolute; top: -14px; right: -12px; z-index: 6; padding: 2px 12px; border-radius: 8px; background: var(--red); border: 2px solid #fff; font: 400 13px/20px 'Lilita'; color: #fff; letter-spacing: 1px; transform: rotate(6deg); }
+.polaroid .stars .ico { color: #ffb400; }
+
+/* ── levels ── */
+.lv-hero { position: absolute; left: 0; right: 0; top: 0; height: 196px; background: #333 url('../photos/Colosseum_in_Rome_April_2007_1_copie_2B.jpg') center/cover; }
+.lv-hero::after { content: ''; position: absolute; inset: 0; background: linear-gradient(rgba(10,14,40,.2), rgba(10,14,40,.78)); }
+.lv-hero .in { position: absolute; left: 18px; right: 18px; bottom: 44px; color: #fff; z-index: 2; } .lv-hero .in .h1 { font-size: 32px; } .lv-hero .in p { font: 600 12px 'Poppins'; opacity: .85; margin-top: 4px; }
+.lv-hero .bk { position: absolute; left: 16px; top: 38px; z-index: 3; }
+.lv-list { position: absolute; left: 0; right: 0; top: 168px; bottom: 0; background: var(--bg); border-radius: 26px 26px 0 0; padding: 18px 16px 0; overflow: hidden; }
+.lv-prog { display: flex; align-items: center; gap: 10px; margin-bottom: 14px; } .lv-prog .bar { flex: 1; } .lv-prog span { font: 700 11px 'Poppins'; color: var(--ink2); white-space: nowrap; }
+.lvr { height: 70px; background: #fff; border-radius: 18px; box-shadow: var(--shS); display: flex; align-items: center; gap: 12px; padding: 7px 12px 7px 7px; margin-bottom: 9px; position: relative; }
+.lvr .th { width: 56px; height: 56px; border-radius: 14px; overflow: hidden; flex: none; position: relative; background: #dfe6ee; } .lvr .th .map { position: absolute; inset: 0; }
+.lvr .n { position: absolute; left: 4px; top: 4px; z-index: 2; min-width: 20px; height: 20px; border-radius: 10px; padding: 0 5px; background: rgba(20,26,58,.78); color: #fff; font: 400 12px/20px 'Lilita'; text-align: center; }
+.lvr .tx { flex: 1; min-width: 0; } .lvr .tx b { display: block; font: 700 14px 'Poppins'; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; } .lvr .tx span { font: 600 11px 'Poppins'; color: var(--ink2); }
+.lvr.cur { box-shadow: 0 0 0 2px var(--blue), 0 10px 24px rgba(47,107,255,.22); }
+.lvr.lock { opacity: .6; } .lvr.lock .th .map { filter: grayscale(1); }
+.lvr .go { height: 32px; padding: 0 14px; border-radius: 16px; background: linear-gradient(#27bf7e, #14956a); color: #fff; font: 400 15px/32px 'Lilita'; letter-spacing: .5px; box-shadow: 0 4px 10px rgba(22,163,106,.3); }
+.lvr .lk { width: 20px; height: 20px; color: var(--ink3); }
+
+/* ── daily ── */
+.daily-top { position: absolute; top: 36px; left: 16px; right: 16px; display: flex; align-items: center; gap: 10px; z-index: 5; } .daily-top .h1 { flex: 1; }
+.streak-card { position: absolute; left: 16px; right: 16px; top: 92px; height: 188px; border-radius: 26px; background: linear-gradient(150deg, #2a3fb8, #12185a); color: #fff; padding: 18px; overflow: hidden; box-shadow: 0 14px 30px rgba(18,24,90,.3); }
+.streak-card::before { content: ''; position: absolute; right: -40px; top: -50px; width: 220px; height: 220px; border-radius: 50%; background: radial-gradient(circle, rgba(255,150,40,.5), transparent 65%); }
+.streak-card .big { display: flex; align-items: baseline; gap: 8px; position: relative; } .streak-card .big b { font: 400 64px/1 'Lilita'; } .streak-card .big span { font: 600 14px 'Poppins'; opacity: .85; }
+.streak-card .fl { position: absolute; right: 22px; top: 18px; width: 60px; height: 76px; background: linear-gradient(#ffd25a, #ff7a1a); clip-path: path('M30 0C34 18 56 28 56 50a26 26 0 0 1-52 0c0-10 6-18 10-24 4 6 4 10 8 10 0-14 4-24 8-36z'); filter: drop-shadow(0 6px 14px rgba(255,138,28,.6)); }
+.streak-card p { position: relative; font: 600 12px/1.45 'Poppins'; opacity: .8; margin-top: 8px; max-width: 220px; }
+.streak-card .bar { position: absolute; left: 18px; right: 18px; bottom: 18px; background: rgba(255,255,255,.18); } .streak-card .bar b { background: linear-gradient(90deg, #ffb347, #ffd98a); width: 57%; }
+.streak-card .bl { position: absolute; left: 18px; right: 18px; bottom: 34px; display: flex; justify-content: space-between; font: 700 10px 'Poppins'; letter-spacing: .6px; opacity: .8; }
+.week { position: absolute; left: 16px; right: 16px; top: 298px; display: grid; grid-template-columns: repeat(7, 1fr); gap: 6px; }
+.dy { height: 82px; border-radius: 16px; background: #fff; box-shadow: var(--shS); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 5px; font: 700 10px 'Poppins'; color: var(--ink3); position: relative; }
+.dy .c { width: 28px; height: 28px; border-radius: 50%; display: grid; place-items: center; background: #eceef7; color: var(--ink3); } .dy .c .ico { width: 15px; height: 15px; } .dy .v { font: 400 13px 'Lilita'; color: var(--ink2); }
+.dy.got .c { background: var(--greenSoft); color: var(--green); } .dy.today { background: linear-gradient(#fff, #fff4d6); box-shadow: 0 0 0 2px var(--gold), 0 8px 18px rgba(242,169,0,.25); color: #a56f00; } .dy.today .c { background: var(--gold); color: #fff; } .dy.today .v { color: #a56f00; }
+.reward { position: absolute; left: 16px; right: 16px; top: 398px; padding: 18px; text-align: center; }
+.reward .amt { display: flex; align-items: center; justify-content: center; gap: 10px; margin: 8px 0 4px; } .reward .amt b { font: 400 54px/1 'Lilita'; } .reward .amt .coin { width: 40px; height: 40px; } .reward .amt .coin::after { inset: 9px; border-width: 2px; }
+.reward .bonus { display: inline-flex; gap: 6px; margin-top: 10px; }
+.daily-cta { position: absolute; left: 16px; right: 16px; top: 596px; }
+.next { text-align: center; font: 600 11px 'Poppins'; color: var(--ink3); margin-top: 12px; letter-spacing: .4px; }
+
+/* ── profile ── */
+.pf-head { position: absolute; left: 0; right: 0; top: 0; height: 236px; background: linear-gradient(160deg, #2f6bff, #1a2a9c 70%, #12185a); border-radius: 0 0 34px 34px; color: #fff; overflow: hidden; }
+.pf-head::before { content: ''; position: absolute; right: -60px; top: -40px; width: 260px; height: 260px; border-radius: 50%; background: radial-gradient(circle, rgba(255,255,255,.18), transparent 65%); }
+.pf-id { color: #fff; position: absolute; left: 20px; right: 20px; top: 52px; display: flex; align-items: center; gap: 14px; }
+.pf-id .ring { width: 76px; height: 76px; --p: 62%; background: conic-gradient(#ffd25a var(--p), rgba(255,255,255,.25) 0); } .pf-id .ring::before { background: linear-gradient(145deg, #4d83ff, #2a5fe6); inset: 5px; } .pf-id .ring span { font: 400 34px 'Lilita'; }
+.pf-id h2 { font: 400 28px/1 'Lilita'; letter-spacing: .4px; } .pf-id p { font: 600 12px 'Poppins'; opacity: .8; margin-top: 4px; }
+.pf-xp { position: absolute; left: 20px; right: 20px; top: 148px; } .pf-xp .bar { background: rgba(255,255,255,.2); height: 9px; } .pf-xp .bar b { width: 62%; background: linear-gradient(90deg, #ffb347, #ffd98a); } .pf-xp .l { display: flex; justify-content: space-between; font: 700 11px 'Poppins'; margin-bottom: 6px; opacity: .9; }
+.stats { position: absolute; left: 16px; right: 16px; top: 202px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+.stat { background: #fff; border-radius: 18px; box-shadow: var(--sh); padding: 12px 10px; text-align: center; } .stat b { display: block; font: 400 26px/1 'Lilita'; } .stat span { font: 700 10px 'Poppins'; color: var(--ink2); letter-spacing: .5px; }
+.pf-sec { position: absolute; left: 18px; right: 18px; top: 308px; display: flex; justify-content: space-between; align-items: baseline; } .pf-sec a { font: 700 12px 'Poppins'; color: var(--blue); }
+.badges { position: absolute; left: 16px; right: 16px; top: 336px; display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
+.bd { text-align: center; } .bd .ci { width: 62px; height: 62px; margin: 0 auto 6px; border-radius: 20px; display: grid; place-items: center; background: var(--c, #eceef7); color: #fff; box-shadow: 0 6px 14px rgba(20,26,58,.14); position: relative; } .bd .ci .ico { width: 30px; height: 30px; }
+.bd > span { font: 700 10px/1.2 'Poppins'; color: var(--ink2); display: block; } .bd.lk .ci { background: #e3e6f3; color: #b4bad6; box-shadow: none; }
+.bd .pr { position: absolute; bottom: -5px; left: 50%; transform: translateX(-50%); font: 700 9px 'Poppins'; background: #fff; color: var(--ink2); padding: 1px 6px; border-radius: 8px; box-shadow: var(--shS); }
+.acct { position: absolute; left: 16px; right: 16px; top: 548px; padding: 14px; display: flex; align-items: center; gap: 12px; } .acct .gp { width: 40px; height: 40px; border-radius: 13px; background: #eaf7ee; color: var(--green); display: grid; place-items: center; } .acct .gp .ico { width: 22px; height: 22px; }
+
+/* ── settings ── */
+.st-top { position: absolute; top: 36px; left: 16px; right: 16px; display: flex; align-items: center; gap: 10px; } .st-top .h1 { flex: 1; }
+.grp { position: absolute; left: 16px; right: 16px; } .grp .sec { margin: 0 4px 8px; display: block; }
+.grp .card { padding: 4px 14px; }
+.sr { display: flex; align-items: center; gap: 12px; height: 52px; border-bottom: 1px solid var(--line); font: 700 14px 'Poppins'; } .sr:last-child { border: 0; }
+.sr .ic { width: 32px; height: 32px; border-radius: 11px; display: grid; place-items: center; color: #fff; } .sr .ic svg { width: 18px; height: 18px; } .sr .lbl { flex: 1; } .sr small { display: block; font: 600 11px 'Poppins'; color: var(--ink3); margin-top: 1px; }
+.sw { width: 46px; height: 28px; border-radius: 14px; background: var(--green); position: relative; } .sw::after { content: ''; position: absolute; right: 3px; top: 3px; width: 22px; height: 22px; border-radius: 50%; background: #fff; box-shadow: 0 2px 4px rgba(0,0,0,.2); } .sw.off { background: #d3d7ea; } .sw.off::after { right: auto; left: 3px; }
+.sl { flex: 0 0 120px; height: 6px; border-radius: 3px; background: #e0e4f3; position: relative; } .sl b { position: absolute; left: 0; top: 0; bottom: 0; border-radius: 3px; background: linear-gradient(90deg, var(--blue), var(--blue2)); } .sl u { position: absolute; top: -7px; width: 20px; height: 20px; margin-left: -10px; border-radius: 50%; background: #fff; box-shadow: 0 2px 6px rgba(20,26,58,.3); }
+.val { font: 700 12px 'Poppins'; color: var(--ink2); }
+
+/* ── pause ── */
+.pause .bgmap { position: absolute; inset: 0; filter: blur(3px); transform: scale(1.03); } .pause::before { content: ''; position: absolute; inset: 0; background: rgba(12,16,48,.38); z-index: 1; }
+.pcard { position: absolute; left: 24px; right: 24px; top: 200px; z-index: 5; padding: 22px 20px 18px; text-align: center; border-radius: 28px; box-shadow: 0 24px 60px rgba(0,0,0,.4); }
+.pcard h2 { font: 400 30px/1 'Lilita'; letter-spacing: .4px; } .pcard .lvl { margin-top: 6px; }
+.pcard .tip { margin: 16px 0; padding: 12px 14px; border-radius: 16px; background: var(--blueSoft); text-align: left; font: 600 12px/1.45 'Poppins'; color: var(--ink2); display: flex; gap: 10px; } .pcard .tip b { color: var(--blue); }
+.pcard .tgl { display: flex; justify-content: center; gap: 12px; margin-top: 14px; } .pcard .tgl i { width: 44px; height: 44px; border-radius: 15px; background: #eef1fa; display: grid; place-items: center; color: var(--blue); } .pcard .tgl i.off { color: #b4bad6; }
+.pcard .stack { display: flex; flex-direction: column; gap: 10px; }
+
+/* ── result ── */
+.res { background: linear-gradient(#e8f0ff, var(--bg) 46%); }
+.res.lose { background: linear-gradient(#ececf5, var(--bg) 46%); }
+.confetti i { position: absolute; width: 8px; height: 8px; border-radius: 2px; opacity: .8; }
+.emb { position: absolute; left: 50%; top: 52px; width: 116px; height: 116px; margin-left: -58px; border-radius: 32px; overflow: hidden; box-shadow: 0 16px 34px rgba(47,107,255,.3); border: 4px solid #fff; background: #dfe6ee; }
+.emb .map { position: absolute; inset: 0; } .res.lose .emb { box-shadow: 0 16px 34px rgba(20,26,58,.25); } .res.lose .emb .map { filter: grayscale(1) brightness(.92); }
+.emb-badge { position: absolute; left: 50%; top: 140px; margin-left: 18px; width: 44px; height: 44px; border-radius: 50%; display: grid; place-items: center; color: #fff; z-index: 3; border: 3px solid #fff; box-shadow: var(--shS); } .emb-badge .ico { width: 22px; height: 22px; }
+.res h2 { position: absolute; left: 0; right: 0; top: 186px; text-align: center; font: 400 38px/1 'Lilita'; letter-spacing: .6px; } .res .lvl { position: absolute; left: 0; right: 0; top: 232px; text-align: center; }
+.goals { position: absolute; left: 18px; right: 18px; top: 268px; padding: 14px 16px; }
+.goals .stars { display: flex; justify-content: center; gap: 6px; margin-bottom: 10px; } .goals .stars .ico { width: 36px; height: 36px; filter: drop-shadow(0 3px 4px rgba(242,169,0,.35)); } .goals .stars .ico:nth-child(2) { width: 46px; height: 46px; margin-top: -6px; } .goals .stars .off { filter: none; }
+.gl { display: flex; align-items: center; gap: 10px; height: 30px; font: 600 13px 'Poppins'; } .gl .ck { width: 20px; height: 20px; border-radius: 50%; display: grid; place-items: center; background: var(--green); color: #fff; font-size: 11px; } .gl.no { color: var(--ink3); } .gl.no .ck { background: #e5e8f4; } .gl em { margin-left: auto; font: 700 11px 'Poppins'; font-style: normal; color: var(--ink3); }
+.rw { position: absolute; left: 18px; right: 18px; top: 486px; display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; } .rw .card { padding: 12px 8px; text-align: center; } .rw b { display: block; font: 400 22px/1.1 'Lilita'; } .rw span { font: 700 10px 'Poppins'; color: var(--ink2); letter-spacing: .5px; }
+.res-act { position: absolute; left: 18px; right: 18px; bottom: 28px; display: flex; flex-direction: column; gap: 10px; }
+.adrow { position: absolute; left: 18px; right: 18px; top: 568px; padding: 12px 14px; display: flex; align-items: center; gap: 12px; background: linear-gradient(100deg, #fff, #f1ecff); } .adrow .ic { width: 38px; height: 38px; border-radius: 13px; background: var(--violet); color: #fff; display: grid; place-items: center; } .adrow .ic .ico { width: 20px; height: 20px; } .adrow b { font: 700 13px 'Poppins'; display: block; } .adrow span { font: 600 11px 'Poppins'; color: var(--ink2); }
+.adrow .go { margin-left: auto; height: 34px; padding: 0 14px; border-radius: 17px; background: var(--violet); color: #fff; font: 400 15px/34px 'Lilita'; letter-spacing: .4px; }
+.lose-tip { position: absolute; left: 18px; right: 18px; top: 268px; padding: 16px; } .lose-tip p { font: 600 13px/1.5 'Poppins'; color: var(--ink2); } .lose-tip p b { color: var(--ink); }
+.lose-stats { position: absolute; left: 18px; right: 18px; top: 428px; display: grid; grid-template-columns: 1fr 1fr; gap: 10px; } .lose-stats .card { padding: 12px 14px; } .lose-stats b { display: block; font: 400 24px/1.1 'Lilita'; } .lose-stats span { display: block; line-height: 1.3; margin-top: 4px; font: 700 10px 'Poppins'; color: var(--ink2); letter-spacing: .5px; }
+</style>
+</head>
+<body>
+<div class="sheet">
+
+<!-- 01 SPLASH -->
+<div class="item" data-id="splash"><div class="phone splash">
+  <div class="status l"><span>9:41</span><span>●●● ▮</span></div>
+  <div class="grid"></div><i class="orb g"></i><i class="trail"></i><i class="orb b"></i><i class="orb r"></i>
+  <div class="wm"><h1>Battle<b>Grid</b></h1><p>CAPTURE · SPREAD · CONQUER</p></div>
+  <div class="load"><div class="bar"><b></b></div>Loading real-world maps…</div>
+  <div class="ver">v1.0</div>
+</div><div class="cap">01 · SPLASH</div></div>
+
+<!-- 02 ONBOARDING -->
+<div class="item" data-id="onboarding"><div class="phone ob">
+  <div class="status"><span>9:41</span><span>●●● ▮</span></div>
+  <div class="skip">Skip</div>
+  <div class="ob-map"><div class="map" style="position:absolute;inset:0">{{map:hero1}}</div>
+    <svg class="ob-line" id="obline" viewBox="0 0 100 100" preserveAspectRatio="none"></svg><img class="ob-hand" id="obhand" src="../../assets/ui/hand.png" alt=""></div>
+  <h2>Drag to send troops</h2>
+  <p>Drag from one of your territories to another to send half your troops. Take every territory on the map to win.</p>
+  <div class="dots"><i></i><i class="on"></i><i></i></div>
+  <div class="btn blue">Next</div>
+</div><div class="cap">02 · ONBOARDING</div></div>
+
+<!-- 03 HOME -->
+<div class="item" data-id="home"><div class="phone">
+  <div class="status"><span>9:41</span><span>●●● ▮</span></div>
+  <div class="home-top">
+    <div class="who"><div class="ring" style="--p:62%;width:46px;height:46px"><div class="avatar" style="width:34px;height:34px;border-radius:50%;font-size:17px">A</div></div><div><b>Alex</b><span>Commander · Lv 5</span></div></div>
+    <div class="chip"><i class="flame"></i><b>4</b></div><div class="chip"><span class="coin"></span><b>1,240</b></div>
+  </div>
+  <div class="hero"><div class="map">{{map:hero5}}</div>
+    <div class="tl"><span class="pill gold">CAMPAIGN</span><span class="pill blue" id="homemap"></span></div>
+    <div class="meta"><div class="row" style="justify-content:space-between"><div><h3>Hold the Line</h3><p id="homefrom"></p></div><span class="stars">{{stars:2}}</span></div></div>
+  </div>
+  <div class="home-play"><div class="btn green stack" style="height:60px;font-size:26px">PLAY<small id="homesub"></small></div></div>
+  <div class="tiles">
+    <div class="card tile"><div class="ic" style="background:var(--goldSoft);color:#c98a00"><span class="ico" style="--m:url(../../assets/ui/medal1.png)"></span></div><div class="t">Daily Bonus</div><div class="s">+150 coins ready</div><i class="dotr"></i></div>
+    <div class="card tile"><div class="photo" style="background-image:url('../photos/Colosseum_in_Rome_April_2007_1_copie_2B.jpg')"></div><div class="ic" style="background:var(--blueSoft);color:var(--blue)"><span class="ico" style="--m:url(../../assets/ui/leaderboardsComplex.png)"></span></div><div class="t">World Tour</div><div class="s">Europe · 4/10</div></div>
+  </div>
+  <div class="card goal"><div class="ic"><span class="ico" style="--m:url(../../assets/ui/flag_triangle.png)"></span></div><div class="tx"><b>Capture 10 territories today</b><div class="bar green"><b style="width:60%"></b></div></div><em>6 / 10</em></div>
+  <div class="nav"><i class="on"><span class="ico" style="--m:url(../../assets/ui/home.png)"></span>Home</i><i><span class="ico" style="--m:url(../../assets/ui/leaderboardsComplex.png)"></span>Levels</i><i><span class="ico" style="--m:url(../../assets/ui/medal1.png)"></span>Daily<b class="dot"></b></i><i><span class="ico" style="--m:url(../../assets/ui/multiplayer.png)"></span>Profile</i><i><span class="ico" style="--m:url(../../assets/ui/gear.png)"></span>Settings</i></div>
+</div><div class="cap">03 · HOME</div></div>
+
+<!-- 04 TOUR (path with photos) -->
+<div class="item" data-id="tour"><div class="phone tour">
+  <div class="status"><span>9:41</span><span>●●● ▮</span></div>
+  <div class="tour-hd"><div class="back"><i></i></div><div class="h1">World Tour</div><div class="chip"><span class="coin"></span><b>1,240</b></div></div>
+  <svg class="dash" viewBox="0 0 360 780" fill="none" stroke="#9a5a3a" stroke-width="7" stroke-dasharray="14 12"><path d="M232 244 C320 274 330 322 252 352"/><path d="M118 454 C36 482 34 530 112 560"/><path d="M232 670 C320 686 330 720 268 746"/></svg>
+  <div class="polaroid" style="left:22px;top:92px;transform:rotate(-3deg)"><i class="tape"></i><div class="pic"><img src="../photos/Machu_Picchu_2023_012.jpg" alt=""><span class="place">Machu Picchu · Peru</span></div><div class="cap2">1. The Americas</div><div class="subl">10 / 10<span class="stars">{{stars:3}}</span></div></div>
+  <div class="polaroid cur" style="left:128px;top:316px;transform:rotate(2.5deg)"><i class="tape"></i><div class="here">YOU ARE HERE</div><div class="pic"><img src="../photos/Colosseum_in_Rome_April_2007_1_copie_2B.jpg" alt=""><span class="place">Colosseum · Italy</span></div><div class="cap2">2. Europe</div><div class="subl">LEVEL 5 · 4 / 10</div></div>
+  <div class="polaroid locked" style="left:22px;top:528px;transform:rotate(-2deg)"><i class="tape"></i><div class="pic"><img src="../photos/Taj_Mahal_in_March_2004.jpg" alt=""><span class="place">Taj Mahal · India</span><span class="ico lock" style="--m:url(../../assets/ui/locked.png)"></span></div><div class="cap2">3. Asia</div><div class="subl">LOCKED</div></div>
+  <div class="polaroid locked" style="left:128px;top:742px;transform:rotate(3deg)"><i class="tape"></i><div class="pic"><img src="../photos/All_Gizah_Pyramids.jpg" alt=""></div></div>
+</div><div class="cap">04 · WORLD TOUR</div></div>
+
+<!-- 05 LEVELS -->
+<div class="item" data-id="levels"><div class="phone">
+  <div class="status l"><span>9:41</span><span>●●● ▮</span></div>
+  <div class="lv-hero"><div class="back bk"><i></i></div><div class="in"><div class="h1">Europe</div><p>Theater 2 · Colosseum, Rome</p></div></div>
+  <div class="lv-list">
+    <div class="lv-prog"><div class="bar green"><b style="width:40%"></b></div><span>4 / 10 cleared · ★ 10 / 30</span></div>
+    <div id="lvrows"></div>
+  </div>
+  <div class="nav"><i><span class="ico" style="--m:url(../../assets/ui/home.png)"></span>Home</i><i class="on"><span class="ico" style="--m:url(../../assets/ui/leaderboardsComplex.png)"></span>Levels</i><i><span class="ico" style="--m:url(../../assets/ui/medal1.png)"></span>Daily<b class="dot"></b></i><i><span class="ico" style="--m:url(../../assets/ui/multiplayer.png)"></span>Profile</i><i><span class="ico" style="--m:url(../../assets/ui/gear.png)"></span>Settings</i></div>
+</div><div class="cap">05 · LEVELS</div></div>
+
+<!-- 06 DAILY -->
+<div class="item" data-id="daily"><div class="phone">
+  <div class="status"><span>9:41</span><span>●●● ▮</span></div>
+  <div class="daily-top"><div class="h1">Daily Bonus</div><div class="chip"><span class="coin"></span><b>1,240</b></div></div>
+  <div class="streak-card"><i class="fl"></i><div class="big"><b>4</b><span>day streak</span></div><p>Come back every day — rewards grow, and day 7 is a big one.</p><div class="bl"><span>DAY 4</span><span>DAY 7 · 500 COINS</span></div><div class="bar"><b></b></div></div>
+  <div class="week" id="week"></div>
+  <div class="card reward"><div class="sec">Today's reward</div><div class="amt"><span class="coin"></span><b>150</b></div><div class="sub">Claim before UTC midnight to keep your streak</div><div class="bonus"><span class="pill gold">+10% STREAK BONUS</span><span class="pill blue">+20 XP</span></div></div>
+  <div class="daily-cta"><div class="btn gold">CLAIM +150</div><div class="next">Next bonus in 14:22:07</div></div>
+  <div class="nav"><i><span class="ico" style="--m:url(../../assets/ui/home.png)"></span>Home</i><i><span class="ico" style="--m:url(../../assets/ui/leaderboardsComplex.png)"></span>Levels</i><i class="on"><span class="ico" style="--m:url(../../assets/ui/medal1.png)"></span>Daily</i><i><span class="ico" style="--m:url(../../assets/ui/multiplayer.png)"></span>Profile</i><i><span class="ico" style="--m:url(../../assets/ui/gear.png)"></span>Settings</i></div>
+</div><div class="cap">06 · DAILY BONUS</div></div>
+
+<!-- 07 PROFILE -->
+<div class="item" data-id="profile"><div class="phone">
+  <div class="status l"><span>9:41</span><span>●●● ▮</span></div>
+  <div class="pf-head"></div>
+  <div class="pf-id"><div class="ring"><span>5</span></div><div><h2>Alex</h2><p>Commander · Europe campaign</p></div></div>
+  <div class="pf-xp" style="color:#fff"><div class="l"><span>LEVEL 5</span><span>1,240 / 2,000 XP</span></div><div class="bar"><b></b></div></div>
+  <div class="stats"><div class="stat"><b>4</b><span>LEVELS</span></div><div class="stat"><b>10</b><span>STARS</span></div><div class="stat"><b>86</b><span>CAPTURED</span></div></div>
+  <div class="pf-sec"><div class="sec">Achievements</div><a>See all</a></div>
+  <div class="badges" id="badges"></div>
+  <div class="card acct"><div class="gp"><span class="ico" style="--m:url(../../assets/ui/multiplayer.png)"></span></div><div style="flex:1"><div style="font:700 14px Poppins">Google Play Games</div><div class="sub">Signed in · synced</div></div><span class="pill green">ONLINE</span></div>
+  <div class="nav"><i><span class="ico" style="--m:url(../../assets/ui/home.png)"></span>Home</i><i><span class="ico" style="--m:url(../../assets/ui/leaderboardsComplex.png)"></span>Levels</i><i><span class="ico" style="--m:url(../../assets/ui/medal1.png)"></span>Daily<b class="dot"></b></i><i class="on"><span class="ico" style="--m:url(../../assets/ui/multiplayer.png)"></span>Profile</i><i><span class="ico" style="--m:url(../../assets/ui/gear.png)"></span>Settings</i></div>
+</div><div class="cap">07 · PROFILE</div></div>
+
+<!-- 08 SETTINGS -->
+<div class="item" data-id="settings"><div class="phone">
+  <div class="status"><span>9:41</span><span>●●● ▮</span></div>
+  <div class="st-top"><div class="h1">Settings</div></div>
+  <div class="grp" style="top:84px"><span class="sec">Audio</span><div class="card">
+    <div class="sr"><div class="ic" style="background:#5b8cff"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9v6h4l5 4V5L8 9zM16.5 8.500a5 5 0 0 1 0 7"/></svg></div><div class="lbl">Sound effects</div><div class="sl"><b style="width:80%"></b><u style="left:80%"></u></div></div>
+    <div class="sr"><div class="ic" style="background:#7b5cff"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18V6l10-2v12"/><circle cx="7" cy="18" r="2.500" fill="#fff"/><circle cx="17" cy="16" r="2.500" fill="#fff"/></svg></div><div class="lbl">Music</div><div class="sl"><b style="width:55%"></b><u style="left:55%"></u></div></div>
+  </div></div>
+  <div class="grp" style="top:236px"><span class="sec">Gameplay</span><div class="card">
+    <div class="sr"><div class="ic" style="background:#ff8a1c"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.200" stroke-linecap="round"><path d="M6 8v8M3 10v4M18 8v8M21 10v4M9 6h6v12H9z"/></svg></div><div class="lbl">Haptics<small>Vibrate on captures and hits</small></div><div class="sw"></div></div>
+    <div class="sr"><div class="ic" style="background:#16a36a"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.200" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 8v5M12 16h.01"/></svg></div><div class="lbl">Battle hints<small>Tips and incoming-attack warnings</small></div><div class="sw"></div></div>
+    <div class="sr"><div class="ic" style="background:#98a0c4"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.200" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12h4l3-8 4 16 3-8h4"/></svg></div><div class="lbl">Reduce motion</div><div class="sw off"></div></div>
+  </div></div>
+  <div class="grp" style="top:456px"><span class="sec">Account</span><div class="card">
+    <div class="sr"><div class="avatar" style="width:34px;height:34px;border-radius:12px;font-size:17px">A</div><div class="lbl">Alex<small>Google Play Games · synced 2 min ago</small></div><span class="pill green">SIGNED IN</span></div>
+    <div class="sr"><div class="lbl" style="color:var(--blue)">Sync progress now</div><span class="val">›</span></div>
+    <div class="sr"><div class="lbl" style="color:var(--red)">Sign out</div></div>
+  </div></div>
+  <div class="grp" style="top:640px;text-align:center"><div class="sub" style="font-size:11px;color:var(--ink3)">BattleGrid v1.0 · Maps © Natural Earth · Icons Kenney (CC0)</div></div>
+  <div class="nav"><i><span class="ico" style="--m:url(../../assets/ui/home.png)"></span>Home</i><i><span class="ico" style="--m:url(../../assets/ui/leaderboardsComplex.png)"></span>Levels</i><i><span class="ico" style="--m:url(../../assets/ui/medal1.png)"></span>Daily<b class="dot"></b></i><i><span class="ico" style="--m:url(../../assets/ui/multiplayer.png)"></span>Profile</i><i class="on"><span class="ico" style="--m:url(../../assets/ui/gear.png)"></span>Settings</i></div>
+</div><div class="cap">08 · SETTINGS</div></div>
+
+<!-- 09 PAUSE -->
+<div class="item" data-id="pause"><div class="phone pause">
+  <div class="status l"><span>9:41</span><span>●●● ▮</span></div>
+  <div class="bgmap map" style="position:absolute;inset:0">{{map:pause5}}</div>
+  <div class="card pcard">
+    <h2>Paused</h2><div class="lvl"><span class="pill blue">LEVEL 5 · HOLD THE LINE</span></div>
+    <div class="tip"><span style="font-size:18px">💡</span><div><b>Tip.</b> <span id="pausetip"></span></div></div>
+    <div class="stack"><div class="btn green">RESUME</div><div class="btn light" style="height:48px;font-size:18px">RESTART</div><div class="btn ghost">Quit to menu</div></div>
+    <div class="tgl"><i><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.200" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9v6h4l5 4V5L8 9zM16.5 8.500a5 5 0 0 1 0 7"/></svg></i><i><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.200" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18V6l10-2v12"/><circle cx="7" cy="18" r="2" fill="currentColor"/><circle cx="17" cy="16" r="2" fill="currentColor"/></svg></i><i class="off"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.200" stroke-linecap="round"><path d="M6 8v8M3 10v4M18 8v8M21 10v4M9 6h6v12H9zM4 4l16 16"/></svg></i></div>
+  </div>
+</div><div class="cap">09 · PAUSE</div></div>
+
+<!-- 10 VICTORY -->
+<div class="item" data-id="victory"><div class="phone res">
+  <div class="status"><span>9:41</span><span>●●● ▮</span></div>
+  <div class="confetti" id="conf"></div>
+  <div class="emb"><div class="map">{{map:thumb5}}</div></div><div class="emb-badge" style="background:linear-gradient(#ffc933,#f2a000)"><span class="ico" style="--m:url(../../assets/ui/crown_a.png)"></span></div>
+  <h2>Victory!</h2><div class="lvl"><span class="pill blue" id="winpill"></span></div>
+  <div class="card goals"><div class="stars">{{stars:2}}</div>
+    <div class="gl"><i class="ck">✓</i>Win the battle</div><div class="gl"><i class="ck">✓</i>Lose at most 1 territory<em>lost 1</em></div><div class="gl no"><i class="ck"></i>Win in under 2:30<em>3:12</em></div></div>
+  <div class="rw"><div class="card"><b>+180</b><span>COINS</span></div><div class="card"><b>+45</b><span>XP</span></div><div class="card"><b>9</b><span>CAPTURED</span></div></div>
+  <div class="card adrow"><div class="ic"><span class="ico" style="--m:url(../../assets/ui/movie.png)"></span></div><div><b>Triple your coins</b><span>Watch a short ad · +360</span></div><div class="go">WATCH</div></div>
+  <div class="res-act"><div class="btn green" style="height:58px;font-size:23px">NEXT LEVEL</div><div class="row" style="gap:10px"><div class="btn light" style="flex:1;height:46px;font-size:17px">LEVELS</div><div class="btn light" style="flex:1;height:46px;font-size:17px">HOME</div></div></div>
+</div><div class="cap">10 · VICTORY</div></div>
+
+<!-- 11 DEFEAT -->
+<div class="item" data-id="defeat"><div class="phone res lose">
+  <div class="status"><span>9:41</span><span>●●● ▮</span></div>
+  <div class="emb"><div class="map">{{map:thumb5}}</div></div><div class="emb-badge" style="background:var(--red)"><span style="font:400 22px/1 Lilita">✕</span></div>
+  <h2>Defeated</h2><div class="lvl"><span class="pill red" id="losepill"></span></div>
+  <div class="card lose-tip"><p><b>The enemy took every territory.</b> Retry plays the same map, so you know where they strike.</p><p style="margin-top:10px"><b>Tip:</b> <span id="losetip"></span></p></div>
+  <div class="lose-stats"><div class="card"><b>2</b><span>ATTEMPTS</span></div><div class="card"><b>1:24</b><span>TIME SURVIVED</span></div></div>
+  <div class="res-act"><div class="btn green" style="height:58px;font-size:23px">TRY AGAIN</div><div class="btn purple light" style="height:50px;font-size:17px;color:var(--violet)">ASSISTED RETRY · WEAKER ENEMIES</div><div class="row" style="gap:10px"><div class="btn light" style="flex:1;height:46px;font-size:17px">LEVELS</div><div class="btn light" style="flex:1;height:46px;font-size:17px">HOME</div></div></div>
+</div><div class="cap">11 · DEFEAT</div></div>
+
+</div>
+<script src="levels.js"></script>
+<script src="thumbs.js"></script>
+<script>
+const L = window.LEVELS, $ = (id) => document.getElementById(id);
+const ico = (n, cls = '') => `<span class="ico ${cls}" style="--m:url(../../assets/ui/${n}.png)"></span>`;
+const stars = (n, tot = 3) => [...Array(tot)].map((_, i) => ico('star', i < n ? '' : 'off')).join('');
+const l5 = L[4];
+$('homemap').textContent = l5.map.toUpperCase();
+$('homefrom').textContent = `Start from ${l5.from.join(' & ')} · ${l5.rivals} rival${l5.rivals > 1 ? 's' : ''}`;
+$('homesub').textContent = `LEVEL 5 · FROM ${l5.from[0].toUpperCase()}`;
+$('winpill').textContent = `LEVEL 5 · ${l5.name.toUpperCase()}`;
+$('losepill').textContent = `LEVEL 5 · ${l5.name.toUpperCase()}`;
+$('pausetip').textContent = l5.lesson; $('losetip').textContent = l5.lesson;
+
+/* onboarding drag arrow: from your territory to the nearest neutral one */
+{ const d = L[0].drag; if (d) {
+  $('obline').innerHTML = `<line x1="${d.x1}" y1="${d.y1}" x2="${d.x2}" y2="${d.y2}" stroke="#fff" stroke-width="1.3" stroke-dasharray="1 3" stroke-linecap="round" vector-effect="non-scaling-stroke" style="stroke-width:5px;filter:drop-shadow(0 0 4px rgba(0,0,0,.4))"/>`;
+  const h = $('obhand'); h.style.left = `calc(${d.x2}% - 14px)`; h.style.top = `calc(${d.y2}% - 6px)`;
+} }
+
+/* levels list */
+{
+  const st = [3, 2, 3, 2];
+  $('lvrows').innerHTML = [1, 2, 3, 4, 5, 6, 7].map((n) => {
+    const m = L[n - 1], cleared = n < 5, cur = n === 5, lock = n > 5;
+    return `<div class="lvr ${cur ? 'cur' : ''} ${lock ? 'lock' : ''}"><div class="th"><span class="n">${n}</span><div class="map">${window.THUMBS[n]}</div></div>
+      <div class="tx"><b>${m.name}</b><span>From ${m.from[0]}${m.from.length > 1 ? ' +' + (m.from.length - 1) : ''} · ${m.rivals} rival${m.rivals > 1 ? 's' : ''}</span></div>
+      ${cleared ? `<span class="stars">${stars(st[n - 1])}</span>` : cur ? '<span class="go">PLAY</span>' : ico('locked', 'lk')}</div>`;
+  }).join('');
+}
+
+/* daily week */
+{
+  const v = [50, 75, 100, 150, 200, 250, 500];
+  $('week').innerHTML = v.map((c, i) => {
+    const s = i < 3 ? 'got' : i === 3 ? 'today' : '';
+    return `<div class="dy ${s}"><span>${i === 3 ? 'TODAY' : 'D' + (i + 1)}</span><div class="c">${s === 'got' ? '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5 9-10"/></svg>' : i === 6 ? ico('star') : '<span class="coin" style="width:14px;height:14px"></span>'}</div><span class="v">${c}</span></div>`;
+  }).join('');
+}
+
+/* profile badges */
+{
+  const B = [['First win', 'trophy', '#16a36a', 1], ['3 stars', 'star', '#f2a900', 1], ['7-day streak', 'medal1', '#ff8a1c', 0, '4/7'], ['Europe', 'flag_triangle', '#2f6bff', 0, '4/10'],
+    ['Fortress', 'locked', '#7b5cff', 0, '0/3'], ['Storm rider', 'movie', '#14b8a6', 0, '0/5'], ['Ten wins', 'crown_a', '#ec4899', 0, '4/10'], ['Commander', 'multiplayer', '#2a3fb8', 0, '5/20']];
+  $('badges').innerHTML = B.map(([n, ic, c, got, pr]) => `<div class="bd ${got ? '' : 'lk'}"><div class="ci" style="--c:${c}">${ico(ic)}${pr ? `<span class="pr">${pr}</span>` : ''}</div><span>${n}</span></div>`).join('');
+}
+
+/* confetti */
+{ const c = ['#2f6bff', '#f2a900', '#16a36a', '#ff5c8a', '#7b5cff']; let h = '';
+  for (let i = 0; i < 26; i++) { const x = (i * 97 + 31) % 340 + 10, y = (i * 53 + 20) % 200 + 36; if (x > 120 && x < 240 && y > 60 && y < 190) continue; h += `<i style="left:${x}px;top:${y}px;background:${c[i % 5]};transform:rotate(${i * 37}deg);${i % 3 === 0 ? 'border-radius:50%' : ''}"></i>`; }
+  $('conf').innerHTML = h; }
+
+const id = location.hash.slice(1);
+if (id) { document.body.classList.add('solo'); document.querySelector(`.item[data-id="${id}"]`)?.classList.add('on'); }
+</script>
+</body>
+</html>

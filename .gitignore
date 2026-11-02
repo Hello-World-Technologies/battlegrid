@@ -1,0 +1,165 @@
+# OSX
+#
+.DS_Store
+
+# Xcode
+#
+build/
+*.pbxuser
+!default.pbxuser
+*.mode1v3
+!default.mode1v3
+*.mode2v3
+!default.mode2v3
+*.perspectivev3
+!default.perspectivev3
+xcuserdata
+*.xccheckout
+*.moved-aside
+DerivedData
+*.hmap
+*.ipa
+*.xcuserstate
+**/.xcode.env.local
+
+# Android/IntelliJ
+#
+build/
+.idea
+.gradle
+local.properties
+*.iml
+*.hprof
+.cxx/
+*.keystore
+!debug.keystore
+.kotlin/
+
+# node.js
+#
+node_modules/
+npm-debug.log
+yarn-error.log
+
+# fastlane
+#
+# It is recommended to not store the screenshots in the git repo. Instead, use fastlane to re-generate the
+# screenshots whenever they are needed.
+# For more information about the recommended setup visit:
+# https://docs.fastlane.tools/best-practices/source-control/
+
+**/fastlane/report.xml
+**/fastlane/Preview.html
+**/fastlane/screenshots
+**/fastlane/test_output
+
+# Bundle artifact
+*.jsbundle
+
+# Ruby / CocoaPods
+**/Pods/
+/vendor/bundle/
+
+# Temporary files created by Metro to check the health of the file watcher
+.metro-health-check*
+
+# testing
+/coverage
+
+# Yarn
+.yarn/*
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/sdks
+!.yarn/versions
+
+android/app/keystore.properties
+
+# raw world datasets (see scripts/fetch-geodata.sh)
+/data/raw/
+
+# Log files
+#
+*.log
+*.log.[0-9]*
+logs/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+logcat*.txt
+hs_err_pid*
+replay_pid*
+
+# Test images
+#
+# Screen checks from mockups/current/shoot.mjs: png_new/ by default, png_a/, png_b2/, ... for parallel
+# runs (SHOOT_OUT).
+/mockups/png_new/
+/mockups/png_[a-z]/
+/mockups/png_[a-z][0-9]/
+/mockups/png_phone/
+/mockups/blender/out/
+/mockups/splash-match/splash_new.png
+/mockups/splash-match/comparison.png
+/scripts/logo/preview.png
+/scripts/logo/banners-preview.png
+Screenshot_*.png
+screenshot*.png
+__screenshots__/
+__image_snapshots__/
+__diff_output__/
+
+# Mockup harness bundles: dist/ by default, dist-a/, dist-e/, ... for parallel runs (HARNESS_DIST)
+/mockups/current/dist*/
+
+# Mockup images stay local (the scripts and HTML that make them are tracked)
+/mockups/**/*.png
+/mockups/**/*.jpg
+/mockups/**/*.jpeg
+/mockups/**/*.svg
+/mockups/**/*.webp
+
+# Release builds
+#
+*.apk
+*.aab
+android/app/release/
+
+# Firebase
+#
+# google-services.json is optional (the app runs as an offline guest without it); keep it local.
+android/app/google-services.json
+GoogleService-Info.plist
+.firebase/
+*-debug.log
+
+# Environment and secrets
+#
+.env
+.env.*
+!.env.example
+
+# Tool caches
+#
+.eslintcache
+*.tsbuildinfo
+__pycache__/
+*.py[cod]
+
+# Blender auto-backups (*.blend1, *.blend2, ...)
+*.blend[0-9]*
+
+# Large downloads and scratch archives
+#
+*.zip
+*.tar.gz
+/*.stl
+
+# Editors and OS
+#
+.claude/settings.local.json
+*.swp
+*~
+Thumbs.db
+desktop.ini

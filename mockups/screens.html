@@ -1,0 +1,440 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>BattleGrid UI Mockups</title>
+<!--
+  Static mockups of the BattleGrid shell, built from src/theme.tsx, src/game/theme.ts and the real
+  assets. Open with #home | #levels | #battle | #victory | #defeat | #daily to see a single screen.
+  Render PNGs with: node mockups/render.mjs
+-->
+<style>
+@font-face { font-family: 'Lilita'; src: url('../assets/fonts/LilitaOne-Regular.ttf'); }
+@font-face { font-family: 'Poppins'; font-weight: 600; src: url('../assets/fonts/Poppins-SemiBold.ttf'); }
+@font-face { font-family: 'Poppins'; font-weight: 700; src: url('../assets/fonts/Poppins-Bold.ttf'); }
+
+:root {
+  --bg:#070a16; --glow:#ff8a1c; --text:#f4f4ff; --dim:#9aa0cc;
+  --card:#c8c9ea; --cardAlt:#dcdcf5; --cardEdge:#fff; --cardDeep:#a9abd8;
+  --ink:#1d1a4a; --inkSoft:#54538a;
+  --chip:#f1f1ff; --chipEdge:#5b6bd6;
+  --green:#22a522; --greenDeep:#127012; --blue:#2f6bff; --blueDeep:#1236b0;
+  --orange:#ff7a0d; --orangeDeep:#d85a00; --purple:#b81fe6; --purpleDeep:#7d0fa8;
+  --red:#e5262b; --redDeep:#9c1015; --gold:#ffc21a; --goldDeep:#c98a00;
+  --outline:#0c1030; --mapBg:#e4e4e4; --mapWater:#dde6f1;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { background: #14172b; }
+body { font-family: 'Poppins', sans-serif; font-weight: 600; }
+.d { font-family: 'Lilita', sans-serif; font-weight: 400; }
+
+/* Page: all screens in a row; #hash shows one alone */
+.sheet { display: flex; gap: 40px; padding: 40px; width: max-content; }
+.cap { color: #c9cdf5; font: 700 15px 'Poppins'; letter-spacing: 2px; text-align: center; margin-top: 14px; }
+body.solo .sheet { padding: 0; gap: 0; }
+body.solo .cap { display: none; }
+body.solo .item { display: none; }
+body.solo .item.on { display: block; }
+
+.phone { position: relative; width: 360px; height: 780px; overflow: hidden; background: var(--mapBg);
+  border-radius: 0; }
+body:not(.solo) .phone { border-radius: 36px; box-shadow: 0 0 0 8px #0b0d1c, 0 20px 60px rgba(0,0,0,.5); }
+.status { position: absolute; top: 0; left: 0; right: 0; height: 28px; padding: 6px 18px; display: flex;
+  justify-content: space-between; font: 700 12px 'Poppins'; z-index: 20; }
+.status.light { color: #fff; } .status.dark { color: #1d1a4a; }
+
+/* ── UI kit ── */
+.chip { display: flex; align-items: center; gap: 6px; height: 44px; padding: 0 12px; background: var(--chip);
+  border: 2px solid var(--chipEdge); border-radius: 12px; color: var(--ink); }
+.coin { width: 24px; height: 24px; border-radius: 50%; background: radial-gradient(circle at 35% 30%, #ffe27a, var(--gold) 55%, var(--goldDeep));
+  border: 2px solid var(--goldDeep); display: inline-block; position: relative; flex: none; }
+.coin::after { content: ''; position: absolute; inset: 4px; border-radius: 50%; border: 2px solid rgba(201,138,0,.6); }
+.ico { display: inline-block; flex: none; background: currentColor; -webkit-mask: var(--m) center/contain no-repeat; mask: var(--m) center/contain no-repeat; }
+.flame { width: 16px; height: 20px; background: linear-gradient(#ffd25a, var(--orange)); clip-path: path('M8 0C9 5 15 8 15 14a7 7 0 0 1-14 0c0-3 2-5 3-7 1 2 1 3 2 3 0-4 1-7 4-10z'); }
+
+.btn { position: relative; display: flex; flex-direction: column; align-items: center; justify-content: center; color: #fff;
+  border-radius: 16px; border: 3px solid var(--deep); background: var(--face); box-shadow: 0 6px 0 var(--deep); overflow: hidden; }
+.btn::before { content: ''; position: absolute; left: 0; right: 0; top: 0; height: 50%; background: linear-gradient(rgba(255,255,255,.38), rgba(255,255,255,.08)); }
+.btn .t { position: relative; -webkit-text-stroke: 5px var(--outline); paint-order: stroke fill; letter-spacing: .5px; line-height: 1; }
+.btn .s { position: relative; font: 700 10px 'Poppins'; letter-spacing: 1.2px; margin-top: 3px; text-shadow: 0 1px 0 rgba(0,0,0,.45); }
+.btn.green { --face: var(--green); --deep: var(--greenDeep); }
+.btn.blue { --face: var(--blue); --deep: var(--blueDeep); }
+.btn.purple { --face: var(--purple); --deep: var(--purpleDeep); }
+.btn.red { --face: var(--red); --deep: var(--redDeep); }
+.btn.orange { --face: var(--orange); --deep: var(--orangeDeep); }
+.btn.gold { --face: var(--gold); --deep: var(--goldDeep); }
+.btn.light { --face: #f4f4ff; --deep: var(--cardDeep); color: var(--ink); }
+.btn.light .t { -webkit-text-stroke: 0; }
+.btn.lg { height: 64px; font-size: 30px; } .btn.md { height: 52px; font-size: 22px; }
+
+.panel { position: relative; background: var(--card); border: 3px solid var(--cardEdge); border-bottom-width: 6px;
+  border-bottom-color: var(--cardDeep); border-radius: 18px; padding: 16px; }
+.tile { display: flex; align-items: center; justify-content: center; gap: 8px; background: var(--chip); border: 2px solid #fff;
+  border-bottom: 5px solid var(--cardDeep); border-radius: 12px; padding: 6px 22px; }
+
+.tabbar { position: absolute; left: 0; right: 0; bottom: 0; height: 64px; background: var(--card); border-top: 3px solid #fff; display: flex; }
+.tab { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; border-right: 1px solid var(--cardDeep); position: relative; color: var(--blue); }
+.tab:last-child { border-right: 0; }
+.tab .ico { width: 28px; height: 28px; }
+.tab.on { background: #fff; color: var(--blue); }
+.tab.on .ico { width: 32px; height: 32px; margin-top: -8px; }
+.tab .lb { display: none; font: 400 12px 'Lilita'; color: var(--blueDeep); margin-top: 2px; }
+.tab.on .lb { display: block; }
+.badge { position: absolute; top: 8px; right: 18%; width: 20px; height: 20px; border-radius: 50%; background: var(--red); border: 2px solid #fff;
+  color: #fff; font: 400 12px/16px 'Lilita'; text-align: center; }
+
+/* ── Home ── */
+.home .top { position: absolute; top: 40px; left: 16px; right: 16px; display: flex; gap: 8px; z-index: 5; }
+.avatar { width: 34px; height: 34px; border-radius: 8px; background: var(--blue); color: #fff; display: grid; place-items: center; font: 400 18px 'Lilita'; }
+.map { position: absolute; inset: 0; }
+.theater { position: absolute; left: 50%; transform: translateX(-50%); top: 96px; text-align: center; padding: 4px 18px; z-index: 5; }
+.theater b { display: block; font: 400 16px 'Lilita'; letter-spacing: 1px; color: var(--ink); }
+.theater i { font: 600 10px 'Poppins'; font-style: normal; letter-spacing: 1px; color: var(--inkSoft); }
+.home .bottom { position: absolute; left: 16px; right: 16px; bottom: 78px; display: flex; flex-direction: column; gap: 12px; }
+.track { display: flex; align-items: center; justify-content: center; }
+.node { width: 38px; height: 38px; border-radius: 50%; border: 3px solid; display: grid; place-items: center; font: 400 18px 'Lilita'; color: #fff; }
+.node.cur { width: 46px; height: 46px; background: var(--gold); border-color: var(--goldDeep); box-shadow: 0 0 0 4px rgba(255,194,26,.35); }
+.node.done { background: var(--blue); border-color: var(--blueDeep); }
+.node.next { background: var(--chip); border-color: var(--chipEdge); color: var(--inkSoft); }
+.link { width: 46px; height: 8px; margin: 0 -2px; }
+.playrow { display: flex; gap: 12px; }
+.side { position: relative; width: 76px; height: 64px; background: var(--card); border: 3px solid #fff; border-bottom: 6px solid var(--cardDeep); border-radius: 16px;
+  display: flex; flex-direction: column; align-items: center; justify-content: center; color: var(--blue); }
+.side .ico { width: 28px; height: 28px; }
+.side span { font: 400 13px 'Lilita'; color: var(--blueDeep); }
+.side .dot { position: absolute; top: -9px; right: -9px; width: 20px; height: 20px; border-radius: 50%; background: var(--red); border: 2px solid #fff; }
+
+/* ── Hero stage (win / lose / daily) ── */
+.stage { position: absolute; inset: 0; background: radial-gradient(ellipse 80% 38% at 50% 24%, rgba(255,138,28,.55), rgba(255,138,28,0) 70%), var(--bg); }
+.stage::after { content: ''; position: absolute; inset: 0; background-image: radial-gradient(#ffffff22 1px, transparent 1.5px); background-size: 34px 34px; mask: linear-gradient(#000, transparent 70%); -webkit-mask: linear-gradient(#000, transparent 70%); }
+.rays { position: absolute; left: 50%; top: 150px; width: 700px; height: 700px; margin: -350px 0 0 -350px;
+  background: repeating-conic-gradient(rgba(255,196,80,.22) 0 8deg, transparent 8deg 24deg); border-radius: 50%;
+  -webkit-mask: radial-gradient(circle, #000 10%, transparent 62%); mask: radial-gradient(circle, #000 10%, transparent 62%); }
+.rays.loss { background: repeating-conic-gradient(rgba(120,130,200,.16) 0 8deg, transparent 8deg 24deg); }
+.emblem { position: absolute; left: 50%; top: 56px; width: 190px; height: 190px; margin-left: -95px; border-radius: 50%;
+  display: grid; place-items: center;
+  background: radial-gradient(circle at 35% 28%, #ffe27a, var(--gold) 50%, var(--goldDeep)); border: 7px solid #fff6c9;
+  box-shadow: 0 0 0 7px var(--goldDeep), 0 0 70px 14px rgba(255,170,40,.6); }
+.emblem::before { content: ''; position: absolute; inset: 14px; border-radius: 50%; border: 3px dashed rgba(255,255,255,.55); }
+.emblem .ico { width: 104px; height: 104px; color: #fff; filter: drop-shadow(0 4px 0 rgba(150,90,0,.6)); }
+.emblem.loss { background: radial-gradient(circle at 35% 28%, #aab0e6, #626aa8 55%, #3a4178); border-color: #d9dcf7;
+  box-shadow: 0 0 0 7px #2b3162, 0 0 60px 10px rgba(90,100,200,.45); }
+.emblem.loss .ico { color: #e1e3fa; filter: drop-shadow(0 4px 0 rgba(20,25,70,.6)); }
+.ribbon { position: absolute; left: 22px; right: 22px; top: 236px; height: 54px; z-index: 3; border-radius: 10px; display: grid; place-items: center;
+  background: var(--face); border: 3px solid var(--deep); box-shadow: 0 5px 0 var(--deep); color: #fff; font: 400 34px/1 'Lilita'; letter-spacing: 2px; }
+.ribbon span { -webkit-text-stroke: 6px var(--outline); paint-order: stroke fill; }
+.ribbon.green { --face: var(--green); --deep: var(--greenDeep); } .ribbon.red { --face: var(--red); --deep: var(--redDeep); }
+.ribbon::before, .ribbon::after { content: ''; position: absolute; top: 12px; width: 26px; height: 100%; background: var(--deep); z-index: -1; }
+.ribbon::before { left: -16px; clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%, 30% 50%); }
+.ribbon::after { right: -16px; clip-path: polygon(0 0, 100% 0, 70% 50%, 100% 100%, 0 100%); }
+.col { position: absolute; left: 22px; right: 22px; top: 312px; display: flex; flex-direction: column; gap: 14px; }
+.stars { display: flex; justify-content: center; align-items: flex-end; gap: 4px; margin-bottom: 8px; }
+.star { width: 50px; height: 50px; }
+.star.big { width: 66px; height: 66px; }
+.star.s { margin-bottom: -4px; }
+.star .ico { width: 100%; height: 100%; color: var(--gold); filter: drop-shadow(0 3px 0 var(--goldDeep)); }
+.star.off .ico { color: #9a9cc9; filter: drop-shadow(0 3px 0 #7678a8); }
+.goal { display: flex; align-items: center; gap: 8px; padding: 3px 8px; font-size: 13px; font-weight: 700; color: var(--ink); }
+.goal.no { color: var(--inkSoft); }
+.gd { width: 22px; height: 22px; border-radius: 50%; border: 2px solid; display: grid; place-items: center; flex: none; background: var(--green); border-color: var(--greenDeep); color: #fff; font-size: 12px; }
+.goal.no .gd { background: var(--chip); border-color: var(--chipEdge); }
+.label { font: 400 20px 'Lilita'; color: var(--ink); text-align: center; letter-spacing: .5px; }
+.note { font-size: 11px; color: var(--inkSoft); text-align: center; margin-top: 4px; }
+.actions { position: absolute; left: 22px; right: 22px; bottom: 28px; display: flex; flex-direction: column; gap: 14px; }
+.row2 { display: flex; gap: 12px; } .row2 .btn { flex: 1; }
+.bonus { background: linear-gradient(#ffd9bd, #ffc59a); border-color: #fff; padding: 22px 14px 12px; display: flex; align-items: center; gap: 10px; }
+.bonus .tag { position: absolute; top: -13px; left: 50%; transform: translateX(-50%); background: var(--red); border: 2px solid var(--redDeep); border-radius: 6px; padding: 0 16px;
+  font: 400 15px/22px 'Lilita'; color: #fff; white-space: nowrap; }
+.bonus .val { font: 400 26px 'Lilita'; color: var(--ink); display: flex; align-items: center; gap: 6px; background: #ffe6d2; border: 2px solid #ffb070; border-radius: 12px; padding: 4px 12px; }
+
+.win .emblem{top:28px;width:140px;height:140px;margin-left:-70px;border-width:5px}.win .emblem .ico{width:76px;height:76px}.win .rays{top:104px}.win .ribbon{top:178px;height:46px;font-size:30px}.win .col{top:240px;gap:10px}.win .panel{padding:10px 14px}.win .star{width:40px;height:40px}.win .star.big{width:54px;height:54px}.win .stars{margin-bottom:4px}.win .goal{padding:1px 8px}.win .bonus{padding:18px 12px 10px}.win .actions{gap:10px;bottom:22px}.win .actions>.btn.lg{height:56px;font-size:26px}.win .row2 .btn{height:46px;font-size:19px}
+/* ── Levels ── */
+.levels { background: var(--mapBg); }
+.hdr { position: absolute; top: 40px; left: 16px; right: 16px; display: flex; align-items: center; justify-content: space-between; }
+.hdr h1 { font: 400 28px 'Lilita'; color: var(--ink); letter-spacing: .8px; }
+.grid { position: absolute; top: 100px; left: 16px; right: 16px; display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px 10px; }
+.lv { position: relative; aspect-ratio: 1; border-radius: 16px; border: 3px solid #fff; border-bottom: 6px solid var(--cardDeep); background: var(--card);
+  display: flex; flex-direction: column; align-items: center; justify-content: center; font: 400 26px/1 'Lilita'; color: var(--ink); }
+.lv.cleared { background: var(--blue); border-color: #8fb0ff; border-bottom-color: var(--blueDeep); color: #fff; }
+.lv.cur { background: var(--gold); border-color: #ffe9a3; border-bottom-color: var(--goldDeep); color: #fff; box-shadow: 0 0 0 4px rgba(255,194,26,.4); }
+.lv.cur, .lv.cleared { text-shadow: 0 2px 0 rgba(0,0,0,.25); }
+.lv.lock { background: #d4d5ec; color: #9395c4; border-color: #ececfa; }
+.lv .st { display: flex; gap: 1px; margin-top: 4px; }
+.lv .st .ico { width: 13px; height: 13px; color: var(--gold); }
+.lv .st .ico.off { color: rgba(255,255,255,.35); }
+.lv .lk { width: 20px; height: 20px; color: #9395c4; }
+.sub { position: absolute; left: 16px; right: 16px; top: 84px; font-size: 12px; color: var(--inkSoft); display:none; }
+
+/* ── Battle ── */
+.battle { background: #e8e8e8; }
+.pause { position: absolute; left: 22px; top: 36px; width: 34px; height: 34px; display: grid; place-items: center; }
+.pause i { width: 15px; height: 15px; border-left: 4.5px solid #141414; border-bottom: 4.5px solid #141414; border-radius: 1.5px; transform: rotate(45deg); margin-left: 5px; }
+.share { position: absolute; top: 40px; left: 50%; margin-left: -94px; width: 188px; height: 15px; border: 2px solid #fff; border-radius: 8px; background: #5c5c5c; display: flex; overflow: hidden; }
+.share b { display: block; } .share .sp { width: 1.5px; background: #fff; flex: none; }
+.send { position: absolute; left: 0; right: 0; bottom: 26px; display: flex; justify-content: center; align-items: center; gap: 8px; }
+.send .l { font: 400 18px 'Lilita'; color: var(--ink); letter-spacing: 1px; margin-right: 4px; }
+.send .p { min-width: 62px; height: 40px; border-radius: 20px; background: rgba(255,255,255,.5); border: 2px solid transparent; display: grid; place-items: center; font: 400 20px 'Lilita'; color: rgba(29,26,74,.65); }
+.send .p.on { background: #fff; border-color: var(--ink); color: var(--ink); }
+.hand { position: absolute; width: 56px; z-index: 6; filter: drop-shadow(0 4px 4px rgba(0,0,0,.3)); }
+
+/* ── Daily ── */
+.days { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
+.day { height: 78px; border-radius: 12px; background: var(--chip); border: 2px solid #fff; border-bottom: 5px solid var(--cardDeep); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; font: 400 12px 'Lilita'; color: var(--inkSoft); }
+.day b { font: 400 16px 'Lilita'; color: var(--ink); display: flex; align-items: center; gap: 3px; }
+.day.got { background: #c9efc9; border-bottom-color: #7fc27f; }
+.day.today { background: var(--gold); border-color: #ffe9a3; border-bottom-color: var(--goldDeep); color: #fff; box-shadow: 0 0 0 3px rgba(255,194,26,.45); }
+.day.today b { color: #fff; text-shadow: 0 2px 0 rgba(0,0,0,.25); }
+.day.big { grid-column: span 2; }
+.day .coin { width: 16px; height: 16px; border-width: 1.5px; } .day .coin::after { inset: 2px; border-width: 1.5px; }
+</style>
+</head>
+<body>
+<div class="sheet">
+
+<!-- ═════════════ HOME ═════════════ -->
+<div class="item" data-id="home">
+<div class="phone home">
+  <div class="status dark"><span>9:41</span><span>●●● ▮</span></div>
+  <div class="top">
+    <div class="chip" style="flex:1"><div class="avatar">A</div><span style="font-size:14px;font-weight:700">Alex</span></div>
+    <div class="chip"><span class="flame"></span><span class="d" style="font-size:18px">4</span></div>
+    <div class="chip"><span class="coin"></span><span class="d" style="font-size:18px">1,240</span></div>
+  </div>
+  <svg class="map" viewBox="0 0 360 780" preserveAspectRatio="xMidYMid slice">
+    <rect width="360" height="780" fill="#dde6f1"/>
+    <!-- land masses -->
+    <g fill="#a6a6a6" stroke="#f4f4f4" stroke-width="3" stroke-linejoin="round">
+      <path d="M28 200 C60 150 140 140 190 170 C230 150 290 160 320 200 C345 240 330 290 300 310 C285 345 240 350 220 330 C190 360 130 355 100 330 C60 335 20 290 28 200Z"/>
+      <path d="M60 420 C90 390 160 395 190 420 C230 400 300 410 320 450 C335 500 300 540 260 545 C230 580 160 575 130 545 C80 550 40 500 60 420Z"/>
+    </g>
+    <!-- territories -->
+    <g stroke="#f4f4f4" stroke-width="3">
+      <path d="M44 205 C70 165 130 158 170 180 L150 255 C110 270 60 270 44 205Z" fill="#7cc8ff"/>
+      <path d="M170 180 C215 160 270 165 305 205 L270 262 L190 258 L150 255Z" fill="#f97057"/>
+      <path d="M150 255 L190 258 L270 262 L300 308 C280 340 245 342 222 325 C190 350 140 345 112 326 C90 310 120 280 150 255Z" fill="#8be08b"/>
+      <path d="M72 428 C100 402 160 404 186 424 L170 500 C130 520 70 500 72 428Z" fill="#a3a3a3"/>
+      <path d="M186 424 C225 408 290 416 308 452 C318 490 295 525 258 535 L170 500Z" fill="#7cc8ff"/>
+      <path d="M170 500 L258 535 C232 565 170 565 140 538Z" fill="#f97057"/>
+    </g>
+    <!-- route dashes -->
+    <path d="M100 232 L165 214 L230 224 L245 288 L180 300 L120 290 L100 232" fill="none" stroke="#fff" stroke-width="3" stroke-dasharray="2 8" stroke-linecap="round"/>
+    <path d="M110 462 L220 470 L215 520" fill="none" stroke="#fff" stroke-width="3" stroke-dasharray="2 8" stroke-linecap="round"/>
+    <!-- level pins -->
+    <g font-family="Lilita" text-anchor="middle" font-size="17" fill="#fff">
+      <g transform="translate(100 232)"><circle r="17" fill="#2f6bff" stroke="#1236b0" stroke-width="3"/><text y="6">1</text></g>
+      <g transform="translate(165 214)"><circle r="17" fill="#2f6bff" stroke="#1236b0" stroke-width="3"/><text y="6">2</text></g>
+      <g transform="translate(230 224)"><circle r="17" fill="#2f6bff" stroke="#1236b0" stroke-width="3"/><text y="6">3</text></g>
+      <g transform="translate(245 288)"><circle r="17" fill="#2f6bff" stroke="#1236b0" stroke-width="3"/><text y="6">4</text></g>
+      <g transform="translate(180 300)"><circle r="27" fill="#ffc21a" fill-opacity=".35"/><circle r="20" fill="#ffc21a" stroke="#c98a00" stroke-width="3.5"/><text y="7" font-size="20">5</text></g>
+      <g transform="translate(120 290)"><circle r="16" fill="#f1f1ff" stroke="#5b6bd6" stroke-width="3"/><text y="6" fill="#54538a">6</text></g>
+      <g transform="translate(110 462)"><circle r="16" fill="#f1f1ff" stroke="#5b6bd6" stroke-width="3"/><text y="6" fill="#54538a">7</text></g>
+      <g transform="translate(220 470)"><circle r="16" fill="#f1f1ff" stroke="#5b6bd6" stroke-width="3"/><text y="6" fill="#54538a">8</text></g>
+      <g transform="translate(215 520)"><circle r="16" fill="#f1f1ff" stroke="#5b6bd6" stroke-width="3"/><text y="6" fill="#54538a">9</text></g>
+      <g transform="translate(160 540)"><circle r="16" fill="#f1f1ff" stroke="#5b6bd6" stroke-width="3"/><text y="6" fill="#54538a">10</text></g>
+    </g>
+  </svg>
+  <div class="chip theater"><div><b>NORTH ATLANTIC</b><i>4 / 10 CLEARED</i></div></div>
+  <div class="bottom">
+    <div class="track">
+      <div class="node done">4</div><div class="link" style="background:var(--blue)"></div>
+      <div class="node cur">5</div><div class="link" style="background:var(--cardDeep)"></div>
+      <div class="node next">6</div>
+    </div>
+    <div class="playrow">
+      <div class="side"><span class="ico" style="--m:url(../assets/ui/medal1.png)"></span><span>DAILY</span><i class="dot"></i></div>
+      <div class="btn lg green" style="flex:1"><span class="t">PLAY</span><span class="s">LEVEL 5 · FIRST CONTACT</span></div>
+    </div>
+  </div>
+  <div class="tabbar">
+    <div class="tab"><span class="ico" style="--m:url(../assets/ui/leaderboardsComplex.png)"></span></div>
+    <div class="tab"><span class="ico" style="--m:url(../assets/ui/medal1.png)"></span><i class="badge">!</i></div>
+    <div class="tab on"><span class="ico" style="--m:url(../assets/ui/home.png)"></span><span class="lb">BATTLE</span></div>
+    <div class="tab"><span class="ico" style="--m:url(../assets/ui/multiplayer.png)"></span></div>
+    <div class="tab"><span class="ico" style="--m:url(../assets/ui/gear.png)"></span></div>
+  </div>
+</div>
+<div class="cap">HOME · CAMPAIGN MAP</div>
+</div>
+
+<!-- ═════════════ LEVELS ═════════════ -->
+<div class="item" data-id="levels">
+<div class="phone levels">
+  <div class="status dark"><span>9:41</span><span>●●● ▮</span></div>
+  <div class="hdr"><h1>LEVELS</h1><div class="chip"><span class="coin"></span><span class="d" style="font-size:18px">1,240</span></div></div>
+  <div class="grid" id="lvgrid"></div>
+  <div class="tabbar">
+    <div class="tab on"><span class="ico" style="--m:url(../assets/ui/leaderboardsComplex.png)"></span><span class="lb">LEVELS</span></div>
+    <div class="tab"><span class="ico" style="--m:url(../assets/ui/medal1.png)"></span><i class="badge">!</i></div>
+    <div class="tab"><span class="ico" style="--m:url(../assets/ui/home.png)"></span></div>
+    <div class="tab"><span class="ico" style="--m:url(../assets/ui/multiplayer.png)"></span></div>
+    <div class="tab"><span class="ico" style="--m:url(../assets/ui/gear.png)"></span></div>
+  </div>
+</div>
+<div class="cap">LEVELS · STAR GRID</div>
+</div>
+
+<!-- ═════════════ BATTLE ═════════════ -->
+<div class="item" data-id="battle">
+<div class="phone battle">
+  <div class="status dark"><span>9:41</span><span>●●● ▮</span></div>
+  <div class="pause"><i></i></div>
+  <div class="share"><b style="flex:5;background:#2c6a99"></b><i class="sp"></i><b style="flex:3;background:#e01010"></b><i class="sp"></i><b style="flex:3;background:#1fa01f"></b><i class="sp"></i><b style="flex:1;background:#5c5c5c"></b></div>
+  <svg viewBox="0 0 360 780" style="position:absolute;inset:0" font-family="Lilita" text-anchor="middle">
+    <rect width="360" height="780" fill="#e8e8e8"/>
+    <!-- land -->
+    <g fill="#d6d6d6" stroke="#f4f4f4" stroke-width="3" stroke-linejoin="round">
+      <path d="M24 110 C70 80 150 90 180 110 C230 80 310 95 338 140 C352 220 340 300 320 340 C340 420 330 520 300 600 C240 650 130 650 60 610 C20 540 28 440 40 360 C14 280 10 170 24 110Z"/>
+    </g>
+    <!-- regions -->
+    <g stroke="#f4f4f4" stroke-width="3" stroke-linejoin="round">
+      <path d="M32 120 C75 92 150 100 178 122 L170 330 L40 352 C22 280 20 180 32 120Z" fill="#70bceb"/>
+      <path d="M178 122 C230 92 305 104 330 146 C342 220 334 296 316 336 L170 330Z" fill="#ff6b57"/>
+      <path d="M40 352 L170 330 L316 336 C334 420 324 510 296 590 C236 636 134 636 68 600 C34 530 38 440 40 352Z" fill="#a6a6a6" fill-opacity=".0"/>
+      <path d="M170 330 L316 336 C330 420 322 510 296 590 L190 580 L180 470Z" fill="#86d88f"/>
+      <path d="M40 352 L170 330 L180 470 L190 580 L180 622 C130 630 90 620 68 600 C36 530 38 440 40 352Z" fill="#a6a6a6"/>
+    </g>
+    <!-- links -->
+    <g stroke="#ffffff" stroke-opacity=".9" stroke-width="3" stroke-dasharray="1 8" stroke-linecap="round" fill="none">
+      <path d="M95 215 L250 210"/><path d="M95 215 L100 330"/><path d="M250 210 L240 330"/><path d="M100 330 L240 330"/><path d="M100 330 L110 470"/><path d="M240 330 L250 470"/><path d="M110 470 L250 470"/><path d="M110 470 L170 560"/><path d="M250 470 L170 560"/>
+    </g>
+    <!-- troops in flight -->
+    <g fill="#2c6a99" opacity=".95"><circle cx="130" cy="296" r="4"/><circle cx="138" cy="288" r="4"/><circle cx="122" cy="288" r="4"/><circle cx="130" cy="280" r="4"/><circle cx="114" cy="304" r="4"/><circle cx="146" cy="300" r="4"/></g>
+    <g fill="#8b160d" opacity=".95"><circle cx="246" cy="262" r="4"/><circle cx="252" cy="270" r="4"/><circle cx="240" cy="272" r="4"/><circle cx="246" cy="280" r="4"/></g>
+    <!-- territories -->
+    <g stroke="#fff" stroke-width="3">
+      <circle cx="95" cy="215" r="34" fill="#2c6a99"/><circle cx="100" cy="330" r="28" fill="#2c6a99"/>
+      <circle cx="250" cy="210" r="36" fill="#8b160d"/><circle cx="240" cy="330" r="26" fill="#8b160d"/>
+      <circle cx="250" cy="470" r="32" fill="#147a22"/><circle cx="110" cy="470" r="30" fill="#7a7a7a"/>
+      <circle cx="170" cy="560" r="26" fill="#7a7a7a"/>
+    </g>
+    <circle cx="95" cy="215" r="42" fill="none" stroke="#1d1a4a" stroke-width="3" stroke-dasharray="4 5"/>
+    <g fill="#fff" font-size="26">
+      <text x="95" y="225">42</text><text x="100" y="339" font-size="22">18</text>
+      <text x="250" y="219">36</text><text x="240" y="338" font-size="22">14</text>
+      <text x="250" y="479">28</text><text x="110" y="479">12</text><text x="170" y="568" font-size="22">10</text>
+    </g>
+  </svg>
+  <img class="hand" src="../assets/ui/hand.png" style="left:84px;top:226px" alt="">
+  <div class="send"><span class="l">SEND</span><span class="p">25%</span><span class="p on">50%</span><span class="p">100%</span></div>
+</div>
+<div class="cap">BATTLE · LIVE HUD</div>
+</div>
+
+<!-- ═════════════ VICTORY ═════════════ -->
+<div class="item" data-id="victory">
+<div class="phone win">
+  <div class="stage"></div><div class="rays"></div>
+  <div class="status light"><span>9:41</span><span>●●● ▮</span></div>
+  <div class="emblem"><span class="ico" style="--m:url(../assets/ui/crown_a.png)"></span></div>
+  <div class="ribbon green"><span>VICTORY</span></div>
+  <div class="col">
+    <div class="panel">
+      <div class="stars">
+        <div class="star s"><span class="ico" style="--m:url(../assets/ui/star.png)"></span></div>
+        <div class="star big"><span class="ico" style="--m:url(../assets/ui/star.png)"></span></div>
+        <div class="star s off"><span class="ico" style="--m:url(../assets/ui/star.png)"></span></div>
+      </div>
+      <div class="goal"><i class="gd">✓</i>Win the battle</div>
+      <div class="goal"><i class="gd">✓</i>Lose at most 1 territory</div>
+      <div class="goal no"><i class="gd"></i>Win in under 2:30</div>
+    </div>
+    <div class="panel" style="text-align:center;padding-top:12px">
+      <div class="label">YOUR REWARD</div>
+      <div class="tile" style="margin:8px auto 0;width:max-content"><span class="coin" style="width:32px;height:32px"></span><span class="d" style="font-size:32px;color:var(--ink)">+180</span></div>
+      <div class="note">Level 5 · First Contact · includes +120 for new stars</div>
+    </div>
+    <div class="panel bonus">
+      <div class="tag">GET ×3 COINS:</div>
+      <div class="val">+360 <span class="coin"></span></div>
+      <div class="btn md purple" style="flex:1;height:46px;font-size:18px"><span class="t">WATCH AD</span></div>
+    </div>
+  </div>
+  <div class="actions">
+    <div class="btn lg green"><span class="t">NEXT LEVEL</span></div>
+    <div class="row2"><div class="btn md light"><span class="t">LEVELS</span></div><div class="btn md light"><span class="t">HOME</span></div></div>
+  </div>
+</div>
+<div class="cap">VICTORY · 2 STARS</div>
+</div>
+
+<!-- ═════════════ DEFEAT ═════════════ -->
+<div class="item" data-id="defeat">
+<div class="phone">
+  <div class="stage" style="background: radial-gradient(ellipse 80% 38% at 50% 24%, rgba(90,100,200,.45), rgba(90,100,200,0) 70%), var(--bg)"></div><div class="rays loss"></div>
+  <div class="status light"><span>9:41</span><span>●●● ▮</span></div>
+  <div class="emblem loss"><span class="ico" style="--m:url(../assets/ui/trophy.png)"></span></div>
+  <div class="ribbon red"><span>DEFEATED</span></div>
+  <div class="col">
+    <div class="panel" style="text-align:center;padding:20px 16px">
+      <div class="label" style="font-size:22px">The enemy took every territory.</div>
+      <div class="note">Level 5 · First Contact</div>
+      <div class="note" style="margin-top:2px">Retry plays the same map — you know where they strike.</div>
+      <div class="note" style="margin-top:8px">Stuck? An assisted retry has weaker enemies. It can earn only the first star.</div>
+    </div>
+  </div>
+  <div class="actions">
+    <div class="btn lg green"><span class="t">TRY AGAIN</span></div>
+    <div class="btn md purple"><span class="t">ASSISTED RETRY</span></div>
+    <div class="row2"><div class="btn md light"><span class="t">LEVELS</span></div><div class="btn md light"><span class="t">HOME</span></div></div>
+  </div>
+</div>
+<div class="cap">DEFEAT · RETRY</div>
+</div>
+
+<!-- ═════════════ DAILY ═════════════ -->
+<div class="item" data-id="daily">
+<div class="phone">
+  <div class="stage"></div>
+  <div class="status light"><span>9:41</span><span>●●● ▮</span></div>
+  <div class="hdr" style="top:44px"><h1 style="color:#fff;-webkit-text-stroke:5px var(--outline);paint-order:stroke fill">DAILY BONUS</h1><div class="chip"><span class="coin"></span><span class="d" style="font-size:18px">1,240</span></div></div>
+  <div class="emblem" style="top:108px;width:150px;height:150px;margin-left:-75px"><span class="ico" style="--m:url(../assets/ui/medal1.png);width:84px;height:84px"></span></div>
+  <div class="col" style="top:290px">
+    <div class="panel" style="text-align:center">
+      <div class="label">4 DAY STREAK</div>
+      <div class="note" style="margin-bottom:12px">Come back every day — the reward grows.</div>
+      <div class="days">
+        <div class="day got">DAY 1<b><span class="coin"></span>50</b></div>
+        <div class="day got">DAY 2<b><span class="coin"></span>75</b></div>
+        <div class="day got">DAY 3<b><span class="coin"></span>100</b></div>
+        <div class="day today">TODAY<b><span class="coin"></span>150</b></div>
+        <div class="day">DAY 5<b><span class="coin"></span>200</b></div>
+        <div class="day">DAY 6<b><span class="coin"></span>250</b></div>
+        <div class="day big">DAY 7<b><span class="coin"></span>500</b></div>
+      </div>
+    </div>
+    <div class="btn lg gold" style="height:64px"><span class="t">CLAIM +150</span></div>
+    <div class="note" style="color:var(--dim);margin:0">Next bonus in 14:22:07 (UTC midnight)</div>
+  </div>
+  <div class="tabbar">
+    <div class="tab"><span class="ico" style="--m:url(../assets/ui/leaderboardsComplex.png)"></span></div>
+    <div class="tab on"><span class="ico" style="--m:url(../assets/ui/medal1.png)"></span><span class="lb">DAILY</span><i class="badge">!</i></div>
+    <div class="tab"><span class="ico" style="--m:url(../assets/ui/home.png)"></span></div>
+    <div class="tab"><span class="ico" style="--m:url(../assets/ui/multiplayer.png)"></span></div>
+    <div class="tab"><span class="ico" style="--m:url(../assets/ui/gear.png)"></span></div>
+  </div>
+</div>
+<div class="cap">DAILY BONUS · STREAK</div>
+</div>
+
+</div>
+<script>
+  // Levels grid
+  const stars = [3,3,2,3,2,3,1,2,3,2,3,2,1,3,2,3,2,3,1,2];
+  let h = '';
+  for (let i = 1; i <= 24; i++) {
+    const st = (n) => `<span class="st">${[0,1,2].map(k => `<span class="ico ${k < n ? '' : 'off'}" style="--m:url(../assets/ui/star.png)"></span>`).join('')}</span>`;
+    if (i < 21) h += `<div class="lv cleared">${i}${st(stars[i-1] > 2 ? 3 : stars[i-1])}</div>`;
+    else if (i === 21) h += `<div class="lv cur">${i}</div>`;
+    else h += `<div class="lv lock"><span class="ico lk" style="--m:url(../assets/ui/locked.png)"></span></div>`;
+  }
+  document.getElementById('lvgrid').innerHTML = h;
+  // Hash -> solo
+  const id = location.hash.slice(1);
+  if (id) {
+    document.body.classList.add('solo');
+    document.querySelector(`.item[data-id="${id}"]`)?.classList.add('on');
+  }
+</script>
+</body>
+</html>

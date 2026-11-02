@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">BattleGrid</string>
+    <!-- Play Games Services application id, from Play Console > Play Games
+         Services > Configuration > (Android credential) > Authorization >
+         Application ID (Play Console: the "Project ID" on the configuration page).
+         A wrong or all-zero value makes sign-in fail (DEVELOPER_ERROR / the
+         app reports "not set up"). The manifest requires this entry or the SDK
+         cannot start. -->
+    <string name="app_id" translatable="false">1031307367641</string>
+</resources>

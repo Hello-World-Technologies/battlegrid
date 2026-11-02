@@ -1,0 +1,355 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>BattleGrid forest mockups</title>
+<style>
+@font-face { font-family: 'Lilita'; src: url('../../assets/fonts/LilitaOne-Regular.ttf'); }
+@font-face { font-family: 'Poppins'; font-weight: 700; src: url('../../assets/fonts/Poppins-Bold.ttf'); }
+@font-face { font-family: 'Poppins'; font-weight: 600; src: url('../../assets/fonts/Poppins-SemiBold.ttf'); }
+:root {
+  --forest-950: #0e2616; --forest-900: #153a22; --forest-800: #1f4d2e; --forest-600: #3a7a3c;
+  --leaf: #5fa043; --lime: #9acd4f; --moss: #8fae6a;
+  --bark-900: #2e1d0e; --bark-800: #4a2f17; --bark-700: #6b4423; --wood: #8a5a2b; --wood-light: #b07a3e;
+  --parchment: #f6e6bd; --parchment-dark: #e6cf98; --cream: #fff4d6;
+  --gold: #f2b632; --gold-light: #ffd966; --gold-deep: #b9780f; --ember: #c2452d;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { background: #1a120a; font-family: 'Poppins', sans-serif; font-weight: 600; color: var(--bark-900); }
+#sheet { display: grid; grid-template-columns: repeat(5, 360px); gap: 28px; padding: 40px; width: max-content; background: #1a120a; }
+figure { margin: 0; }
+figcaption { height: 44px; line-height: 44px; text-align: center; color: var(--parchment); font-weight: 700; letter-spacing: 2px; font-size: 16px; }
+.screen { position: relative; width: 360px; height: 800px; overflow: hidden; border-radius: 18px; box-shadow: 0 6px 18px #0009; }
+.abs { position: absolute !important; }
+.lil { font-family: 'Lilita', sans-serif; letter-spacing: .8px; }
+.status { position: absolute; top: 0; left: 0; right: 0; height: 28px; padding: 6px 14px; display: flex; justify-content: space-between; font-size: 12px; font-weight: 700; color: var(--cream); z-index: 5; text-shadow: 0 1px 2px #0008; }
+.status.dark { color: var(--bark-900); text-shadow: none; }
+.outline { color: var(--cream); -webkit-text-stroke: 6px var(--bark-800); paint-order: stroke fill; text-shadow: 0 4px 0 var(--bark-900); }
+
+/* buttons */
+.btn { display: flex; flex-direction: column; align-items: center; justify-content: center; height: 54px; border-radius: 14px; border: 3px solid; font-family: 'Lilita'; font-size: 25px; letter-spacing: 1.2px; position: relative; }
+.btn small { font-family: 'Poppins'; font-weight: 700; font-size: 10px; letter-spacing: 1px; margin-top: -3px; }
+.btn.gold { background: linear-gradient(#ffd966, #f2b632 55%, #dc9a1c); border-color: #8a5a10; color: var(--bark-900); box-shadow: 0 5px 0 #8a5a10, 0 10px 14px #0005; text-shadow: 0 1px 0 #ffeaa6; }
+.btn.wood { background: linear-gradient(#a8703a, #8a5a2b 55%, #744a22); border-color: var(--bark-800); color: var(--cream); box-shadow: 0 5px 0 var(--bark-900), 0 10px 14px #0005; text-shadow: 0 2px 0 #0007; }
+.btn.green { background: linear-gradient(#8bc34a, #5fa043 55%, #4a8a33); border-color: #2c5a1e; color: var(--cream); box-shadow: 0 5px 0 #2c5a1e, 0 10px 14px #0005; text-shadow: 0 2px 0 #0006; }
+.btn.parch { background: linear-gradient(#fbefcb, #ecd7a2); border-color: var(--wood); color: var(--bark-800); box-shadow: 0 4px 0 #8a5a2b88; font-size: 18px; height: 46px; }
+.btn.sm { height: 34px; font-size: 15px; border-radius: 10px; border-width: 2px; box-shadow: 0 3px 0 #8a5a10; }
+.iconbtn { width: 56px; height: 56px; border-radius: 16px; border: 3px solid; display: flex; align-items: center; justify-content: center; box-shadow: 0 5px 0 #0004, 0 8px 12px #0004; position: relative; }
+.iconbtn svg { width: 28px; height: 28px; fill: var(--cream); }
+.dot { position: absolute; top: -6px; right: -6px; width: 14px; height: 14px; border-radius: 50%; background: var(--ember); border: 2px solid var(--cream); }
+
+/* panels */
+.card { background: linear-gradient(#fbeecb, var(--parchment)); border: 4px solid var(--wood); border-radius: 16px; box-shadow: 0 5px 0 var(--bark-700), 0 10px 16px #0004; padding: 12px; position: relative; }
+.hero { background: linear-gradient(#5a3a1e, #3a2410); border: 4px solid var(--bark-900); border-radius: 18px; box-shadow: 0 5px 0 #1d1208, 0 12px 18px #0005; color: var(--cream); padding: 14px; position: relative; }
+.pill { display: flex; align-items: center; gap: 6px; height: 34px; padding: 0 12px 0 6px; border-radius: 999px; background: linear-gradient(#fff4d6, #efd89d); border: 3px solid var(--wood); font-family: 'Lilita'; font-size: 17px; box-shadow: 0 3px 0 var(--bark-700); }
+.coin { width: 22px; height: 22px; border-radius: 50%; background: radial-gradient(circle at 35% 30%, #ffe58a, #f2b632 55%, #b9780f); border: 2px solid #8a5a10; display: inline-block; flex: none; }
+.cap { font-size: 10px; font-weight: 700; letter-spacing: 1.6px; color: var(--bark-700); text-transform: uppercase; }
+.title { font-family: 'Lilita'; font-size: 27px; color: var(--cream); -webkit-text-stroke: 5px var(--bark-800); paint-order: stroke fill; letter-spacing: 1px; text-shadow: 0 3px 0 var(--bark-900); }
+.bar { height: 14px; border-radius: 999px; background: #0004; border: 2px solid var(--bark-900); overflow: hidden; }
+.bar > i { display: block; height: 100%; border-radius: 999px; background: linear-gradient(#ffe58a, #f2b632); }
+
+/* tab bar */
+.tabbar { position: absolute; left: 12px; right: 12px; bottom: 10px; height: 62px; border-radius: 22px; background: linear-gradient(#6b4423, #4a2f17); border: 3px solid var(--bark-900); box-shadow: 0 5px 0 #1d1208, 0 12px 16px #0006; display: flex; align-items: center; justify-content: space-around; padding: 0 4px; z-index: 6; }
+.tab { width: 50px; height: 48px; border-radius: 14px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; color: #d9bf8a; font-size: 9px; font-weight: 700; }
+.tab svg { width: 20px; height: 20px; fill: currentColor; }
+.tab.on { background: linear-gradient(#fff4d6, #efd89d); color: var(--forest-800); box-shadow: inset 0 -2px 0 #c9a864; }
+</style>
+</head>
+<body>
+<div id="sheet"></div>
+<script>
+let uid = 0;
+const ICON = {
+  home: '<path d="M3 11 12 3l9 8v10h-6v-6H9v6H3z"/>',
+  levels: '<path d="M5 3h2v18H5zM8 4h11l-3 4 3 4H8z"/>',
+  shop: '<path d="M3 8l4.5 4L12 5l4.5 7L21 8l-2 12H5z"/>',
+  daily: '<path d="M4 10h16v10H4zM3 7h18v3H3zM11 7h2v13h-2zM12 7C9 7 8 3.5 10.5 3.5 12 3.5 12 7 12 7zm0 0c3 0 4-3.5 1.5-3.5C12 3.5 12 7 12 7z"/>',
+  profile: '<path d="M12 12a4.2 4.2 0 100-8.4 4.2 4.2 0 000 8.4zM3.5 21a8.5 8.5 0 0117 0z"/>',
+  settings: '<circle cx="12" cy="12" r="4"/><circle cx="12" cy="12" r="7.5" fill="none" stroke="currentColor" stroke-width="4" stroke-dasharray="3.3 2.9"/>',
+  gift: '<path d="M4 10h16v10H4zM3 7h18v3H3zM11 7h2v13h-2zM12 7C9 7 8 3.5 10.5 3.5 12 3.5 12 7 12 7zm0 0c3 0 4-3.5 1.5-3.5C12 3.5 12 7 12 7z"/>',
+};
+const ico = (n, extra = '') => `<svg viewBox="0 0 24 24" ${extra}>${ICON[n]}</svg>`;
+const status = (dark) => `<div class="status ${dark ? 'dark' : ''}"><span>9:41</span><span>▲ ▮▮▮ ▮</span></div>`;
+const tabbar = (on) => `<div class="tabbar">${[['home','Home'],['levels','Levels'],['shop','Shop'],['daily','Daily'],['profile','Profile'],['settings','Settings']].map(([k, l]) => `<div class="tab ${on === k ? 'on' : ''}">${ico(k)}${l}</div>`).join('')}</div>`;
+const coins = (n = '2,840') => `<div class="pill"><span class="coin"></span>${n}</div>`;
+
+/* ---- forest scenery ---- */
+function pines(seed, y, h, fill, count, jitter = 1) {
+  let s = seed, out = '';
+  const rnd = () => (s = (s * 9301 + 49297) % 233280) / 233280;
+  for (let i = 0; i < count; i++) {
+    const x = (i + rnd() * jitter) * (380 / count) - 10, k = 0.7 + rnd() * 0.7, w = 34 * k, hh = h * k;
+    const b = y + rnd() * 10;
+    out += `<path d="M${x} ${b - hh} L${x + w * .32} ${b - hh * .62} L${x + w * .16} ${b - hh * .62} L${x + w * .42} ${b - hh * .28} L${x + w * .22} ${b - hh * .28} L${x + w * .5} ${b} L${x - w * .5} ${b} L${x - w * .22} ${b - hh * .28} L${x - w * .42} ${b - hh * .28} L${x - w * .16} ${b - hh * .62} L${x - w * .32} ${b - hh * .62} Z" fill="${fill}"/>`;
+  }
+  return out;
+}
+function forestBg(kind = 'day') {
+  const g = kind === 'night'
+    ? 'linear-gradient(#0e2616 0%, #1f4d2e 38%, #5a8a3a 62%, #f2b632 78%, #ffd966 84%, #2a5a2c 84%)'
+    : 'linear-gradient(#ffe9a8 0%, #d9e4a0 22%, #9bc873 46%, #4f9040 70%, #2a5a2c 100%)';
+  return `<div class="abs" style="inset:0;background:${g}"></div>
+  <svg class="abs" style="left:0;bottom:0" width="360" height="560" viewBox="0 0 360 560">
+    <ellipse cx="60" cy="470" rx="230" ry="110" fill="#6fae4f" opacity=".55"/>
+    <ellipse cx="320" cy="500" rx="240" ry="120" fill="#4f9040" opacity=".7"/>
+    ${pines(3, 470, 70, '#2f6b3a', 12)}
+    ${pines(7, 520, 95, '#1f4d2e', 9)}
+    ${pines(11, 575, 130, '#153a22', 7)}
+  </svg>`;
+}
+
+/* ---- the logo ---- */
+function logoSVG(w = 330, opts = {}) {
+  const id = 'l' + ++uid, h = w * 0.78;
+  const ext = (txt, x, y, size, fill, count, dx = 0) => Array.from({ length: count }, (_, i) => `<text x="${x + dx * (count - i)}" y="${y + (count - i)}" font-size="${size}" text-anchor="middle" fill="${fill}" stroke="${fill}" stroke-width="12" stroke-linejoin="round">${txt}</text>`).join('');
+  return `<svg width="${w}" height="${h}" viewBox="0 0 360 280" style="overflow:visible">
+  <defs>
+    <linearGradient id="${id}g" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff2b8"/><stop offset=".5" stop-color="#ffc83a"/><stop offset="1" stop-color="#e08a12"/></linearGradient>
+    <linearGradient id="${id}f" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#c8ec6a"/><stop offset=".55" stop-color="#5fb044"/><stop offset="1" stop-color="#2f7a33"/></linearGradient>
+    <linearGradient id="${id}s" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2f7a3a"/><stop offset="1" stop-color="#123b20"/></linearGradient>
+    <linearGradient id="${id}w" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#b07a3e"/><stop offset="1" stop-color="#6b4423"/></linearGradient>
+    <filter id="${id}d" x="-20%" y="-20%" width="140%" height="150%"><feDropShadow dx="0" dy="6" stdDeviation="5" flood-color="#000" flood-opacity=".45"/></filter>
+  </defs>
+  <g filter="url(#${id}d)">
+    <!-- emblem: crossed swords + hex shield with a pine -->
+    <g transform="translate(180 62)">
+      <g transform="rotate(38)"><rect x="-5" y="-62" width="10" height="104" rx="3" fill="#e9eef0" stroke="#4a2f17" stroke-width="4"/><rect x="-16" y="30" width="32" height="9" rx="4" fill="url(#${id}g)" stroke="#4a2f17" stroke-width="3.5"/><circle cy="48" r="6" fill="url(#${id}g)" stroke="#4a2f17" stroke-width="3"/></g>
+      <g transform="rotate(-38)"><rect x="-5" y="-62" width="10" height="104" rx="3" fill="#e9eef0" stroke="#4a2f17" stroke-width="4"/><rect x="-16" y="30" width="32" height="9" rx="4" fill="url(#${id}g)" stroke="#4a2f17" stroke-width="3.5"/><circle cy="48" r="6" fill="url(#${id}g)" stroke="#4a2f17" stroke-width="3"/></g>
+      <polygon points="0,-52 42,-30 42,22 0,50 -42,22 -42,-30" fill="url(#${id}s)" stroke="#4a2f17" stroke-width="7" stroke-linejoin="round"/>
+      <polygon points="0,-52 42,-30 42,22 0,50 -42,22 -42,-30" fill="none" stroke="url(#${id}g)" stroke-width="3.5" stroke-linejoin="round" transform="scale(.9)"/>
+      <path d="M0 -34 L16 -10 L7 -10 L22 12 L8 12 L26 32 L-26 32 L-8 12 L-22 12 L-7 -10 L-16 -10 Z" fill="#a6dc58" stroke="#0f3018" stroke-width="3" stroke-linejoin="round"/>
+      <rect x="-4" y="32" width="8" height="9" fill="#8a5a2b" stroke="#2e1d0e" stroke-width="2.5"/>
+      <circle cx="0" cy="-40" r="0" />
+    </g>
+    <!-- wordmark -->
+    <g font-family="Lilita, sans-serif" stroke-linejoin="round">
+      ${ext('BATTLE', 180, 170, 76, '#3a2410', 8)}
+      <text x="180" y="170" font-size="76" text-anchor="middle" fill="url(#${id}g)" stroke="#4a2f17" stroke-width="7" paint-order="stroke" stroke-linejoin="round">BATTLE</text>
+      <text x="180" y="170" font-size="76" text-anchor="middle" fill="url(#${id}g)">BATTLE</text>
+      ${ext('GRID', 180, 238, 76, '#0e2616', 8)}
+      <text x="180" y="238" font-size="76" text-anchor="middle" fill="url(#${id}f)" stroke="#0e2616" stroke-width="8" paint-order="stroke" stroke-linejoin="round">GRID</text>
+      <text x="180" y="238" font-size="76" text-anchor="middle" fill="url(#${id}f)">GRID</text>
+    </g>
+    <!-- gold hex sparkles -->
+    <polygon points="22,150 34,143 46,150 46,164 34,171 22,164" fill="none" stroke="#f2b632" stroke-width="3"/>
+    <polygon points="316,212 328,205 340,212 340,226 328,233 316,226" fill="none" stroke="#9acd4f" stroke-width="3"/>
+  </g>
+  ${opts.tagline === false ? '' : `<g transform="translate(180 268)"><rect x="-128" y="-14" width="256" height="26" rx="8" fill="url(#${id}w)" stroke="#2e1d0e" stroke-width="3"/><text y="5" font-family="Poppins" font-weight="700" font-size="11.5" letter-spacing="3" text-anchor="middle" fill="#fff4d6">CAPTURE · SPREAD · CONQUER</text></g>`}
+  </svg>`;
+}
+const logoImg = (w, o) => `<div style="display:flex;justify-content:center">${logoSVG(w, o)}</div>`;
+
+/* ---- screens ---- */
+const S = {};
+
+S.splash = `<div class="screen" id="splash">
+  <div class="abs" style="inset:0;background:linear-gradient(#0c2214 0%, #164024 34%, #3d7a35 56%, #d9a02a 72%, #ffd966 78%, #153a22 78%)"></div>
+  <div class="abs" style="left:-60px;right:-60px;top:360px;height:360px;background:radial-gradient(ellipse at 50% 70%, #fff0a8 0%, #ffd966 22%, #f2b63255 46%, transparent 70%)"></div>
+  <svg class="abs" style="left:0;top:0" width="360" height="800" viewBox="0 0 360 800">
+    ${Array.from({ length: 26 }, (_, i) => `<circle cx="${(i * 97) % 360}" cy="${(i * 53) % 330 + 20}" r="${i % 4 ? 1 : 1.8}" fill="#fff4d6" opacity="${0.35 + (i % 5) * .12}"/>`).join('')}
+    <path d="M-20 560 Q60 470 140 540 T300 520 T400 560 V800 H-20Z" fill="#3a7a3c" opacity=".55"/>
+    <path d="M-20 600 Q90 520 190 590 T400 580 V800 H-20Z" fill="#2a5a2c"/>
+    <!-- tower + flag on the far hill -->
+    <g transform="translate(236 470)"><rect x="-16" y="0" width="32" height="64" fill="#2a4a2a"/><rect x="-20" y="-8" width="40" height="12" fill="#2a4a2a"/><path d="M-20 -8h8v-8h8v8h8v-8h8v8h8" fill="#2a4a2a"/><rect x="-1.5" y="-50" width="3" height="36" fill="#2e1d0e"/><path d="M1.5 -50 L24 -43 L1.5 -35Z" fill="#f2b632"/><rect x="-5" y="30" width="10" height="16" rx="5" fill="#f2b63288"/></g>
+    ${pines(5, 612, 70, '#1f4d2e', 13)}
+    ${pines(9, 668, 110, '#153a22', 10)}
+    ${pines(14, 740, 160, '#0e2616', 8)}
+    ${pines(2, 810, 190, '#0a1c10', 6)}
+    <!-- orbs: gold attacking green along a dashed line -->
+    <circle cx="70" cy="615" r="9" fill="#f2b632" stroke="#fff4d6" stroke-width="2"/>
+    ${Array.from({ length: 7 }, (_, i) => `<circle cx="${92 + i * 20}" cy="${606 - Math.sin(i / 6 * Math.PI) * 14}" r="3.4" fill="#ffd966"/>`).join('')}
+    <circle cx="236" cy="590" r="9" fill="#9acd4f" stroke="#fff4d6" stroke-width="2"/>
+    ${Array.from({ length: 30 }, (_, i) => `<circle cx="${(i * 71) % 340 + 10}" cy="${(i * 37) % 260 + 360}" r="1.6" fill="#ffe58a" opacity="${.35 + (i % 4) * .15}"/>`).join('')}
+  </svg>
+  <div class="abs" style="left:0;right:0;top:84px">${logoImg(330)}</div>
+  <div class="abs lil" style="left:0;right:0;top:372px;text-align:center;font-size:15px;color:var(--cream);letter-spacing:2px;text-shadow:0 2px 4px #0008">THE FOREST WARS</div>
+  <div class="abs" style="left:46px;right:46px;bottom:76px">
+    <div class="bar" style="height:18px;background:#2e1d0e99;border-color:#2e1d0e;border-width:3px"><i style="width:62%"></i></div>
+    <div style="text-align:center;margin-top:10px;font-size:12px;font-weight:700;letter-spacing:1px;color:var(--cream);text-shadow:0 1px 3px #000a">Loading levels…</div>
+  </div>
+  ${status()}
+</div>`;
+
+S.home = `<div class="screen" id="home">
+  ${forestBg()}
+  ${status(true)}
+  <div class="abs" style="right:14px;top:36px">${coins()}</div>
+  <div class="abs" style="left:0;right:0;top:92px">${logoImg(300)}</div>
+  <div class="abs" style="left:54px;right:54px;top:430px;display:flex;flex-direction:column;gap:20px">
+    <div class="btn gold">PLAY<small>LEVEL 6</small></div>
+    <div class="btn wood">LEVELS</div>
+    <div class="btn green">SHOP</div>
+  </div>
+  <div class="abs" style="left:0;right:0;bottom:44px;display:flex;justify-content:center;gap:22px">
+    <div class="iconbtn" style="background:linear-gradient(#ffd966,#d9961a);border-color:#8a5a10">${ico('gift')}<span class="dot"></span></div>
+    <div class="iconbtn" style="background:linear-gradient(#8bc34a,#4a8a33);border-color:#2c5a1e">${ico('profile')}</div>
+    <div class="iconbtn" style="background:linear-gradient(#a8703a,#6b4423);border-color:#2e1d0e">${ico('settings', 'style="color:#fff4d6"')}</div>
+  </div>
+</div>`;
+
+const levelCard = (n, name, locked, stars, tilt, sky) => `<div class="card" style="width:206px;padding:8px 8px 6px;transform:rotate(${tilt}deg);background:linear-gradient(#fff4d6,#f0dba5)">
+  <div style="height:104px;border-radius:8px;background:${sky};position:relative;overflow:hidden;border:2px solid #b08a4a">
+    <svg width="190" height="104" viewBox="0 0 190 104" style="position:absolute;left:0;top:0"><circle cx="150" cy="26" r="13" fill="#ffe58a"/><path d="M-10 78 Q50 40 100 70 T200 62 V110 H-10Z" fill="#6aa84f"/><path d="M-10 92 Q60 66 120 88 T200 84 V110 H-10Z" fill="#3a7a3c"/>${pines(n * 3, 90, 40, '#1f4d2e', 7)}</svg>
+    ${locked ? '<div style="position:absolute;inset:0;background:#2e1d0e88;display:flex;align-items:center;justify-content:center"><svg viewBox="0 0 24 24" width="30" height="30" fill="#fff4d6"><path d="M7 10V8a5 5 0 0110 0v2h1v11H6V10zm2 0h6V8a3 3 0 00-6 0z"/></svg></div>' : ''}
+  </div>
+  <div class="lil" style="text-align:center;font-size:17px;margin-top:6px;color:var(--bark-800)">${n}. ${name}</div>
+  <div style="text-align:center;color:#f2b632;font-size:15px;letter-spacing:3px;height:18px;-webkit-text-stroke:.6px #8a5a10">${'★'.repeat(stars)}<span style="color:#d9c28a">${'★'.repeat(3 - stars)}</span></div>
+</div>`;
+S.levels = `<div class="screen" id="levels">
+  <div class="abs" style="inset:0;background:linear-gradient(#f2dca0,#e6c98a)"></div>
+  <svg class="abs" style="left:0;top:0;opacity:.5" width="360" height="800">${pines(21, 790, 120, '#c8b070', 9)}</svg>
+  ${status(true)}
+  <div class="abs" style="left:16px;top:38px" ><span class="title">Levels</span></div>
+  <div class="abs" style="right:14px;top:38px">${coins()}</div>
+  <svg class="abs" style="left:0;top:90px" width="360" height="620"><path d="M250 80 C340 150 330 200 250 250 S60 330 150 400 S250 470 220 560" fill="none" stroke="#6b4423" stroke-width="4" stroke-dasharray="10 9" stroke-linecap="round"/></svg>
+  <div class="abs" style="left:22px;top:88px">${levelCard(7, 'Second Empire', true, 0, -3, 'linear-gradient(#9fb08a,#c9d0a0)')}</div>
+  <div class="abs" style="left:132px;top:262px">
+    ${levelCard(6, 'Ion Storm', false, 0, 2, 'linear-gradient(#ffe9a8,#b7dc8a)')}
+    <div class="btn gold sm" style="position:absolute;left:50px;top:40px;width:106px;box-shadow:0 3px 0 #8a5a10,0 6px 10px #0006;border-width:3px">PLAY</div>
+  </div>
+  <div class="abs" style="left:22px;top:476px">${levelCard(5, 'Hold the Line', false, 3, -2, 'linear-gradient(#bfe6a0,#7fbf62)')}</div>
+  ${tabbar('levels')}
+</div>`;
+
+const shopRow = (name, desc, own, a, b, c) => `<div class="card" style="padding:10px 12px;margin-bottom:12px"><div style="display:flex;gap:10px;align-items:center"><div style="width:46px;height:46px;border-radius:12px;background:${c};border:3px solid var(--bark-800);box-shadow:0 3px 0 #0003"></div><div style="flex:1"><div style="display:flex;justify-content:space-between"><b class="lil" style="font-size:17px">${name}</b><span style="font-size:10px;color:var(--bark-700);font-weight:700">You have ${own}</span></div><div style="font-size:11px;color:var(--bark-700);line-height:1.3">${desc}</div></div></div>
+  <div style="display:flex;gap:8px;margin-top:8px"><div class="btn gold sm" style="flex:1;font-size:14px"><span class="coin" style="width:15px;height:15px;margin-right:4px"></span>×${a}</div><div class="btn green sm" style="flex:1;font-size:14px;box-shadow:0 3px 0 #2c5a1e;border-color:#2c5a1e">×5 ${b}</div></div></div>`;
+S.shop = `<div class="screen" id="shop">
+  ${forestBg()}
+  ${status(true)}
+  <div class="abs" style="left:16px;top:38px"><span class="title">Shop</span></div>
+  <div class="abs" style="right:14px;top:38px">${coins()}</div>
+  <div class="abs cap" style="left:18px;top:92px;color:var(--bark-900)">BATTLE ITEMS</div>
+  <div class="abs" style="left:14px;right:14px;top:114px;font-size:11.5px;line-height:1.4;color:var(--bark-900)">Tap the bomb button in a battle to open your items. You can use up to 3 in one battle. Each costs one win.</div>
+  <div class="abs" style="left:14px;right:14px;top:170px">
+    ${shopRow('Bomb', 'Destroys 5 troops in one tower.', 2, '1200', '800', 'radial-gradient(circle at 35% 30%,#555,#1c1c1c)')}
+    ${shopRow('Mega bomb', 'Destroys 25 troops in one tower.', 0, '1600', '2,400', 'linear-gradient(135deg,#6ac0ff,#2a6ab0)')}
+    ${shopRow('Freeze', 'An enemy tower makes no troops for 10 seconds.', 0, '1250', '1,000', 'linear-gradient(135deg,#bfeaff,#4a9ad0)')}
+  </div>
+  ${tabbar('shop')}
+</div>`;
+
+S.daily = `<div class="screen" id="daily">
+  ${forestBg()}
+  ${status(true)}
+  <div class="abs" style="left:16px;top:38px"><span class="title">Daily Bonus</span></div>
+  <div class="abs" style="right:14px;top:38px">${coins()}</div>
+  <div class="abs hero" style="left:14px;right:14px;top:92px;height:136px">
+    <div class="lil" style="font-size:34px;color:var(--gold-light)">3 <span style="font-size:19px;color:var(--cream)">day streak</span></div>
+    <div style="font-size:11px;line-height:1.4;width:200px;margin-top:4px;color:#e9d6a8">Come back every day: rewards grow, and day 7 is a big one.</div>
+    <div style="position:absolute;right:14px;top:14px;width:50px;height:66px;border-radius:50% 50% 50% 50%/60% 60% 40% 40%;background:radial-gradient(circle at 50% 70%,#fff4a8,#f2b632 45%,#d9561a);filter:drop-shadow(0 0 10px #f2b632aa)"></div>
+    <div style="position:absolute;left:14px;right:14px;bottom:10px"><div style="display:flex;justify-content:space-between;font-size:9px;font-weight:700;letter-spacing:1px;color:#e9d6a8;margin-bottom:4px"><span>DAY 4</span><span>DAY 7 · 800 COINS</span></div><div class="bar"><i style="width:48%"></i></div></div>
+  </div>
+  <div class="abs" style="left:14px;right:14px;top:244px;display:flex;gap:5px">
+    ${[['D1', 100, 1], ['D2', 150, 1], ['D3', 200, 1], ['TODAY', 250, 2], ['D5', 300, 0], ['D6', 400, 0], ['D7', 800, 0]].map(([d, c, s]) => `<div class="card" style="flex:1;padding:6px 0;text-align:center;border-width:3px;border-radius:10px;box-shadow:0 3px 0 var(--bark-700);${s === 2 ? 'background:linear-gradient(#fff2b0,#f2d268);border-color:var(--gold-deep)' : ''}"><div style="font-size:7px;font-weight:700;letter-spacing:.5px;color:var(--bark-700)">${d}</div><div style="margin:3px auto;width:18px;height:18px" ><span class="coin" style="width:18px;height:18px;${s === 1 ? 'background:#7fbf4f;border-color:#2c5a1e' : ''}"></span></div><div class="lil" style="font-size:11px">${c}</div></div>`).join('')}
+  </div>
+  <div class="abs card" style="left:14px;right:14px;top:338px;text-align:center;padding:16px">
+    <div class="cap">Today's reward</div>
+    <div class="lil" style="font-size:52px;display:flex;align-items:center;justify-content:center;gap:10px;color:var(--bark-800)"><span class="coin" style="width:42px;height:42px"></span>250</div>
+    <div style="font-size:11px;color:var(--bark-700)">Claim before UTC midnight to keep your streak</div>
+  </div>
+  <div class="abs" style="left:14px;right:14px;top:520px"><div class="btn gold">CLAIM +250</div><div style="text-align:center;margin-top:12px;font-size:11px;font-weight:700;color:var(--bark-900)">Next bonus in 10:45:07</div></div>
+  ${tabbar('daily')}
+</div>`;
+
+const tile = (v, l, ic) => `<div class="card" style="flex:1;padding:8px 4px;text-align:center;border-radius:12px;border-width:3px"><div class="lil" style="font-size:20px;color:var(--forest-800)">${ic ? ic + ' ' : ''}${v}</div><div style="font-size:8.5px;font-weight:700;letter-spacing:1.4px;color:var(--bark-700)">${l}</div></div>`;
+S.profile = `<div class="screen" id="profile">
+  ${forestBg()}
+  ${status()}
+  <div class="abs hero" style="left:0;right:0;top:0;height:158px;border-radius:0 0 22px 22px;border-width:0 0 4px 0;padding:44px 16px 0">
+    <div style="display:flex;gap:12px;align-items:center"><div style="width:52px;height:52px;border-radius:50%;background:linear-gradient(#ffd966,#d9961a);border:3px solid var(--cream);display:flex;align-items:center;justify-content:center" class="lil"><span style="font-size:26px;color:var(--bark-900)">A</span></div><div><div class="lil" style="font-size:22px">Alex</div><div style="font-size:10.5px;color:#e9d6a8">Commander · Campaign level 6</div></div></div>
+    <div style="display:flex;justify-content:space-between;margin-top:12px;font-size:9px;font-weight:700;letter-spacing:1.2px;color:#e9d6a8"><span>5 LEVELS CLEARED</span><span>NEXT GOAL · 10</span></div>
+    <div class="bar" style="margin-top:4px"><i style="width:50%"></i></div>
+  </div>
+  <div class="abs" style="left:14px;right:14px;top:176px;display:flex;gap:8px">${tile(5, 'LEVELS', '⚑')}${tile(11, 'STARS', '★')}${tile(9, 'WINS', '♛')}</div>
+  <div class="abs cap" style="left:18px;top:252px;color:var(--bark-900)">RECORD</div>
+  <div class="abs" style="left:14px;right:14px;top:274px;display:flex;gap:6px">${tile('75%', 'WIN RATE')}${tile(3, 'LOST')}${tile(4, 'BEST STREAK')}${tile('2,840', 'COINS EARNED')}</div>
+  <div class="abs cap" style="left:18px;top:352px;color:var(--bark-900)">MILESTONES</div>
+  <div class="abs card" style="left:14px;right:14px;top:374px;padding:12px 8px"><div style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px 4px;text-align:center">
+    ${[['First win', 'DONE', 1], ['Three stars', 'DONE', 1], ['7-day streak', '4/7', 0], ['Ten wins', '9/10', 0], ['10 levels', '5/10', 0], ['25 stars', '11/25', 0], ['25 levels', '5/25', 0], ['50 wins', '9/50', 0]].map(([n, p, d]) => `<div><div style="width:38px;height:38px;margin:0 auto;border-radius:50%;background:${d ? 'radial-gradient(circle at 35% 30%,#ffe58a,#f2b632 60%,#b9780f)' : '#d9c28a'};border:3px solid ${d ? '#8a5a10' : '#b99a5a'}"></div><div style="font-size:8.5px;margin-top:3px;font-weight:700">${n}</div><div style="font-size:8.5px;color:${d ? 'var(--forest-600)' : 'var(--bark-700)'};font-weight:700">${p}</div></div>`).join('')}
+  </div></div>
+  <div class="abs card" style="left:14px;right:14px;top:558px;padding:10px 12px;display:flex;align-items:center;gap:10px"><div style="width:36px;height:36px;border-radius:10px;background:linear-gradient(#8bc34a,#4a8a33);border:2px solid #2c5a1e"></div><div style="flex:1"><div class="lil" style="font-size:16px">Google Play Games</div><div style="font-size:10px;color:var(--bark-700)">Signed in</div></div><span style="font-size:9px;font-weight:700;color:#fff;background:var(--leaf);padding:2px 8px;border-radius:99px">ONLINE</span></div>
+  <div class="abs" style="left:14px;right:14px;top:626px"><div class="btn parch">SIGN OUT</div></div>
+  ${tabbar('profile')}
+</div>`;
+
+/* battle: Voronoi-style states, gold = you, ember = enemy, moss = neutral */
+function board() {
+  const V = [[[0, 100], [128, 98], [236, 100], [360, 98]], [[0, 262], [104, 300], [250, 246], [360, 290]], [[0, 480], [140, 444], [228, 500], [360, 452]], [[0, 720], [120, 722], [250, 720], [360, 722]]];
+  const owner = [['n', 'n', 'e'], ['n', 'n', 'n'], ['p', 'n', 'n']];
+  const troops = [[18, 26, 45], [14, 12, 16], [45, 10, 12]];
+  const fill = { p: ['#ffd966', '#d9961a'], e: ['#e0674a', '#9c2f1c'], n: ['#a9c283', '#7e9a5c'] };
+  let cells = '', marks = '';
+  for (let i = 0; i < 3; i++) for (let j = 0; j < 3; j++) {
+    const pts = [V[i][j], V[i][j + 1], V[i + 1][j + 1], V[i + 1][j]];
+    const cx = pts.reduce((a, p) => a + p[0], 0) / 4, cy = pts.reduce((a, p) => a + p[1], 0) / 4, o = owner[i][j], gid = `c${i}${j}`;
+    cells += `<defs><linearGradient id="${gid}" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${fill[o][0]}"/><stop offset="1" stop-color="${fill[o][1]}"/></linearGradient></defs><polygon points="${pts.map(p => p.join(',')).join(' ')}" fill="url(#${gid})" stroke="#fff4d6" stroke-width="3" stroke-linejoin="round"/>`;
+    const tint = o === 'p' ? '#7a4a08' : o === 'e' ? '#5a1408' : '#e8efd8';
+    marks += `<circle cx="${cx}" cy="${cy}" r="${o === 'n' ? 17 : 22}" fill="${o === 'n' ? '#fff4d6' : tint}" stroke="#fff4d6" stroke-width="${o === 'n' ? 0 : 3}"/><text x="${cx}" y="${cy + (o === 'n' ? 38 : 42)}" text-anchor="middle" font-family="Lilita" font-size="17" fill="#1d1208" stroke="#fff4d6" stroke-width="3.5" paint-order="stroke">${troops[i][j]}</text>`;
+    if (o === 'p' || o === 'e') marks += `<circle cx="${cx}" cy="${cy}" r="28" fill="none" stroke="#fff4d6" stroke-width="2.5" stroke-dasharray="14 8"/>`;
+  }
+  const arrow = `<path d="M60 560 Q80 440 130 396" fill="none" stroke="#fff4d6" stroke-width="5" stroke-dasharray="4 10" stroke-linecap="round"/>`;
+  const troopsFly = Array.from({ length: 5 }, (_, i) => { const t = (i + 1) / 6; return `<circle cx="${60 + 70 * t * 1.1 + Math.sin(t * 3) * 6}" cy="${560 - 164 * t}" r="5" fill="#ffd966" stroke="#7a4a08" stroke-width="2"/>`; }).join('');
+  return `<svg class="abs" style="left:0;top:0" width="360" height="800" viewBox="0 0 360 800"><rect width="360" height="800" fill="#153a22"/><g>${cells}</g>${arrow}${troopsFly}${marks}
+   <g transform="translate(112 394)"><path d="M0 0 L0 22 L6 17 L11 28 L16 26 L11 15 L19 15 Z" fill="#fff" stroke="#2e1d0e" stroke-width="2" transform="translate(-4 -2)"/></g></svg>`;
+}
+S.play = `<div class="screen" id="play">${board()}
+  ${status()}
+  <div class="abs" style="left:14px;top:38px;width:36px;height:36px;border-radius:12px;background:linear-gradient(#a8703a,#6b4423);border:3px solid var(--bark-900);display:flex;align-items:center;justify-content:center;color:var(--cream);font-size:22px;font-family:Lilita">‹</div>
+  <div class="abs" style="left:66px;right:66px;top:48px;height:16px;border-radius:99px;overflow:hidden;border:3px solid #fff4d6;display:flex;background:#0006"><i style="width:28%;background:#ffd966"></i><i style="width:20%;background:#e0674a"></i><i style="flex:1;background:#5e6e4c"></i></div>
+  <div class="abs" style="right:14px;top:38px;width:36px;height:36px;border-radius:12px;background:linear-gradient(#ffd966,#d9961a);border:3px solid #8a5a10;display:flex;align-items:center;justify-content:center"><svg viewBox="0 0 24 24" width="20" height="20" fill="#4a2f17"><circle cx="11" cy="14" r="7"/><path d="M15 6l3-3M18 4l2 2" stroke="#4a2f17" stroke-width="2"/></svg></div>
+</div>`;
+
+S.won = `<div class="screen" id="won">
+  ${forestBg()}
+  ${status(true)}
+  ${Array.from({ length: 26 }, (_, i) => `<i class="abs" style="left:${(i * 53) % 340 + 8}px;top:${(i * 37) % 280 + 40}px;width:7px;height:11px;border-radius:2px;background:${['#f2b632', '#9acd4f', '#fff4d6', '#c2452d'][i % 4]};transform:rotate(${i * 37}deg)"></i>`).join('')}
+  <div class="abs" style="left:0;right:0;top:92px;display:flex;justify-content:center"><svg width="130" height="120" viewBox="0 0 130 120"><polygon points="65,6 118,34 118,84 65,114 12,84 12,34" fill="url(#wg)" stroke="#4a2f17" stroke-width="6" stroke-linejoin="round"/><defs><linearGradient id="wg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#3f8a3c"/><stop offset="1" stop-color="#153a22"/></linearGradient></defs><path d="M65 26 L80 52 L72 52 L88 76 L74 76 L92 96 L38 96 L56 76 L42 76 L58 52 L50 52 Z" fill="#a6dc58" stroke="#0f3018" stroke-width="3"/></svg></div>
+  <div class="abs lil" style="left:0;right:0;top:228px;text-align:center;font-size:44px;color:var(--cream);-webkit-text-stroke:8px var(--bark-800);paint-order:stroke fill;text-shadow:0 5px 0 var(--bark-900)">Victory!</div>
+  <div class="abs" style="left:0;right:0;top:288px;text-align:center"><span style="background:#fff4d6;border:2px solid var(--wood);border-radius:99px;padding:3px 12px;font-size:9.5px;font-weight:700;letter-spacing:1.4px;color:var(--forest-800)">LEVEL 5 · HOLD THE LINE</span></div>
+  <div class="abs card" style="left:14px;right:14px;top:330px;padding:14px">
+    <div style="text-align:center;font-size:40px;color:#f2b632;letter-spacing:6px;-webkit-text-stroke:1.5px #8a5a10;text-shadow:0 3px 0 #b9780f">★★<span style="color:#d9c28a">★</span></div>
+    ${[['Win the battle', 140, 1], ['Win in under 1:35', 200, 1], ['Win in under 1:05', 250, 0]].map(([t, c, d]) => `<div style="display:flex;justify-content:space-between;align-items:center;margin-top:9px;font-size:12px"><span style="display:flex;gap:8px;align-items:center"><i style="width:16px;height:16px;border-radius:50%;background:${d ? 'var(--leaf)' : '#d9c28a'};display:inline-block"></i>${t}</span><span style="color:var(--bark-700);font-size:11px">${c} coins</span></div>`).join('')}
+  </div>
+  <div class="abs" style="left:14px;right:14px;top:510px;display:flex;gap:8px">${tile('+200', 'COINS', '')}${tile('2/3', 'STARS', '')}${tile('1:20', 'TIME', '')}</div>
+  <div class="abs" style="left:14px;right:14px;top:596px"><div class="btn green">NEXT LEVEL</div><div style="display:flex;gap:10px;margin-top:14px"><div class="btn parch" style="flex:1">LEVELS</div><div class="btn parch" style="flex:1">HOME</div></div></div>
+</div>`;
+
+const toggle = `<span style="width:44px;height:24px;border-radius:99px;background:var(--leaf);border:2px solid #2c5a1e;display:flex;justify-content:flex-end;padding:2px"><i style="width:16px;height:16px;border-radius:50%;background:var(--cream)"></i></span>`;
+const setRow = (t, c) => `<div style="display:flex;align-items:center;gap:10px;padding:10px 4px;border-bottom:2px solid #0001"><div style="width:30px;height:30px;border-radius:9px;background:${c};border:2px solid var(--bark-800)"></div><span style="flex:1;font-size:13px;font-weight:700">${t}</span>${toggle}</div>`;
+S.settings = `<div class="screen" id="settings">
+  ${forestBg()}
+  ${status(true)}
+  <div class="abs" style="left:16px;top:38px"><span class="title">Settings</span></div>
+  <div class="abs cap" style="left:18px;top:98px;color:var(--bark-900)">AUDIO</div>
+  <div class="abs card" style="left:14px;right:14px;top:120px;padding:4px 12px">${setRow('Sound effects', 'linear-gradient(#6ab0e0,#2a6ab0)')}${setRow('Music', 'linear-gradient(#b08ae0,#6a4ab0)')}</div>
+  <div class="abs cap" style="left:18px;top:252px;color:var(--bark-900)">GAMEPLAY</div>
+  <div class="abs card" style="left:14px;right:14px;top:274px;padding:4px 12px">${setRow('Vibration', 'linear-gradient(#ffb060,#d9701a)')}</div>
+  <div class="abs cap" style="left:18px;top:356px;color:var(--bark-900)">ABOUT</div>
+  <div class="abs card" style="left:14px;right:14px;top:378px;padding:10px 12px;display:flex;align-items:center;gap:10px"><div style="width:30px;height:30px;border-radius:9px;background:linear-gradient(#ffd966,#d9961a);border:2px solid #8a5a10"></div><span style="flex:1;font-size:13px;font-weight:700">Credits</span><span class="lil" style="font-size:18px">›</span></div>
+  <div class="abs" style="left:14px;right:14px;top:452px"><div class="btn green">SAVE</div></div>
+  ${tabbar('settings')}
+</div>`;
+
+/* the logo sheet: hero logo, app icon, palette */
+const sw = (c, n) => `<div style="flex:1;text-align:center"><div style="height:46px;border-radius:10px;background:${c};border:3px solid #fff4d655"></div><div style="font-size:8.5px;margin-top:4px;color:#e9d6a8;font-weight:700">${n}<br>${c}</div></div>`;
+S.logo = `<div class="screen" id="logo" style="background:linear-gradient(#153a22,#0e2616)">
+  ${status()}
+  <div class="abs cap" style="left:0;right:0;top:44px;text-align:center;color:var(--gold-light)">NEW LOGO · FOREST EDITION</div>
+  <div class="abs" style="left:0;right:0;top:80px">${logoImg(336)}</div>
+  <div class="abs cap" style="left:18px;top:392px;color:#e9d6a8">APP ICON</div>
+  <div class="abs" style="left:18px;top:414px;display:flex;gap:16px;align-items:flex-end">
+    <div style="width:116px;height:116px;border-radius:26px;background:radial-gradient(circle at 50% 30%,#4f9040,#153a22);border:4px solid #f2b632;box-shadow:0 8px 14px #0007;display:flex;align-items:center;justify-content:center;overflow:hidden"><svg width="96" height="96" viewBox="-50 -66 100 130"><g transform="rotate(38)"><rect x="-5" y="-62" width="10" height="104" rx="3" fill="#e9eef0" stroke="#4a2f17" stroke-width="4"/><rect x="-16" y="30" width="32" height="9" rx="4" fill="#f2b632" stroke="#4a2f17" stroke-width="3.5"/></g><g transform="rotate(-38)"><rect x="-5" y="-62" width="10" height="104" rx="3" fill="#e9eef0" stroke="#4a2f17" stroke-width="4"/><rect x="-16" y="30" width="32" height="9" rx="4" fill="#f2b632" stroke="#4a2f17" stroke-width="3.5"/></g><polygon points="0,-52 42,-30 42,22 0,50 -42,22 -42,-30" fill="#1f5a30" stroke="#4a2f17" stroke-width="7" stroke-linejoin="round"/><path d="M0 -34 L16 -10 L7 -10 L22 12 L8 12 L26 32 L-26 32 L-8 12 L-22 12 L-7 -10 L-16 -10 Z" fill="#a6dc58" stroke="#0f3018" stroke-width="3" stroke-linejoin="round"/><rect x="-4" y="32" width="8" height="9" fill="#8a5a2b"/></svg></div>
+    <div style="width:76px;height:76px;border-radius:50%;background:radial-gradient(circle at 50% 30%,#4f9040,#153a22);border:3px solid #f2b632;display:flex;align-items:center;justify-content:center"><span class="lil" style="font-size:30px;color:#ffd966">BG</span></div>
+    <div style="width:48px;height:48px;border-radius:12px;background:radial-gradient(circle at 50% 30%,#4f9040,#153a22);border:3px solid #f2b632;display:flex;align-items:center;justify-content:center"><span class="lil" style="font-size:19px;color:#ffd966">BG</span></div>
+  </div>
+  <div class="abs cap" style="left:18px;top:566px;color:#e9d6a8">PALETTE</div>
+  <div class="abs" style="left:18px;right:18px;top:588px;display:flex;gap:7px">${sw('#153a22', 'Deep forest')}${sw('#5fa043', 'Leaf')}${sw('#9acd4f', 'Lime')}${sw('#8a5a2b', 'Wood')}${sw('#f2b632', 'Gold')}${sw('#f6e6bd', 'Parchment')}</div>
+  <div class="abs" style="left:18px;right:18px;top:690px;font-size:11px;line-height:1.5;color:#e9d6a8">Same rule everywhere: <b style="color:#ffd966">gold</b> = you and rewards, <b style="color:#e0674a">ember red</b> = the enemy, <b style="color:#9acd4f">leaf green</b> = go / safe, <b style="color:#b07a3e">wood</b> = frames and buttons.</div>
+</div>`;
+
+const ORDER = [['splash', 'SPLASH'], ['home', 'HOME'], ['levels', 'LEVELS'], ['shop', 'SHOP'], ['daily', 'DAILY'], ['profile', 'PROFILE'], ['play', 'BATTLE'], ['won', 'VICTORY'], ['settings', 'SETTINGS'], ['logo', 'LOGO']];
+document.getElementById('sheet').innerHTML = ORDER.map(([id, cap]) => `<figure>${S[id]}<figcaption>${cap}</figcaption></figure>`).join('');
+document.title = 'ready';
+</script>
+</body>
+</html>

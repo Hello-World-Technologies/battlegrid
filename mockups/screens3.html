@@ -1,0 +1,381 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>BattleGrid UI Mockups v3</title>
+<!--
+  Mockup set 3 — "World Tour" parchment / polaroid style, built from free CC0 art by Kenney (kenney.nl):
+  Tower Defense (isometric landscape, towers, trees, rocks, crystals) and UI Pack - Adventure (banners, frames).
+  Files live in mockups/kenney/. #path | #home | #levels | #battle | #victory | #daily shows one screen.
+  Render: node mockups/render.mjs v3
+-->
+<style>
+@font-face { font-family: 'Lilita'; src: url('../assets/fonts/LilitaOne-Regular.ttf'); }
+@font-face { font-family: 'Poppins'; font-weight: 600; src: url('../assets/fonts/Poppins-SemiBold.ttf'); }
+@font-face { font-family: 'Poppins'; font-weight: 700; src: url('../assets/fonts/Poppins-Bold.ttf'); }
+:root {
+  --parch:#efcf9b; --parchDark:#e5b878; --cream:#fffdf8; --cream2:#fff3d9; --brown:#8a3a22; --brownDeep:#5e2412; --wood:#8a5a2a; --woodDeep:#5a3a18;
+  --ink:#4a2a18; --inkSoft:#8a6a52; --green:#22a522; --greenDeep:#127012; --blue:#2f6bff; --blueDeep:#1236b0; --gold:#ffc21a; --goldDeep:#c98a00;
+  --orange:#ff7a0d; --orangeDeep:#d85a00; --red:#e5262b; --redDeep:#9c1015; --purple:#b81fe6; --purpleDeep:#7d0fa8; --outline:#3a1a0c;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { background: #2b1d14; }
+body { font-family: 'Poppins', sans-serif; font-weight: 600; }
+.sheet { display: flex; gap: 40px; padding: 40px; width: max-content; }
+.cap { color: #e8d2b0; font: 700 15px 'Poppins'; letter-spacing: 2px; text-align: center; margin-top: 14px; }
+body.solo .sheet { padding: 0; } body.solo .cap, body.solo .item { display: none; } body.solo .item.on { display: block; }
+.phone { position: relative; width: 360px; height: 780px; overflow: hidden; background: var(--parch); }
+body:not(.solo) .phone { border-radius: 36px; box-shadow: 0 0 0 8px #130c08, 0 20px 60px rgba(0,0,0,.55); }
+.status { position: absolute; top: 0; left: 0; right: 0; height: 28px; padding: 6px 18px; display: flex; justify-content: space-between; font: 700 12px 'Poppins'; z-index: 40; color: var(--brownDeep); }
+.d { font-family: 'Lilita'; font-weight: 400; }
+.ico { display: inline-block; flex: none; background: currentColor; -webkit-mask: var(--m) center/contain no-repeat; mask: var(--m) center/contain no-repeat; }
+.coin { width: 22px; height: 22px; border-radius: 50%; background: radial-gradient(circle at 35% 30%, #ffe27a, var(--gold) 55%, var(--goldDeep)); border: 2px solid var(--goldDeep); display: inline-block; position: relative; flex: none; }
+.coin::after { content: ''; position: absolute; inset: 3px; border-radius: 50%; border: 1.5px solid rgba(201,138,0,.6); }
+
+/* parchment */
+.map::before { content: ''; position: absolute; inset: 0; z-index: 0; background:
+  radial-gradient(ellipse 90px 60px at 20% 18%, var(--parchDark), transparent 70%), radial-gradient(ellipse 130px 80px at 85% 40%, var(--parchDark), transparent 70%),
+  radial-gradient(ellipse 110px 70px at 15% 68%, var(--parchDark), transparent 70%), radial-gradient(ellipse 120px 70px at 80% 92%, var(--parchDark), transparent 70%),
+  linear-gradient(rgba(150,100,40,.12) 1px, transparent 1px), linear-gradient(90deg, rgba(150,100,40,.12) 1px, transparent 1px); background-size: auto, auto, auto, auto, 40px 40px, 40px 40px; }
+.dash { position: absolute; inset: 0; z-index: 1; }
+
+/* iso scene */
+.scene { position: relative; }
+.scene img { position: absolute; display: block; }
+.sky { background: linear-gradient(#a8d8ff, #eaf6ff 85%); }
+.sky::after { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse 40px 14px at 25% 22%, #fff, transparent 70%), radial-gradient(ellipse 50px 16px at 78% 14%, #fff, transparent 70%), radial-gradient(ellipse 36px 12px at 62% 34%, #ffffffaa, transparent 70%); }
+.sunset { background: linear-gradient(#ffd0a8, #fff0dc 85%); } .dusk { background: linear-gradient(#c9b8ff, #f1ecff 85%); } .dawn { background: linear-gradient(#ffe39a, #fff6d8 85%); }
+
+/* polaroid */
+.polaroid { position: absolute; background: var(--cream); padding: 7px 7px 0; border-radius: 3px; box-shadow: 0 8px 18px rgba(90,50,10,.38); }
+.polaroid .pic { position: relative; overflow: hidden; }
+.polaroid .cap2 { height: 34px; display: flex; align-items: center; justify-content: center; gap: 6px; font: 400 17px 'Lilita'; color: var(--brown); }
+.polaroid .sub { text-align: center; margin: -8px 0 7px; font: 700 10px 'Poppins'; color: #a06a50; letter-spacing: 1px; display: flex; justify-content: center; gap: 8px; align-items: center; }
+.tape { position: absolute; top: -9px; left: -16px; width: 54px; height: 19px; background: rgba(255,255,255,.55); border: 1px solid rgba(255,255,255,.7); transform: rotate(-36deg); z-index: 4; }
+.tape.r { left: auto; right: -16px; transform: rotate(36deg); }
+.polaroid.locked .pic { filter: grayscale(1) brightness(.85); } .polaroid.locked .cap2 { color: #8c8c9a; }
+.polaroid.cur { box-shadow: 0 0 0 5px var(--gold), 0 0 30px 6px rgba(255,194,26,.7), 0 8px 18px rgba(90,50,10,.38); }
+.photo { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; display: block; }
+.polaroid.locked .photo { filter: blur(1.5px); }
+.place { position: absolute; left: 0; right: 0; bottom: 0; z-index: 3; padding: 14px 8px 5px; text-align: center; font: 700 10px 'Poppins'; letter-spacing: 1.2px; text-transform: uppercase; color: #fff; text-shadow: 0 1px 3px rgba(0,0,0,.7); background: linear-gradient(transparent, rgba(40,20,10,.62)); }
+.padl { position: absolute; left: 50%; top: 50%; width: 40px; height: 40px; margin: -20px 0 0 -20px; color: #fff; filter: drop-shadow(0 3px 0 rgba(0,0,0,.45)); z-index: 5; }
+.pbadge { position: absolute; top: -14px; right: -12px; z-index: 6; padding: 2px 12px; border-radius: 8px; background: var(--red); border: 2px solid #fff; font: 400 13px/20px 'Lilita'; color: #fff; letter-spacing: 1px; transform: rotate(6deg); }
+.stars3 { display: inline-flex; gap: 1px; } .stars3 .ico { width: 14px; height: 14px; color: var(--gold); filter: drop-shadow(0 1px 0 var(--goldDeep)); } .stars3 .off { color: #d6c4a8; filter: none; }
+.plaque { position: absolute; top: 34px; left: 0; right: 0; text-align: center; z-index: 9; }
+.plaque b { display: inline-block; padding: 4px 24px; border-radius: 10px; background: var(--brown); border: 3px solid #fff4d9; font: 400 20px 'Lilita'; color: #fff4d9; letter-spacing: 2px; box-shadow: 0 4px 0 var(--brownDeep); }
+.back { position: absolute; left: 14px; bottom: 16px; width: 52px; height: 52px; border-radius: 50%; background: radial-gradient(circle at 35% 30%, #5cc8f0, #1e88c8); border: 4px solid #fff; box-shadow: 0 4px 0 #14608f; display: grid; place-items: center; z-index: 12; }
+.back i { width: 17px; height: 17px; border-left: 6px solid #fff; border-bottom: 6px solid #fff; transform: rotate(45deg); margin-left: 6px; border-radius: 2px; }
+
+/* chips, buttons, panels */
+.chip { display: flex; align-items: center; gap: 6px; height: 42px; padding: 0 12px; background: var(--cream2); border: 3px solid var(--wood); border-bottom-width: 5px; border-radius: 12px; color: var(--ink); }
+.btn { position: relative; display: flex; align-items: center; justify-content: center; flex-direction: column; color: #fff; border-radius: 16px; border: 3px solid var(--deep); background: var(--face); box-shadow: 0 6px 0 var(--deep); overflow: hidden; }
+.btn::before { content: ''; position: absolute; left: 0; right: 0; top: 0; height: 50%; background: linear-gradient(rgba(255,255,255,.38), rgba(255,255,255,.08)); }
+.btn .t { position: relative; font-family: 'Lilita'; -webkit-text-stroke: 5px var(--outline); paint-order: stroke fill; letter-spacing: .5px; line-height: 1; }
+.btn .s { position: relative; font: 700 10px 'Poppins'; letter-spacing: 1.2px; margin-top: 3px; text-shadow: 0 1px 0 rgba(0,0,0,.45); }
+.green { --face: var(--green); --deep: var(--greenDeep); } .blue { --face: var(--blue); --deep: var(--blueDeep); } .gold { --face: var(--gold); --deep: var(--goldDeep); } .purple { --face: var(--purple); --deep: var(--purpleDeep); }
+.light { --face: var(--cream2); --deep: #c9a56e; color: var(--brown); } .light .t { -webkit-text-stroke: 0; }
+.lg { height: 64px; font-size: 30px; } .md { height: 50px; font-size: 21px; } .sm { height: 40px; font-size: 17px; border-radius: 12px; box-shadow: 0 4px 0 var(--deep); }
+.panel { position: relative; background: var(--cream2); border: 3px solid var(--wood); border-bottom-width: 6px; border-radius: 16px; padding: 12px 14px; box-shadow: 0 6px 14px rgba(90,50,10,.25); }
+.tabbar { position: absolute; left: 0; right: 0; bottom: 0; height: 64px; background: linear-gradient(#a06a32, var(--wood)); border-top: 4px solid #c99a5c; display: flex; z-index: 20; }
+.tab { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; position: relative; color: #ffe9c4; border-right: 1px solid rgba(0,0,0,.18); }
+.tab:last-child { border: 0; } .tab .ico { width: 28px; height: 28px; }
+.tab.on { background: var(--cream2); color: var(--blue); } .tab.on .ico { width: 32px; height: 32px; margin-top: -8px; }
+.tab .lb { display: none; font: 400 12px 'Lilita'; color: var(--blueDeep); margin-top: 2px; } .tab.on .lb { display: block; }
+.badge { position: absolute; top: 8px; right: 18%; width: 20px; height: 20px; border-radius: 50%; background: var(--red); border: 2px solid #fff; color: #fff; font: 400 12px/16px 'Lilita'; text-align: center; }
+.ribbon { position: absolute; z-index: 9; }
+.ribbon img { width: 100%; display: block; filter: drop-shadow(0 5px 0 rgba(0,0,0,.2)); }
+.ribbon span { position: absolute; left: 0; right: 0; top: 7%; text-align: center; font: 400 34px/1 'Lilita'; color: #fff; letter-spacing: 3px; -webkit-text-stroke: 6px #6b1a14; paint-order: stroke fill; }
+
+/* home */
+.hero { position: absolute; left: 14px; right: 14px; top: 98px; height: 306px; border-radius: 20px; border: 5px solid #fff; background: #fff; box-shadow: 0 0 0 3px var(--wood), 0 10px 20px rgba(90,50,10,.4); overflow: hidden; z-index: 3; }
+.hero .scene { position: absolute; left: 50%; top: 0; }
+.hero .tagbar { position: absolute; left: 0; right: 0; bottom: 0; height: 52px; background: linear-gradient(transparent, rgba(60,30,10,.82)); display: flex; align-items: flex-end; justify-content: space-between; padding: 0 14px 8px; color: #fff; z-index: 9; }
+.hero .tagbar b { font: 400 22px/1 'Lilita'; letter-spacing: .5px; text-shadow: 0 2px 0 rgba(0,0,0,.5); } .hero .tagbar small { font: 700 10px 'Poppins'; letter-spacing: 1px; opacity: .9; }
+.hero .lvl { position: absolute; top: 10px; left: 10px; z-index: 9; background: var(--brown); color: #fff4d9; border: 2px solid #fff4d9; border-radius: 8px; padding: 1px 12px; font: 400 15px/22px 'Lilita'; letter-spacing: 1px; }
+.top { position: absolute; top: 38px; left: 14px; right: 14px; display: flex; gap: 8px; z-index: 6; }
+.avatar { width: 30px; height: 30px; border-radius: 8px; background: var(--blue); color: #fff; display: grid; place-items: center; font: 400 17px 'Lilita'; }
+.flame { width: 16px; height: 20px; background: linear-gradient(#ffd25a, var(--orange)); clip-path: path('M8 0C9 5 15 8 15 14a7 7 0 0 1-14 0c0-3 2-5 3-7 1 2 1 3 2 3 0-4 1-7 4-10z'); }
+.track { position: absolute; left: 0; right: 0; top: 428px; display: flex; align-items: center; justify-content: center; z-index: 5; }
+.node { width: 38px; height: 38px; border-radius: 50%; border: 3px solid; display: grid; place-items: center; font: 400 18px 'Lilita'; color: #fff; }
+.node.cur { width: 48px; height: 48px; background: var(--gold); border-color: var(--goldDeep); box-shadow: 0 0 0 4px rgba(255,194,26,.4); } .node.done { background: var(--blue); border-color: var(--blueDeep); } .node.next { background: var(--cream2); border-color: var(--wood); color: var(--inkSoft); }
+.link { width: 44px; height: 8px; margin: 0 -2px; }
+.playrow { position: absolute; left: 16px; right: 16px; top: 494px; display: flex; gap: 12px; z-index: 5; }
+.side { position: relative; width: 76px; height: 64px; background: var(--cream2); border: 3px solid var(--wood); border-bottom-width: 6px; border-radius: 16px; display: flex; flex-direction: column; align-items: center; justify-content: center; color: var(--blue); }
+.side .ico { width: 28px; height: 28px; } .side span.l { font: 400 13px 'Lilita'; color: var(--blueDeep); } .side .dot { position: absolute; top: -9px; right: -9px; width: 20px; height: 20px; border-radius: 50%; background: var(--red); border: 2px solid #fff; }
+.motto { position: absolute; left: 0; right: 0; top: 582px; text-align: center; font: 700 11px 'Poppins'; letter-spacing: 2px; color: var(--brown); z-index: 5; opacity: .8; }
+
+/* battle */
+.battle { background: radial-gradient(ellipse 90% 60% at 50% 45%, #fff4d8, #f1d8a8 70%, #e2bd80); }
+.battle .gridp { position: absolute; inset: 0; background-image: linear-gradient(rgba(150,100,40,.1) 1px, transparent 1px), linear-gradient(90deg, rgba(150,100,40,.1) 1px, transparent 1px); background-size: 40px 40px; }
+.share { position: absolute; top: 40px; left: 50%; margin-left: -94px; width: 188px; height: 16px; border: 3px solid #fff; border-radius: 9px; background: #5c5c5c; display: flex; overflow: hidden; z-index: 10; box-shadow: 0 2px 6px rgba(0,0,0,.25); }
+.share b { display: block; } .share .sp { width: 2px; background: #fff; flex: none; }
+.pause { position: absolute; left: 20px; top: 36px; width: 34px; height: 34px; display: grid; place-items: center; z-index: 10; }
+.pause i { width: 15px; height: 15px; border-left: 5px solid var(--brownDeep); border-bottom: 5px solid var(--brownDeep); border-radius: 1.5px; transform: rotate(45deg); margin-left: 5px; }
+.send { position: absolute; left: 0; right: 0; bottom: 26px; display: flex; justify-content: center; align-items: center; gap: 8px; z-index: 10; }
+.send .l { font: 400 18px 'Lilita'; color: var(--brown); letter-spacing: 1px; margin-right: 4px; }
+.send .p { min-width: 62px; height: 40px; border-radius: 20px; background: rgba(255,255,255,.55); border: 3px solid transparent; display: grid; place-items: center; font: 400 20px 'Lilita'; color: rgba(74,42,24,.6); }
+.send .p.on { background: #fff; border-color: var(--brown); color: var(--brown); }
+.num { position: absolute; z-index: 8; transform: translate(-50%, -50%); min-width: 34px; height: 24px; padding: 0 7px; border-radius: 12px; background: var(--c); border: 3px solid #fff; color: #fff; font: 400 15px/18px 'Lilita'; text-align: center; box-shadow: 0 3px 0 rgba(0,0,0,.25); }
+.binfo { position: absolute; top: 74px; left: 0; right: 0; text-align: center; z-index: 10; } .binfo b { display: block; font: 400 26px/1 'Lilita'; color: var(--brown); letter-spacing: 1px; text-shadow: 0 2px 0 #fff4d9; } .binfo span { font: 700 10px 'Poppins'; letter-spacing: 2px; color: var(--inkSoft); }
+.fcards { position: absolute; left: 14px; right: 14px; bottom: 82px; display: flex; gap: 8px; z-index: 10; } .fcards div { flex: 1; height: 54px; border-radius: 12px; background: var(--cream2); border: 3px solid var(--wood); border-bottom-width: 5px; display: grid; grid-template-columns: 22px 1fr; align-items: center; padding: 0 8px; column-gap: 6px; } .fcards i { width: 18px; height: 18px; border-radius: 50%; background: var(--c); border: 2px solid #fff; box-shadow: 0 0 0 1.5px var(--c); grid-row: span 2; } .fcards b { font: 400 20px/1 'Lilita'; color: var(--ink); } .fcards small { font: 700 8.5px 'Poppins'; letter-spacing: 1px; color: var(--inkSoft); margin-top: -10px; }
+.hand { position: absolute; width: 54px; z-index: 12; filter: drop-shadow(0 4px 4px rgba(0,0,0,.35)); }
+
+/* victory */
+.victory .winpol { left: 50%; top: 40px; width: 240px; margin-left: -120px; transform: rotate(-2.5deg); }
+.goal { display: flex; align-items: center; gap: 8px; padding: 2px 6px; font-size: 13px; font-weight: 700; color: var(--ink); }
+.goal.no { color: var(--inkSoft); } .gd { width: 22px; height: 22px; border-radius: 50%; border: 2px solid var(--greenDeep); background: var(--green); display: grid; place-items: center; flex: none; color: #fff; font-size: 12px; } .goal.no .gd { background: var(--cream); border-color: var(--wood); }
+.stars { display: flex; justify-content: center; align-items: flex-end; gap: 4px; margin: -4px 0 4px; }
+.star { width: 44px; height: 44px; } .star.big { width: 58px; height: 58px; } .star .ico { width: 100%; height: 100%; color: var(--gold); filter: drop-shadow(0 3px 0 var(--goldDeep)); } .star.off .ico { color: #d6c4a8; filter: drop-shadow(0 3px 0 #b09a78); }
+.tile { display: flex; align-items: center; gap: 8px; background: #fff; border: 2px solid #fff; border-bottom: 5px solid #d9b98a; border-radius: 12px; padding: 4px 14px; }
+.row2 { display: flex; gap: 12px; } .row2 .btn { flex: 1; }
+
+/* levels */
+.hdr { position: absolute; top: 34px; left: 16px; right: 16px; z-index: 9; display: flex; justify-content: space-between; align-items: center; }
+.hdr h1 { font: 400 28px 'Lilita'; color: var(--brown); letter-spacing: 1px; text-shadow: 0 2px 0 #fff4d9; } .hdr h1 small { display: block; font: 700 11px 'Poppins'; color: var(--inkSoft); letter-spacing: 2px; text-shadow: none; }
+.lv { position: absolute; width: 154px; }
+.lv .pic { height: 96px; }
+.lv .cap2 { height: 30px; font-size: 16px; }
+.lv .num2 { position: absolute; top: -10px; left: -8px; z-index: 5; width: 34px; height: 34px; border-radius: 50%; background: var(--blue); border: 3px solid #fff; display: grid; place-items: center; font: 400 17px 'Lilita'; color: #fff; box-shadow: 0 3px 0 rgba(0,0,0,.25); }
+.lv.cleared .num2 { background: var(--blue); } .lv.cur .num2 { background: var(--gold); border-color: #fff; width: 38px; height: 38px; } .lv.locked .num2 { background: #a9a9b8; }
+
+/* daily */
+.day { position: absolute; width: 150px; }
+.day .pic { height: 84px; }
+.day .cap2 { height: 28px; font-size: 16px; gap: 6px; } .day .cap2 .coin { width: 18px; height: 18px; }
+.stamp { position: absolute; right: 8px; top: 8px; z-index: 6; width: 34px; height: 34px; border-radius: 50%; border: 3px solid var(--green); color: var(--green); background: rgba(255,255,255,.85); display: grid; place-items: center; font: 400 20px/1 'Lilita'; transform: rotate(-14deg); }
+.dlab { position: absolute; left: 8px; top: 8px; z-index: 6; padding: 0 9px; border-radius: 7px; background: var(--brown); color: #fff4d9; font: 400 12px/18px 'Lilita'; letter-spacing: 1px; border: 2px solid #fff4d9; }
+</style>
+</head>
+<body>
+<div class="sheet" id="sheet">
+
+<!-- PATH -->
+<div class="item" data-id="path"><div class="phone map">
+  <div class="status"><span>9:41</span><span>●●● ▮</span></div>
+  <div class="plaque"><b>WORLD TOUR</b></div>
+  <svg class="dash" viewBox="0 0 360 780" fill="none" stroke="#9a5a3a" stroke-width="7" stroke-dasharray="14 12">
+    <path d="M232 214 C320 244 330 292 252 322"/><path d="M118 424 C36 452 34 500 112 530"/><path d="M232 640 C320 656 330 690 268 716"/></svg>
+  <div id="pp"></div>
+  <div class="back"><i></i></div>
+</div><div class="cap">WORLD TOUR · PATH</div></div>
+
+<!-- HOME -->
+<div class="item" data-id="home"><div class="phone map">
+  <div class="status"><span>9:41</span><span>●●● ▮</span></div>
+  <div class="top">
+    <div class="chip" style="flex:1"><div class="avatar">A</div><span style="font-size:14px;font-weight:700">Alex</span></div>
+    <div class="chip"><span class="flame"></span><span class="d" style="font-size:18px">4</span></div>
+    <div class="chip"><span class="coin"></span><span class="d" style="font-size:18px">1,240</span></div>
+  </div>
+  <div class="hero sky" id="homehero"><div class="lvl">LEVEL 5</div><div class="tagbar"><b>FIRST CONTACT</b><small>EUROPE · 4 / 10 CLEARED</small></div></div>
+  <div class="track">
+    <div class="node done">4</div><div class="link" style="background:var(--blue)"></div><div class="node cur">5</div><div class="link" style="background:#c9a56e"></div><div class="node next">6</div>
+  </div>
+  <div class="playrow">
+    <div class="side"><span class="ico" style="--m:url(../assets/ui/medal1.png)"></span><span class="l">DAILY</span><i class="dot"></i></div>
+    <div class="btn lg green" style="flex:1"><span class="t">PLAY</span><span class="s">LEVEL 5 · FIRST CONTACT</span></div>
+  </div>
+  <div class="motto">CAPTURE · SPREAD · CONQUER</div>
+  <div class="tabbar">
+    <div class="tab"><span class="ico" style="--m:url(../assets/ui/leaderboardsComplex.png)"></span></div>
+    <div class="tab"><span class="ico" style="--m:url(../assets/ui/medal1.png)"></span><i class="badge">!</i></div>
+    <div class="tab on"><span class="ico" style="--m:url(../assets/ui/home.png)"></span><span class="lb">BATTLE</span></div>
+    <div class="tab"><span class="ico" style="--m:url(../assets/ui/multiplayer.png)"></span></div>
+    <div class="tab"><span class="ico" style="--m:url(../assets/ui/gear.png)"></span></div>
+  </div>
+</div><div class="cap">HOME · BATTLE DIORAMA</div></div>
+
+<!-- LEVELS -->
+<div class="item" data-id="levels"><div class="phone map">
+  <div class="status"><span>9:41</span><span>●●● ▮</span></div>
+  <div class="hdr"><h1>EUROPE<small>THEATER 2 · 4 / 10 CLEARED</small></h1><div class="chip"><span class="coin"></span><span class="d" style="font-size:18px">1,240</span></div></div>
+  <svg class="dash" viewBox="0 0 360 780" fill="none" stroke="#9a5a3a" stroke-width="6" stroke-dasharray="12 11" opacity=".75"><path d="M170 160 C190 190 190 210 190 236 M190 332 C170 360 170 372 170 392 M170 482 C190 510 190 530 190 548"/></svg>
+  <div id="lvs"></div>
+  <div class="tabbar">
+    <div class="tab on"><span class="ico" style="--m:url(../assets/ui/leaderboardsComplex.png)"></span><span class="lb">LEVELS</span></div>
+    <div class="tab"><span class="ico" style="--m:url(../assets/ui/medal1.png)"></span><i class="badge">!</i></div>
+    <div class="tab"><span class="ico" style="--m:url(../assets/ui/home.png)"></span></div>
+    <div class="tab"><span class="ico" style="--m:url(../assets/ui/multiplayer.png)"></span></div>
+    <div class="tab"><span class="ico" style="--m:url(../assets/ui/gear.png)"></span></div>
+  </div>
+</div><div class="cap">LEVELS · PHOTO CARDS</div></div>
+
+<!-- BATTLE -->
+<div class="item" data-id="battle"><div class="phone battle">
+  <div class="gridp"></div>
+  <div class="status"><span>9:41</span><span>●●● ▮</span></div>
+  <div class="pause"><i></i></div>
+  <div class="share"><b style="flex:5;background:#2c6a99"></b><i class="sp"></i><b style="flex:3;background:#e01010"></b><i class="sp"></i><b style="flex:2;background:#1fa01f"></b><i class="sp"></i><b style="flex:2;background:#5c5c5c"></b></div>
+  <div id="battlescene"></div>
+  <div class="binfo"><b>LEVEL 5</b><span>FIRST CONTACT · EUROPE</span></div><div class="fcards"><div style="--c:#2c6a99"><i></i><b>5</b><small>YOU</small></div><div style="--c:#8b160d"><i></i><b>3</b><small>RED</small></div><div style="--c:#147a22"><i></i><b>2</b><small>GREEN</small></div><div style="--c:#6a6a7a"><i></i><b>4</b><small>FREE</small></div></div><div class="send"><span class="l">SEND</span><span class="p">25%</span><span class="p on">50%</span><span class="p">100%</span></div>
+</div><div class="cap">BATTLE · ISOMETRIC (concept)</div></div>
+
+<!-- VICTORY -->
+<div class="item" data-id="victory"><div class="phone map victory">
+  <div class="status"><span>9:41</span><span>●●● ▮</span></div>
+  <div class="polaroid winpol cur" style="z-index:3"><i class="tape"></i><i class="tape r"></i><div class="pic dawn" id="winpic" style="height:178px"></div><div class="cap2">Level 5 · First Contact</div></div>
+  <div class="ribbon" style="left:30px;right:30px;top:222px"><img src="kenney/ui-pack-adventure/PNG/Double/banner_classic_curtain.png" alt=""><span>VICTORY</span></div>
+  <div style="position:absolute;left:20px;right:20px;top:310px;z-index:5;display:flex;flex-direction:column;gap:12px">
+    <div class="panel">
+      <div class="stars"><div class="star" style="margin-bottom:-4px"><span class="ico" style="--m:url(../assets/ui/star.png)"></span></div><div class="star big"><span class="ico" style="--m:url(../assets/ui/star.png)"></span></div><div class="star off" style="margin-bottom:-4px"><span class="ico" style="--m:url(../assets/ui/star.png)"></span></div></div>
+      <div class="goal"><i class="gd">✓</i>Win the battle</div><div class="goal"><i class="gd">✓</i>Lose at most 1 territory</div><div class="goal no"><i class="gd"></i>Win in under 2:30</div>
+    </div>
+    <div class="row2" style="align-items:stretch">
+      <div class="panel" style="flex:1;text-align:center;padding:8px 8px 10px"><div class="d" style="font-size:15px;color:var(--brown)">YOUR REWARD</div><div class="tile" style="justify-content:center;margin-top:4px"><span class="coin" style="width:28px;height:28px"></span><span class="d" style="font-size:28px;color:var(--ink)">+180</span></div></div>
+      <div class="panel" style="flex:1;text-align:center;padding:8px 8px 10px;background:linear-gradient(#ffe3c8,#ffd2a8)"><div class="d" style="font-size:15px;color:var(--redDeep)">×3 WITH AD</div><div class="btn sm purple" style="margin-top:6px;height:42px"><span class="t">WATCH · +360</span></div></div>
+    </div>
+  </div>
+  <div style="position:absolute;left:20px;right:20px;bottom:24px;z-index:5;display:flex;flex-direction:column;gap:12px">
+    <div class="btn lg green" style="height:58px"><span class="t">NEXT LEVEL</span></div>
+    <div class="row2"><div class="btn md light" style="height:46px"><span class="t">LEVELS</span></div><div class="btn md light" style="height:46px"><span class="t">HOME</span></div></div>
+  </div>
+</div><div class="cap">VICTORY · SNAPSHOT</div></div>
+
+<!-- DAILY -->
+<div class="item" data-id="daily"><div class="phone map">
+  <div class="status"><span>9:41</span><span>●●● ▮</span></div>
+  <div class="plaque"><b>DAILY BONUS</b></div>
+  <svg class="dash" viewBox="0 0 360 780" fill="none" stroke="#9a5a3a" stroke-width="6" stroke-dasharray="12 11" opacity=".8"><path d="M158 150 C176 150 176 170 192 176 M192 232 C176 240 176 262 158 276 M158 300 C176 306 176 330 192 340 M192 398 C176 410 176 450 180 516"/></svg>
+  <div id="days"></div>
+  <div style="position:absolute;left:30px;right:30px;bottom:34px;z-index:6;display:flex;flex-direction:column;gap:10px;align-items:center">
+    <div class="btn lg gold" style="width:100%"><span class="t">CLAIM +150</span></div>
+    <div style="font:700 11px 'Poppins';color:var(--brown);letter-spacing:1px">NEXT BONUS IN 14:22:07 · UTC MIDNIGHT</div>
+  </div>
+  <div class="back" style="top:30px;bottom:auto;width:44px;height:44px;left:12px"><i></i></div>
+</div><div class="cap">DAILY BONUS · STAMP CARDS</div></div>
+
+</div>
+<script>
+const K = 'kenney/tower-defense/PNG/';
+const ico = (n) => `<span class="ico" style="--m:url(../assets/ui/${n}.png)"></span>`;
+const TEAM = { R: ['Towers (red)', ''], B: ['Towers (red)', 'hue-rotate(205deg) saturate(1.15)'], G: ['Towers (red)', 'hue-rotate(112deg) saturate(1.05)'], N: ['Towers (grey)', ''] };
+const gsrc = (g) => (g.startsWith('d:') ? K + 'Details/' + g.slice(2) + '.png' : K + 'Landscape/landscape_' + g + '.png');
+/* A scene: cells = [{c,r,g,t:{team,n}}]; returns {html,w,h,centers} laid out for container of size W x H at scale s. */
+function scene(cells, { W, H, s = 0.5, ox = null, oy = 8, tOff = 22, tScale = 1 }) {
+  const maxC = Math.max(...cells.map((x) => x.c)), maxR = Math.max(...cells.map((x) => x.r));
+  const left0 = ox ?? (W - (maxC + maxR + 2) * 66 * s) / 2 + maxR * 66 * s;
+  const list = [...cells].sort((a, b) => a.c + a.r - (b.c + b.r) || a.c - b.c);
+  let html = ''; const centers = {};
+  for (const x of list) {
+    const gx = (x.c - x.r) * 66 * s + left0, gy = (x.c + x.r) * 33 * s + oy;
+    html += `<img src="${gsrc(x.g)}" style="left:${gx}px;bottom:${H - (gy + 99 * s)}px;width:132px;transform-origin:0 100%;transform:scale(${s})" alt="">`;
+    const cx = gx + 66 * s, cy = gy + 33 * s;
+    centers[x.c + ',' + x.r] = [cx, cy];
+    if (x.t) {
+      const [dir, f] = TEAM[x.t.team];
+      html += `<img src="${K + dir}/tower_${String(x.t.n).padStart(2, '0')}.png" style="left:${cx}px;bottom:${H - (cy + tOff * s)}px;transform-origin:50% 100%;transform:translateX(-50%) scale(${s * tScale * (x.t.s || 1)});${f ? 'filter:' + f : ''}" alt="">`;
+    }
+  }
+  return { html, centers };
+}
+const grid = (w, h, fn) => { const o = []; for (let r = 0; r < h; r++) for (let c = 0; c < w; c++) o.push({ c, r, ...fn(c, r) }); return o; };
+
+/* ── theater dioramas ── */
+const dio = {
+  americas: grid(3, 3, (c, r) => ({ g: r === 1 ? (c === 1 ? '37' : '37') : ['d:trees_3', 'd:trees_6', 'd:trees_10', 'd:trees_1', 'd:trees_8', 'd:rocks_1'][(c + r * 2) % 6] === undefined ? '13' : (r === 1 ? '37' : ['d:trees_3', 'd:trees_6', 'd:trees_10', 'd:trees_8', 'd:rocks_1', 'd:trees_1'][(c * 2 + r) % 6]), t: c === 0 && r === 0 ? { team: 'B', n: 24 } : c === 2 && r === 2 ? { team: 'R', n: 17 } : null })),
+  europe: grid(3, 3, (c, r) => ({ g: (c + r) % 2 ? '13' : '28', t: c === 1 && r === 1 ? { team: 'B', n: 17, s: 1.3 } : (c === 0 && r === 0) || (c === 2 && r === 2) ? { team: 'R', n: 17 } : c === 2 && r === 0 ? { team: 'N', n: 24 } : null })),
+  asia: grid(3, 3, (c, r) => ({ g: [ 'd:crystals_1', 'd:rocks_3', 'd:crystals_3', 'd:rocks_5', '17', 'd:crystals_2', 'd:rocks_7', 'd:crystals_4', 'd:rocks_2'][c + r * 3], t: c === 1 && r === 1 ? { team: 'G', n: 17 } : null })),
+  africa: grid(3, 3, (c, r) => ({ g: ['17', '14', '17', '12', '17', 'd:rocks_4', '17', '15', '17'][c + r * 3], t: c === 0 && r === 2 ? { team: 'R', n: 24 } : c === 2 && r === 0 ? { team: 'N', n: 17 } : null })),
+};
+dio.americas = grid(3, 3, (c, r) => ({
+  g: r === 1 ? '33' : ['d:trees_3', 'd:trees_6', 'd:trees_10', 'd:trees_8', 'd:rocks_1', 'd:trees_1'][(c * 2 + r) % 6],
+  t: c === 0 && r === 0 ? { team: 'B', n: 24 } : c === 2 && r === 2 ? { team: 'R', n: 17 } : null,
+}));
+
+/* PATH polaroids */
+const P = [
+  { k: 'americas', img: 'Machu_Picchu_2023_012.jpg', n: '1. The Americas', place: 'Machu Picchu · Peru', sub: '10 / 10', x: 22, y: 78, r: -3, sky: 'sky', stars: 3, done: 1 },
+  { k: 'europe', img: 'Colosseum_in_Rome_April_2007_1_copie_2B.jpg', n: '2. Europe', place: 'Colosseum · Italy', sub: 'LEVEL 5 · 4 / 10', x: 128, y: 290, r: 2.5, sky: 'sunset', cur: 1 },
+  { k: 'asia', img: 'Taj_Mahal_in_March_2004.jpg', n: '3. Asia', place: 'Taj Mahal · India', sub: 'LOCKED', x: 22, y: 500, r: -2, sky: 'dusk', lock: 1 },
+  { k: 'africa', img: 'All_Gizah_Pyramids.jpg', n: '4. Africa', place: 'Giza · Egypt', sub: 'LOCKED', x: 128, y: 700, r: 3, sky: 'dawn', lock: 1 },
+];
+document.getElementById('pp').innerHTML = P.map((p) => {
+  const sc = scene(dio[p.k], { W: 192, H: 134, s: 0.44, oy: 18 });
+  return `<div class="polaroid ${p.lock ? 'locked' : ''} ${p.cur ? 'cur' : ''}" style="left:${p.x}px;top:${p.y}px;width:206px;transform:rotate(${p.r}deg);z-index:3">
+    <i class="tape"></i>${p.cur ? '<div class="pbadge">YOU ARE HERE</div>' : ''}
+    <div class="pic" style="height:134px"><img class="photo" src="photos/${p.img}" alt=""><span class="place">${p.place}</span>${p.lock ? ico('locked').replace('class="ico"', 'class="ico padl"') : ''}</div>
+    <div class="cap2">${p.n}</div>
+    <div class="sub">${p.sub}${p.stars ? '<span class="stars3">' + ico('star').repeat(3) + '</span>' : ''}</div></div>`;
+}).join('');
+
+/* HOME hero */
+{
+  const cells = grid(5, 5, (c, r) => {
+    const m = { '0,0': { team: 'B', n: 17, s: 1.3 }, '1,0': null, '4,0': { team: 'R', n: 17 }, '2,2': { team: 'N', n: 24 }, '0,4': { team: 'N', n: 17 }, '4,4': { team: 'R', n: 24 }, '3,2': { team: 'G', n: 24 } };
+    const trees = ['d:trees_3', 'd:trees_6', 'd:rocks_2', 'd:trees_10'];
+    const isT = m[c + ',' + r];
+    return { g: isT ? ((c + r) % 2 ? '13' : '28') : ((c * 3 + r * 5) % 7 === 0 ? trees[(c + r) % 4] : (c + r) % 2 ? '13' : '28'), t: isT || null };
+  });
+  const sc = scene(cells, { W: 330, H: 300, s: 0.56, oy: 40, tScale: 1.2 });
+  document.getElementById('homehero').insertAdjacentHTML('beforeend', `<div class="scene" style="width:330px;height:300px;margin-left:-165px">${sc.html}
+    <svg style="position:absolute;inset:0;z-index:9" width="330" height="300" fill="none" stroke="#fff" stroke-width="3" stroke-dasharray="1 7" stroke-linecap="round"><path d="M${sc.centers['0,0']}L${sc.centers['3,2']}" /><path d="M${sc.centers['4,0']}L${sc.centers['3,2']}"/></svg></div>`);
+}
+
+/* LEVELS */
+{
+  const g = ['d:trees_3', 'd:rocks_2', '13', 'd:trees_10', 'd:crystals_1', 'd:trees_6', '28', 'd:rocks_6'];
+  const meta = [ [5, 'cur', 0], [4, 'cleared', 3], [3, 'cleared', 2], [2, 'cleared', 3], [1, 'cleared', 3], [6, 'locked', 0], [7, 'locked', 0], [8, 'locked', 0] ];
+  const pos = [ [14, 96, -2.2], [192, 114, 2.4], [20, 238, 2], [190, 258, -2.5], [14, 382, -2], [190, 402, 2.4], [20, 526, 2], [190, 546, -2] ];
+  document.getElementById('lvs').innerHTML = pos.map(([x, y, rot], i) => {
+    const [n, st, stars] = meta[i];
+    const tile = scene([{ c: 0, r: 0, g: g[i], t: i < 4 ? null : null }], { W: 140, H: 96, s: 0.85, oy: 2, ox: 14 });
+    return `<div class="polaroid lv ${st} ${st === 'cur' ? 'cur' : ''}" style="left:${x}px;top:${y}px;transform:rotate(${rot}deg);z-index:3"><i class="tape ${i % 2 ? 'r' : ''}"></i><div class="num2">${n}</div>
+      <div class="pic ${['sky', 'sunset', 'dawn', 'sky'][i % 4]}" style="height:96px"><div class="scene" style="width:140px;height:96px">${tile.html}</div>${st === 'locked' ? ico('locked').replace('class="ico"', 'class="ico padl"') : ''}</div>
+      <div class="cap2">${st === 'cur' ? 'PLAY NOW' : st === 'locked' ? 'LEVEL ' + n : ['', 'Crossing', 'Hilltop', 'Harbor', 'Border'][n] || ''}${st === 'cleared' ? '' : ''}</div>
+      ${st === 'cleared' ? `<div class="sub"><span class="stars3">${[0, 1, 2].map((k) => ico('star').replace('class="ico"', 'class="ico ' + (k < stars ? '' : 'off') + '"')).join('')}</span></div>` : ''}</div>`;
+  }).join('');
+}
+
+/* BATTLE */
+{
+  const L = {
+    '0,3': { team: 'B', n: 17, v: 42 }, '2,4': { team: 'B', n: 24, v: 18 }, '4,1': { team: 'R', n: 17, v: 36 }, '2,0': { team: 'R', n: 24, v: 14 },
+    '2,2': { team: 'N', n: 24, v: 12 }, '4,3': { team: 'N', n: 24, v: 10 }, '0,0': { team: 'G', n: 17, v: 28 }, '1,0': { team: 'G', n: 24, v: 16 }, '3,4': { team: 'N', n: 17, v: 8 },
+  };
+  const trees = ['d:trees_3', 'd:trees_6', 'd:rocks_2', 'd:trees_10', 'd:crystals_2'];
+  const cells = grid(5, 5, (c, r) => { const t = L[c + ',' + r]; return { g: t ? ((c + r) % 2 ? '13' : '28') : ((c * 3 + r * 5) % 5 === 1 ? trees[(c + r) % 5] : (c + r) % 2 ? '13' : '28'), t: t ? { team: t.team, n: t.n } : null }; });
+  const W = 360, H = 780, s = 0.7;
+  const sc = scene(cells, { W, H, s, oy: 232, ox: 180 - 66 * s, tScale: 1.1 });
+  const col = { B: '#2c6a99', R: '#8b160d', G: '#147a22', N: '#6a6a7a' };
+  let nums = '';
+  for (const k in L) { const [cx, cy] = sc.centers[k]; nums += `<div class="num" style="left:${cx}px;top:${cy - 54 * s - 12}px;--c:${col[L[k].team]}">${L[k].v}</div>`; }
+  const a = sc.centers['0,3'], b = sc.centers['2,4'], c2 = sc.centers['2,2'];
+  document.getElementById('battlescene').innerHTML = `<div class="scene" style="position:absolute;inset:0;width:360px;height:780px">${sc.html}
+    <svg style="position:absolute;inset:0;z-index:9" width="360" height="780" fill="none"><g stroke="#fff" stroke-width="4" stroke-dasharray="1 9" stroke-linecap="round"><path d="M${a}L${c2}"/><path d="M${a}L${b}"/><path d="M${sc.centers['2,0']}L${sc.centers['4,1']}"/><path d="M${sc.centers['1,0']}L${c2}"/></g>
+    <g fill="#2c6a99" stroke="#fff" stroke-width="1.5"><circle cx="${a[0] + (c2[0] - a[0]) * .35}" cy="${a[1] + (c2[1] - a[1]) * .35}" r="4.5"/><circle cx="${a[0] + (c2[0] - a[0]) * .47}" cy="${a[1] + (c2[1] - a[1]) * .47}" r="4.5"/><circle cx="${a[0] + (c2[0] - a[0]) * .59}" cy="${a[1] + (c2[1] - a[1]) * .59}" r="4.5"/><circle cx="${a[0] + (c2[0] - a[0]) * .28}" cy="${a[1] + (c2[1] - a[1]) * .28 - 9}" r="5.5"/></g></svg>${nums}</div>
+    <img class="hand" src="../assets/ui/hand.png" style="left:${a[0] + 8}px;top:${a[1] - 34}px" alt="">`;
+}
+
+/* VICTORY pic */
+{
+  const cells = grid(3, 3, (c, r) => ({ g: (c + r) % 2 ? '13' : '28', t: (c === 1 && r === 1) ? { team: 'B', n: 17, s: 1.3 } : (c + r) % 2 === 0 && !(c === 1 && r === 1) ? { team: 'B', n: 24 } : null }));
+  const sc = scene(cells, { W: 226, H: 178, s: 0.58, oy: 26, tScale: 1 });
+  document.getElementById('winpic').innerHTML = `<div class="scene" style="width:226px;height:178px">${sc.html}</div>
+   <svg style="position:absolute;left:0;top:0" width="226" height="178"><g fill="#ffc21a" stroke="#c98a00" stroke-width="2" stroke-linejoin="round"><path d="M40 30l4 9 10 1-7.500 6.500 2.500 9.500-9-5.500-9 5.500 2.500-9.500-7.500-6.500 10-1z"/><path d="M186 40l3 7 8 1-6 5 2 8-7-4.500-7 4.500 2-8-6-5 8-1z"/><path d="M110 16l3 6 7 1-5 4.500 1.500 7-6.500-4-6.500 4 1.500-7-5-4.500 7-1z"/></g></svg>`;
+}
+
+/* DAILY */
+{
+  const D = [
+    { n: 1, c: 50, st: 'got', g: 'd:rocks_1', x: 20, y: 84, r: -2.5 }, { n: 2, c: 75, st: 'got', g: 'd:trees_3', x: 190, y: 118, r: 2 },
+    { n: 3, c: 100, st: 'got', g: 'd:rocks_5', x: 20, y: 212, r: 2 }, { n: 4, c: 150, st: 'today', g: 'd:crystals_2', x: 190, y: 246, r: -2 },
+    { n: 5, c: 200, st: 'lock', g: 'd:trees_10', x: 20, y: 340, r: -2 }, { n: 6, c: 250, st: 'lock', g: 'd:rocks_7', x: 190, y: 374, r: 2.5 },
+  ];
+  document.getElementById('days').innerHTML = D.map((d) => {
+    const sc = scene([{ c: 0, r: 0, g: d.g }], { W: 136, H: 84, s: 0.7, oy: 0, ox: 22 });
+    return `<div class="polaroid day ${d.st === 'lock' ? 'locked' : ''} ${d.st === 'today' ? 'cur' : ''}" style="left:${d.x}px;top:${d.y}px;transform:rotate(${d.r}deg);z-index:3"><i class="tape ${d.n % 2 ? '' : 'r'}"></i>
+      <div class="dlab">${d.st === 'today' ? 'TODAY' : 'DAY ' + d.n}</div>${d.st === 'got' ? '<div class="stamp">✓</div>' : ''}
+      <div class="pic ${['sky', 'sunset', 'dawn', 'dusk'][d.n % 4]}" style="height:84px"><div class="scene" style="width:136px;height:84px">${sc.html}</div>${d.st === 'lock' ? ico('locked').replace('class="ico"', 'class="ico padl"') : ''}</div>
+      <div class="cap2"><span class="coin"></span>${d.c}</div></div>`;
+  }).join('');
+  document.getElementById('days').insertAdjacentHTML('beforeend', `<div class="polaroid day locked" style="left:92px;top:518px;transform:rotate(-1deg);z-index:3;width:176px"><i class="tape"></i><div class="dlab">DAY 7 · BONUS</div>
+    <div class="pic dawn" style="height:70px"><div class="scene" style="width:160px;height:70px">${scene([{ c: 0, r: 0, g: 'd:crystals_3' }], { W: 160, H: 70, s: 0.62, oy: 0, ox: 40 }).html}</div>${ico('locked').replace('class="ico"', 'class="ico padl"')}</div>
+    <div class="cap2" style="height:26px"><span class="coin"></span>500 + ${ico('star').replace('class="ico"', 'class="ico" style="width:16px;height:16px;color:var(--gold);--m:url(../assets/ui/star.png)"')}</div></div>`);
+}
+
+const id = location.hash.slice(1);
+if (id) { document.body.classList.add('solo'); document.querySelector(`.item[data-id="${id}"]`)?.classList.add('on'); }
+</script>
+</body>
+</html>
