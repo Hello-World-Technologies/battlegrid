@@ -1,6 +1,6 @@
 This is a bare React Native CLI app (no Expo). Prioritize mobile-first patterns, performance, and cross-platform compatibility.
 
-The game: an endless, State.io-style real-time conquest game. Every level is one fixed map: the board is cut into one state per territory, you drag troops from your towers to take the grey and enemy ones, and opposing troops destroy each other in flight. Levels never run out. `GAMEPLAY_SPEC.md` has the rules as built (sections 18-24). The real-world conquest map, the Rule phase and the rebel battles were removed; there are no ads.
+The game: an endless, State.io-style real-time conquest game. Every level is one fixed map: the board is cut into one state per territory, you drag troops from your towers to take the grey and enemy ones, and opposing troops destroy each other in flight. Levels never run out. `GAMEPLAY_SPEC.md` has the rules as built (sections 18-24). The real-world conquest map, the Rule phase and the rebel battles were removed; ads are Unity LevelPlay + Meta (`src/ads.ts`, `src/config/ads.ts`, `src/ui/AdBanner.tsx`; see `docs/ADS_INTEGRATION.md`), with no consent dialog.
 
 ## Stack
 
