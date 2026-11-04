@@ -18,6 +18,6 @@ export const ADS_CONFIGURED = LEVELPLAY_APP_KEY.length > 0;
 export const AD_FREQUENCY = {
   /** How long to wait for a late `onAdRewarded` after the ad closes. */
   rewardGraceMs: 1500,
-  /** Show an interstitial every Nth time the player leaves a result screen. */
+  /** Show an interstitial every Nth time the player taps NEXT LEVEL or RETRY. */
   interstitialEveryBattles: 2,
 } as const;

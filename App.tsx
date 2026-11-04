@@ -635,7 +635,8 @@ function App() {
               onShop={() => setScreen('shop')}
               onDaily={() => setScreen('daily')}
               onProfile={() => setScreen('profile')}
-              onLeaderboard={() => setScreen('leaderboard')}
+              // Every tap: an interstitial (if one is loaded) plays first; the leaderboard opens once it is closed.
+              onLeaderboard={() => void AdService.showInterstitial(() => setScreen('leaderboard'))}
               onSettings={() => openSettings('home')}
             />
           )}

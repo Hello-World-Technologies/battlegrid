@@ -130,6 +130,19 @@ export const AdService = {
 
   isReady: (): boolean => ready,
 
+  /**
+   * Dev builds only: opens LevelPlay's test suite (needs the `is_test_suite`
+   * metadata set in `init`, and a finished init) to load and show each network's ads.
+   */
+  async launchTestSuite(): Promise<void> {
+    if (!__DEV__ || !ready) return;
+    try {
+      await LevelPlay.launchTestSuite();
+    } catch (e) {
+      log('test suite launch threw', e);
+    }
+  },
+
   onReady(listener: () => void): () => void {
     readyListeners.add(listener);
     return () => readyListeners.delete(listener);
@@ -146,11 +159,18 @@ export const AdService = {
   /**
    * Shows an interstitial if one is loaded, then runs `proceed` once it is gone.
    * If none is ready (or anything fails) `proceed` runs immediately.
+   * The Leaderboard button calls it on every tap. Resolves true if an ad was shown.
    */
-  async showInterstitial(proceed: () => void): Promise<void> {
+  async showInterstitial(proceed: () => void): Promise<boolean> {
     try {
-      if (!ready || !interstitial || interstitialShowing || rewardedShowing) return proceed();
-      if (!(await interstitial.isAdReady())) return proceed();
+      if (!ready || !interstitial || interstitialShowing || rewardedShowing) {
+        proceed();
+        return false;
+      }
+      if (!(await interstitial.isAdReady())) {
+        proceed();
+        return false;
+      }
       interstitialShowing = true;
       let done = false;
       finishInterstitial = () => {
@@ -160,23 +180,24 @@ export const AdService = {
         proceed();
       };
       await interstitial.showAd('Result');
+      return true;
     } catch (e) {
       log('interstitial show threw', e);
       interstitialShowing = false;
       if (finishInterstitial) finishInterstitial();
       else proceed();
+      return false;
     }
   },
 
   /**
-   * Called when the player leaves a result screen for another battle or menu:
-   * shows an interstitial every Nth time, otherwise just proceeds.
+   * NEXT LEVEL / RETRY on a result screen: shows an interstitial every Nth tap,
+   * otherwise just proceeds. If the due ad is not loaded, the next tap tries again.
    */
   async afterBattle(proceed: () => void): Promise<void> {
     battlesSinceAd += 1;
     if (battlesSinceAd < AD_FREQUENCY.interstitialEveryBattles) return proceed();
-    battlesSinceAd = 0;
-    return AdService.showInterstitial(proceed);
+    if (await AdService.showInterstitial(proceed)) battlesSinceAd = 0;
   },
 
   /** Player-initiated rewarded ad. Resolves true only if the reward was earned. */

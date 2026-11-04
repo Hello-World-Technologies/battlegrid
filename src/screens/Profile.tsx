@@ -29,6 +29,7 @@ import { alpha } from '../ui/color';
 import { FONT_BODY, FONT_BODY_BOLD, FONT_DISPLAY } from '../ui/fonts';
 import { FS, RADIUS, SPACE, lift } from '../ui/tokens';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { useBannerHeight } from '../ui/AdBanner';
 
 type Props = {
   player: PlayerProfile | null;
@@ -57,6 +58,7 @@ export default function Profile({
 }: Props) {
   const { theme } = useTheme();
   const insets = useSafeAreaInsets();
+  const adHeight = useBannerHeight();
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [showRename, setShowRename] = useState(false);
@@ -120,7 +122,7 @@ export default function Profile({
   return (
     <View style={[styles.root, { backgroundColor: theme.bg }]}>
       <ScrollView
-        contentContainerStyle={{ paddingBottom: insets.bottom + SPACE.xl }}
+        contentContainerStyle={{ paddingBottom: insets.bottom + adHeight + SPACE.xl }}
         showsVerticalScrollIndicator={false}
       >
         {/* ── Hero header ── */}

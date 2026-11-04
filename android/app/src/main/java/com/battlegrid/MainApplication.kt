@@ -8,6 +8,7 @@ import com.facebook.react.ReactNativeApplicationEntryPoint.loadReactNative
 import com.facebook.react.defaults.DefaultReactHost.getDefaultReactHost
 import com.battlegrid.playgames.PlayGamesAuthPackage
 import com.google.android.gms.games.PlayGamesSdk
+import com.facebook.ads.AdSettings
 
 class MainApplication : Application(), ReactApplication {
 
@@ -32,6 +33,9 @@ class MainApplication : Application(), ReactApplication {
     } catch (e: Exception) {
       android.util.Log.w("BattleGrid", "Play Games SDK not initialised", e)
     }
+    // Debug builds get Meta Audience Network test ads (LevelPlay's Meta
+    // adapter serves whatever Meta returns); release builds get live ads.
+    if (BuildConfig.DEBUG) AdSettings.setTestMode(true)
     loadReactNative(this)
   }
 }

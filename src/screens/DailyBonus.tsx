@@ -10,6 +10,7 @@
 import React, { useEffect, useState } from 'react';
 import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { useBannerHeight } from '../ui/AdBanner';
 import { Ionicons } from '../icons';
 import {
   DAILY_CYCLE,
@@ -54,6 +55,7 @@ const countdown = (now: Date): string => {
 export default function DailyBonus({ progress, onClaim, onBack }: Props) {
   const { theme } = useTheme();
   const insets = useSafeAreaInsets();
+  const adHeight = useBannerHeight();
   const [now, setNow] = useState(() => new Date());
   const [claimed, setClaimed] = useState<Reward | null>(null);
 
@@ -85,7 +87,7 @@ export default function DailyBonus({ progress, onClaim, onBack }: Props) {
       <ScreenHeader title="Daily Bonus" onBack={onBack} right={<CurrencyPill kind="coins" value={coinsLeft(progress)} />} />
       <ScrollView
         style={styles.scroll}
-        contentContainerStyle={[styles.body, { paddingBottom: insets.bottom + SPACE.xl }]}
+        contentContainerStyle={[styles.body, { paddingBottom: insets.bottom + adHeight + SPACE.xl }]}
         showsVerticalScrollIndicator={false}
       >
         {/* ── Streak hero ── */}
