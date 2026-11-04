@@ -6,6 +6,30 @@ import { ADS_CONFIGURED, BANNER_AD_UNIT_ID } from '../config/ads';
 import { AdService } from '../ads';
 
 /**
+ * Height (dp) of the banner while one is showing, 0 otherwise. Menu screens add
+ * it to their bottom spacing so the banner never covers their controls.
+ */
+let bannerHeight = 0;
+const heightListeners = new Set<(h: number) => void>();
+function setBannerHeight(h: number): void {
+  if (h === bannerHeight) return;
+  bannerHeight = h;
+  heightListeners.forEach((fn) => fn(h));
+}
+
+export function useBannerHeight(): number {
+  const [h, setH] = useState(bannerHeight);
+  useEffect(() => {
+    heightListeners.add(setH);
+    setH(bannerHeight);
+    return () => {
+      heightListeners.delete(setH);
+    };
+  }, []);
+  return h;
+}
+
+/**
  * Adaptive banner pinned to the bottom safe edge. Renders nothing until the SDK
  * is up and the banner has loaded, so a missing ad leaves no empty strip. Menu
  * screens only: never mount it over a battle.
@@ -35,9 +59,12 @@ export function AdBanner() {
     if (size) ref.current?.loadAd();
   }, [size]);
 
+  useEffect(() => setBannerHeight(loaded && size ? size.height : 0), [loaded, size]);
+
   useEffect(
     () => () => {
       ref.current?.destroy();
+      setBannerHeight(0);
     },
     [],
   );

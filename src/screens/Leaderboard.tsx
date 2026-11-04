@@ -23,6 +23,7 @@ import {
 } from '../leaderboard';
 import { titleById } from '../shop';
 import { useTheme } from '../theme';
+import { useBannerHeight } from '../ui/AdBanner';
 import Button from '../ui/Button';
 import { Coin, Medal } from '../ui/Decor';
 import ScreenHeader from '../ui/ScreenHeader';
@@ -50,6 +51,7 @@ const flagOf = (code: string | null): string | null => {
 };
 
 export default function Leaderboard({ player, myScore, myTitle, onBack }: Props) {
+  const adHeight = useBannerHeight();
   const { theme } = useTheme();
   const [scope, setScope] = useState<Scope>('world');
   const [status, setStatus] = useState<Status>('loading');
@@ -103,7 +105,7 @@ export default function Leaderboard({ player, myScore, myTitle, onBack }: Props)
       </View>
       {place ? <Text style={[styles.place, { color: theme.inkSoft }]}>{place}</Text> : null}
 
-      <ScrollView contentContainerStyle={styles.body} showsVerticalScrollIndicator={false}>
+      <ScrollView contentContainerStyle={[styles.body, { paddingBottom: SPACE.xxl + adHeight }]} showsVerticalScrollIndicator={false}>
         {status === 'loading' ? (
           <ActivityIndicator style={styles.spinner} color={theme.blue} size="large" />
         ) : status === 'error' ? (

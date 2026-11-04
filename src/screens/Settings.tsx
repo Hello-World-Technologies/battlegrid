@@ -7,6 +7,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Animated, ScrollView, Share, StyleSheet, Switch, Text, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { AdService } from '../ads';
 import { ICONS } from '../icons';
 import { PLAY_STORE_URL } from '../links';
 import { SettingsValue } from '../settings';
@@ -90,6 +91,10 @@ export default function Settings({ initial, onSave, onBack }: Props) {
             />
           </Card>
         </View>
+
+        {__DEV__ && (
+          <Button label="AD TEST SUITE" fullWidth tone="blue" onPress={() => { AdService.launchTestSuite(); }} />
+        )}
 
         <Button
           label="SAVE"

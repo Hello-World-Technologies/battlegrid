@@ -6,6 +6,7 @@
 import React from 'react';
 import { Image, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { useBannerHeight } from '../ui/AdBanner';
 
 import { CosmeticKind, Progress, coinsLeft, heldOf, upgradeLevel } from '../progress';
 import { BOARDS, ITEM_PACKS, ITEM_SHOP, SHAPES, SKINS, TITLES, UPGRADES, packPrice, skinById, type Board, type ItemShop, type Shape, type Skin, type Title, type UpgradeShop } from '../shop';
@@ -256,11 +257,12 @@ function TitlePreview({ title, theme }: { title: Title; theme: ReturnType<typeof
 export default function Shop({ progress, onBuy, onEquip, onBuyItem, onBuyUpgrade, onBuyCosmetic, onEquipCosmetic, onBack }: Props) {
   const { theme } = useTheme();
   const insets = useSafeAreaInsets();
+  const adHeight = useBannerHeight();
   return (
     <View style={styles.root}>
       <Stage variant="plain" />
       <ScreenHeader title="Shop" onBack={onBack} right={<CurrencyPill kind="coins" value={coinsLeft(progress)} />} />
-      <ScrollView contentContainerStyle={[styles.body, { paddingBottom: insets.bottom + SPACE.xl }]} showsVerticalScrollIndicator={false}>
+      <ScrollView contentContainerStyle={[styles.body, { paddingBottom: insets.bottom + adHeight + SPACE.xl }]} showsVerticalScrollIndicator={false}>
         <SectionLabel>Battle items</SectionLabel>
         <Text style={[styles.note, { color: theme.inkSoft }]}>
           {'Tap the bomb button in a battle to open your items. Use as many as you hold. Each costs about one win.'}

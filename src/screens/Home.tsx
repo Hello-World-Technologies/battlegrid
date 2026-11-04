@@ -9,6 +9,7 @@
 import React from 'react';
 import { Pressable, StyleSheet, Text, View, useWindowDimensions } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { useBannerHeight } from '../ui/AdBanner';
 
 import { ICONS } from '../icons';
 import { PlayerProfile } from '../firebase/auth';
@@ -105,6 +106,8 @@ function Square({
 
 export default function Home({ progress, dailyReady, onPlay, onLevels, onShop, onDaily, onProfile, onSettings, onLeaderboard }: Props) {
   const insets = useSafeAreaInsets();
+  // Everything at the bottom sits above the ad banner while one is showing.
+  const bottom = insets.bottom + useBannerHeight();
   const { width, height } = useWindowDimensions();
   const level = progress.unlocked;
   const plankW = Math.round(Math.min(width * 0.66, 300));
@@ -127,7 +130,7 @@ export default function Home({ progress, dailyReady, onPlay, onLevels, onShop, o
         <Text style={styles.tag}>PLAN · CONQUER · WIN</Text>
       </View>
 
-      <View style={[styles.menu, { bottom: insets.bottom + 92 + height * 0.06 }]}>
+      <View style={[styles.menu, { bottom: bottom + 92 + height * 0.06 }]}>
         <Pulse>
           <Plank kind="play" label="PLAY" sublabel={`LEVEL ${level}`} width={plankW} onPress={onPlay} />
         </Pulse>
@@ -135,7 +138,7 @@ export default function Home({ progress, dailyReady, onPlay, onLevels, onShop, o
         <Plank kind="shop" label="SHOP" width={plankW} onPress={onShop} />
       </View>
 
-      <View style={[styles.row, { bottom: insets.bottom + 20 }]}>
+      <View style={[styles.row, { bottom: bottom + 20 }]}>
         <Square label="Daily bonus" fill="#e2a321" badge={dailyReady} onPress={onDaily} icon={<ICONS.gift size={24} color="#ffffff" />} />
         <Square label="Leaderboard" fill="#8a62b0" onPress={onLeaderboard} icon={<ICONS.trophy size={24} color="#ffffff" />} />
         <Square label="Profile" fill="#3f9d8f" onPress={onProfile} icon={<ICONS.person size={24} color="#ffffff" />} />
