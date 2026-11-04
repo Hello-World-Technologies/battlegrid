@@ -77,13 +77,26 @@ type WinProps = {
   onNext: () => void;
   onLevels: () => void;
   onHome: () => void;
+  /** Offered only when a rewarded ad is ready: resolves true if the ad was watched and the coins were paid again. */
+  onDouble?: () => Promise<boolean>;
 };
 
-export function WinScreen({ level, nextLabel = 'NEXT LEVEL', payout, replay, result, seconds, onNext, onLevels, onHome }: WinProps) {
+export function WinScreen({ level, nextLabel = 'NEXT LEVEL', payout, replay, result, seconds, onNext, onLevels, onHome, onDouble }: WinProps) {
   const { theme } = useTheme();
   const insets = useSafeAreaInsets();
   const shareCardRef = useRef<ViewShotRef>(null);
   const [sharing, setSharing] = useState(false);
+  const [doubled, setDoubled] = useState(false);
+  const [doubling, setDoubling] = useState(false);
+  const doubleCoins = () => {
+    if (!onDouble || doubled || doubling) return;
+    setDoubling(true);
+    onDouble()
+      .then((ok) => setDoubled(ok))
+      .catch(() => {})
+      .finally(() => setDoubling(false));
+  };
+  const shownPayout = doubled ? payout * 2 : payout;
   const shareResult = () => {
     if (sharing) return;
     const stars = result ? `${result.stars}★ ` : '';
@@ -99,7 +112,7 @@ export function WinScreen({ level, nextLabel = 'NEXT LEVEL', payout, replay, res
       ]
     : [];
 
-  const tiles: React.ReactNode[] = [<StatTile key="coins" label="Coins" value={`+${payout.toLocaleString()}`} icon={<Coin size={16} />} />];
+  const tiles: React.ReactNode[] = [<StatTile key="coins" label="Coins" value={`+${shownPayout.toLocaleString()}`} icon={<Coin size={16} />} />];
   if (result) tiles.push(<StatTile key="stars" label="Stars" value={`${result.stars}/3`} icon={<Star size={16} />} />);
   if (seconds !== undefined) {
     tiles.push(<StatTile key="time" label="Time" value={fmtTime(seconds)} icon={<Ionicons name="time" size={16} color={theme.blue} />} />);
@@ -166,6 +179,9 @@ export function WinScreen({ level, nextLabel = 'NEXT LEVEL', payout, replay, res
         </View>
 
         <View style={styles.actions}>
+          {onDouble && !doubled && payout > 0 ? (
+            <Button label="WATCH AD: DOUBLE COINS" tone="light" size="md" fullWidth disabled={doubling} onPress={doubleCoins} />
+          ) : null}
           <Pulse delay={TILE_AT + tiles.length * TILE_STEP + 300} style={styles.pulse}>
             <Button label={nextLabel} size="lg" tone="green" fullWidth onPress={onNext} />
           </Pulse>

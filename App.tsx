@@ -29,6 +29,8 @@ import Pause from './src/screens/Pause';
 import { LoseScreen, WinScreen } from './src/screens/Result';
 import { THEME, ThemeContext } from './src/theme';
 import { Audio, Track } from './src/audio';
+import { AdService } from './src/ads';
+import { AdBanner } from './src/ui/AdBanner';
 
 // ───────────────────────── State ─────────────────────────
 import {
@@ -40,6 +42,7 @@ import {
   buySkin,
   buyUpgrade,
   canClaimDaily,
+  addCoins,
   claimDaily,
   emptyProgress,
   mergeProgress,
@@ -363,6 +366,30 @@ function App() {
     setScreen('play');
   }, [updateProgress]);
 
+  // Ads: start the SDK once, and offer the rewarded "double coins" only when one is loaded.
+  useEffect(() => {
+    void AdService.init();
+  }, []);
+  const [rewardedReady, setRewardedReady] = useState(false);
+  useEffect(() => {
+    if (screen !== 'won') return;
+    let live = true;
+    const check = () => void AdService.isRewardedReady().then((r) => live && setRewardedReady(r));
+    check();
+    const t = setTimeout(check, 3000);
+    return () => {
+      live = false;
+      clearTimeout(t);
+    };
+  }, [screen]);
+  const handleDouble = useCallback(async () => {
+    const payout = win?.payout ?? 0;
+    if (payout <= 0 || !(await AdService.showRewarded())) return false;
+    updateProgress((p) => addCoins(p, payout));
+    Audio.sfx('reward');
+    return true;
+  }, [win, updateProgress]);
+
   const pause = useCallback(() => setScreen((s) => (s === 'play' ? 'paused' : s)), []);
   const resume = useCallback(() => setScreen((s) => (s === 'paused' ? 'play' : s)), []);
 
@@ -658,7 +685,8 @@ function App() {
               replay={win.replay}
               result={win.result}
               seconds={win.seconds}
-              onNext={() => startLevel(win.level + 1)}
+              onNext={() => void AdService.afterBattle(() => startLevel(win.level + 1))}
+              onDouble={rewardedReady ? handleDouble : undefined}
               onLevels={() => openLevels('won')}
               onHome={() => setScreen('home')}
             />
@@ -671,7 +699,7 @@ function App() {
               seconds={session.world.t}
               assisted={session.difficulty === 'easy'}
               // Same seed: a loss teaches something about the same map.
-              onRetry={() => startLevel(session.level, session.world.seed, session.difficulty)}
+              onRetry={() => void AdService.afterBattle(() => startLevel(session.level, session.world.seed, session.difficulty))}
               onLevels={() => openLevels('lost')}
               onHome={() => setScreen('home')}
             />
@@ -720,6 +748,9 @@ function App() {
               onBack={() => setScreen(settingsFrom)}
             />
           )}
+
+          {/* Banner on menu screens only, never over a battle or result. */}
+          {(screen === 'home' || screen === 'shop' || screen === 'profile' || screen === 'leaderboard' || screen === 'daily') && <AdBanner />}
 
           {showGuestNudge && <BackupNudge onSignIn={handlePlayGames} onDismiss={dismissGuestNudge} />}
         </View>

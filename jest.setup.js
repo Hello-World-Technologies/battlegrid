@@ -49,6 +49,30 @@ jest.mock('@react-native-async-storage/async-storage', () => {
   };
 });
 
+jest.mock('unity-levelplay-mediation', () => {
+  const ad = class {
+    setListener() {}
+    async loadAd() {}
+    async isAdReady() {
+      return false;
+    }
+    async showAd() {}
+  };
+  return {
+    LevelPlay: {
+      init: jest.fn(async () => {}),
+      setAdaptersDebug: jest.fn(),
+      setMetaData: jest.fn(),
+      validateIntegration: jest.fn(async () => {}),
+    },
+    LevelPlayInitRequest: { builder: () => ({ build: () => ({}) }) },
+    LevelPlayInterstitialAd: ad,
+    LevelPlayRewardedAd: ad,
+    LevelPlayAdSize: { BANNER: { width: 320, height: 50 }, createAdaptiveAdSize: jest.fn(async () => null) },
+    LevelPlayBannerAdView: () => null,
+  };
+});
+
 jest.mock('react-native-sound', () => {
   class Sound {
     constructor(_filename, _basePath, onLoad) {
